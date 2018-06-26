@@ -7,11 +7,13 @@ using System.Web.UI.WebControls;
 
 namespace NephroNet
 {
-    public partial class SiteMaster : MasterPage
+    public partial class Logout : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-           
-        }       
+            Session.Clear();//clear the session.
+            Session.Abandon();
+            Response.Redirect("~/default.aspx"); //go home.
+        }
     }
 }
