@@ -11,7 +11,7 @@ namespace NephroNet.Accounts.Admin
 {
 
 
-    public partial class testAdminHome
+    public partial class Home
     {
     }
 }

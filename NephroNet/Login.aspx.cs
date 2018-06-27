@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -21,10 +22,7 @@ namespace NephroNet
         }
 
         protected void btnLogin_Click(object sender, EventArgs e)
-        {
-            //TEST
-            Response.Redirect("~/Accounts/Admin/testAdminHome");
-            //TEST
+        {            
             string username = txtUsername.Text;
             string password = txtPassword.Text;
             check(username, password);
