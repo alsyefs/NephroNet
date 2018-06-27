@@ -13,7 +13,7 @@ namespace NephroNet
     public class Encryption
     {
         static string connString = getConnection();
-        SqlConnection connect = new SqlConnection(connString);
+        SqlConnection connect = new SqlConnection(connString);        
         public Encryption()
         {
             connString = getConnection();
@@ -23,7 +23,8 @@ namespace NephroNet
         }
         public static string getConnection()
         {
-            string conn = Configuration.getConnectionString();
+            Configuration config = new Configuration();
+            string conn = config.getConnectionString();            
             return conn;
         }
         public static string hash(string clearText)

@@ -53,28 +53,20 @@
                     
                     
                     
+                    <asp:ContentPlaceHolder ID="default" runat="server">
+                        <ul class="nav navbar-nav">
+                            <%--<li><a runat="server" href="~/">Home</a></li>--%>
+                            <li><a runat="server" href="~/About">About</a></li>
+                            <li><a runat="server" href="~/Contact">Contact</a></li>
+                        </ul>
+                        
+                    </asp:ContentPlaceHolder>
                     
-                    <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/">Home</a></li>
-                        <li><a runat="server" href="~/About">About</a></li>
-                        <li><a runat="server" href="~/Contact">Contact</a></li>
+                    <asp:ContentPlaceHolder ID="loggedOut" runat="server">
+                        <ul class="nav navbar-nav navbar-right">                               
+                                <li><a runat="server" href="~/Login">Login</a></li>
                     </ul>
-
-
-
-
-                    <%--test--%>
-                    <ul class="nav navbar-nav navbar-right" runat="server" id="LoggedIn" visible="False">
-
-                        <li id="A1" runat="server"><a runat="server" title="Go To A1 Page" href="~/Admin/control.aspx">Hello A1 </a></li>
-                        <li id="A2" runat="server"><a runat="server" title="Go To A2 Page" href="~/Committee/control.aspx">Hello A2</a></li>
-                        <li id="A3" runat="server"><a runat="server" title="Go To A3 Page" href="~/Account/Manage">Hello A3</a></li>
-                        <li>
-                            <%--<asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />--%>
-                        </li>
-                    </ul>
-                    <%--test--%>
-
+                    </asp:ContentPlaceHolder>                    
 
 
 

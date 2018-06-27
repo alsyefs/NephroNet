@@ -13,40 +13,22 @@ namespace NephroNet {
     public partial class SiteMaster {
         
         /// <summary>
-        /// LoggedIn control.
+        /// default control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LoggedIn;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder @default;
         
         /// <summary>
-        /// A1 control.
+        /// loggedOut control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl A1;
-        
-        /// <summary>
-        /// A2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl A2;
-        
-        /// <summary>
-        /// A3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl A3;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder loggedOut;
         
         /// <summary>
         /// MainContent control.

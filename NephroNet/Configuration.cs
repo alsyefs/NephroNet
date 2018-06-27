@@ -10,7 +10,7 @@ namespace NephroNet
     {
         //The below is Saleh's personal connection string:
         static string connectionString = "data source=R14\\SALEH;initial catalog=NephroNetDB;Trusted_Connection=True;MultipleActiveResultSets=True;";
-        public static string getConnectionString()
+        public string getConnectionString()
         {
             SqlConnection connect = new SqlConnection(connectionString);
             return connectionString;            
