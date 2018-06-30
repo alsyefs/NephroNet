@@ -60,6 +60,7 @@
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><a runat="server" href="~/Login">Login</a></li>
+                            <li><a runat="server" href="~/Register">Register</a></li>
                         </ul>
                     </asp:ContentPlaceHolder>
                 </div>
