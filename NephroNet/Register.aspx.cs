@@ -24,14 +24,15 @@ namespace NephroNet
             if (correctInput)
             {
                 //send it all to database code:
-                //storeInput();
+                storeInput();
 
                 //prompt a message that everything was successful:
                 lblResult.ForeColor = System.Drawing.Color.Green;
                 lblResult.Visible = true;
                 lblResult.Text = "Your application has been successfully submitted!";
             }
-            lblResult.Visible = false;
+            else
+                lblResult.Visible = false;
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)
@@ -45,7 +46,7 @@ namespace NephroNet
             lblLastnameError.Visible = false;
             lblEmailError.Visible = false;
             lblCityError.Visible = false;
-            lblState.Visible = false;
+            lblStateError.Visible = false;
             lblZipError.Visible = false;
             lblAddressError.Visible = false;
             lblPhoneError.Visible = false;
@@ -59,8 +60,9 @@ namespace NephroNet
             CheckErrors error = new CheckErrors();
             //Check first name:
             string firstnameError = "";
-            if (error.ContainsSpecialChars(txtFirstname.Text, out firstnameError) 
-                || error.validFirstName(txtFirstname.Text, out firstnameError))
+            if (
+                //error.ContainsSpecialChars(txtFirstname.Text, out firstnameError) || 
+                !error.validFirstName(txtFirstname.Text, out firstnameError))
             {
                 correct = false;
                 lblFirstnameError.Visible = true;
@@ -69,7 +71,9 @@ namespace NephroNet
             }
             //Check last name:
             string lastnameError = "";
-            if (error.ContainsSpecialChars(txtLastname.Text, out lastnameError) || error.validLastName(txtLastname.Text, out lastnameError))
+            if (
+                //error.ContainsSpecialChars(txtLastname.Text, out lastnameError) || 
+                !error.validLastName(txtLastname.Text, out lastnameError))
             {
                 correct = false;
                 lblLastnameError.Visible = true;
@@ -78,7 +82,7 @@ namespace NephroNet
             }            
             //Check email:
             string emailError = "";
-            if (!error.validEmail(txtLastname.Text, out emailError))
+            if (!error.validEmail(txtEmail.Text, out emailError))
             {
                 correct = false;
                 lblEmailError.Visible = true;
@@ -87,7 +91,9 @@ namespace NephroNet
             }           
             //Check city:
             string cityError = "";
-            if (error.ContainsSpecialChars(txtCity.Text, out cityError) || error.validCity(txtCity.Text, out cityError))
+            if (
+                //error.ContainsSpecialChars(txtCity.Text, out cityError) || 
+                !error.validCity(txtCity.Text, out cityError))
             {
                 correct = false;
                 lblCityError.Visible = true;
@@ -96,7 +102,7 @@ namespace NephroNet
             }
             //Check state:
             string stateError = "";
-            if (error.validState(drpStates.SelectedIndex, out stateError))
+            if (!error.validState(drpStates.SelectedIndex, out stateError))
             {
                 correct = false;
                 lblStateError.Visible = true;
@@ -105,7 +111,7 @@ namespace NephroNet
             }
             //Check zip:
             string zipError = "";
-            if (error.ContainsSpecialChars(txtZip.Text, out zipError) || error.validZip(txtZip.Text, out zipError))
+            if (error.ContainsSpecialChars(txtZip.Text, out zipError) || !error.validZip(txtZip.Text, out zipError))
             {
                 correct = false;
                 lblZipError.Visible = true;
@@ -114,7 +120,9 @@ namespace NephroNet
             }
             //Check address:
             string addressError = "";
-            if (error.ContainsSpecialChars(txtAddress.Text, out addressError) || error.validAddress(txtAddress.Text, out addressError))
+            if (
+                //error.ContainsSpecialChars(txtAddress.Text, out addressError) || 
+                !error.validAddress(txtAddress.Text, out addressError))
             {
                 correct = false;
                 lblAddressError.Visible = true;
@@ -123,7 +131,9 @@ namespace NephroNet
             }
             //Check phone:
             string phoneError = "";
-            if (error.ContainsSpecialChars(txtPhone.Text, out phoneError) || !error.validPhone(txtPhone.Text, out phoneError))
+            if (
+                //error.ContainsSpecialChars(txtPhone.Text, out phoneError) || 
+                !error.validPhone(txtPhone.Text, out phoneError))
             {
                 correct = false;
                 lblPhoneError.Visible = true;
@@ -132,7 +142,7 @@ namespace NephroNet
             }
             //Check selected role:
             string roleError = "";
-            if (error.validState(drpRole.SelectedIndex, out roleError))
+            if (!error.validRole(drpRole.SelectedIndex, out roleError))
             {
                 correct = false;
                 lblRoleError.Visible = true;
@@ -149,9 +159,18 @@ namespace NephroNet
             Configuration config = new Configuration();
             SqlConnection connect = new SqlConnection(config.getConnectionString());
             connect.Open();
+            //If special characters are needed, then the below can be used for all strings
+            //to replace a special character which can cause SQL errors.
+            txtCity.Text = txtCity.Text.Replace("'", "''");
+            txtAddress.Text = txtAddress.Text.Replace("'", "''");
+            txtFirstname.Text = txtFirstname.Text.Replace("'", "''");
+            txtLastname.Text = txtLastname.Text.Replace("'", "''");
+            txtEmail.Text = txtEmail.Text.Replace("'", "''");
+            txtPhone.Text = txtPhone.Text.Replace("'", "''");
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "insert into Registrations values ('"+txtFirstname.Text+"', '"+txtLastname.Text+"', '"+txtEmail.Text+"', '"+txtCity.Text+"', '"+drpStates.SelectedItem.ToString()+"'," +
-                " '"+txtZip.Text+"', '"+txtAddress.Text+"', '"+drpRole.SelectedItem.ToString()+"', '"+txtPhone.Text+"') ";
+            cmd.CommandText = "insert into Registrations(register_firstname, register_lastname, register_email, register_city, register_state, register_zip, register_address, register_roleId, register_phone)" +
+                " values ('" + txtFirstname.Text+"', '"+txtLastname.Text+"', '"+txtEmail.Text+"', '"+txtCity.Text+"', '"+drpStates.SelectedItem.ToString()+"'," +
+                " '"+txtZip.Text+"', '"+txtAddress.Text+"', '"+drpRole.SelectedIndex+"','"+txtPhone.Text+"') ";
             cmd.ExecuteScalar();
             connect.Close();
         }

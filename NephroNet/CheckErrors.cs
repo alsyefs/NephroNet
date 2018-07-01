@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -45,19 +46,39 @@ namespace NephroNet
         //Validate emails:
         public bool validEmail(string emailAddress, out string result)
         {
-            bool isValid = ValidEmailRegex.IsMatch(emailAddress);
-            result = "Invalid input: Please type a correct email.";
-            return isValid;
+            bool correct = true;
+            result = "";
+            //ValidEmailRegex.IsMatch(emailAddress);
+            if (string.IsNullOrEmpty(emailAddress))
+            {
+                correct = false;
+                result = "Invalid input: Please type an email.";
+            }
+            //This a built-in class that validates emails. Note: a@a is a valid email according to .NET
+            if (correct)
+            {
+                try
+                {
+                    emailAddress = new MailAddress(emailAddress).Address;
+                }
+                catch (FormatException)
+                {
+                    //address is invalid
+                    correct = false;
+                    result = "Invalid input: Please type a correct email.";
+                }
+            }
+            return correct;
         }
-        static Regex ValidEmailRegex = CreateValidEmailRegex();
-        private static Regex CreateValidEmailRegex()
-        {
-            string validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
-                + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)"
-                + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
+        //static Regex ValidEmailRegex = CreateValidEmailRegex();
+        //private static Regex CreateValidEmailRegex()
+        //{
+        //    string validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
+        //        + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)"
+        //        + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
 
-            return new Regex(validEmailPattern, RegexOptions.IgnoreCase);
-        }
+        //    return new Regex(validEmailPattern, RegexOptions.IgnoreCase);
+        //}
         //Validate city:
         public bool validCity(string city, out string result)
         {
@@ -131,15 +152,15 @@ namespace NephroNet
                 correct = false;
                 result = "Invalid input: Please type the correct phone numbers using digits only.";
             }
-            else if (phone.Length < 9)
+            else if (phone.Length < 10)
             {
                 correct = false;
-                result = "Invalid input: the phone number must be at least 9 digits.";
+                result = "Invalid input: the phone number must be at least 10 digits.";
             }
-            else if (phone.Length > 17)
+            else if (phone.Length > 13)
             {
                 correct = false;
-                result = "Invalid input: the phone number must be less than 17 digits.";
+                result = "Invalid input: the phone number must be less than 13 digits.";
             }
             return correct;
         }
