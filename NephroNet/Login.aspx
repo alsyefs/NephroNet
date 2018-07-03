@@ -2,6 +2,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container">
+    <h2>Please fill the registration form</h2>    
+        <div class="panel panel-default">
+        <div class="panel-body">
+
+
+
 
     <h3>
         Login
@@ -21,11 +28,17 @@
     <asp:Label ID="lblPasswordError" runat="server" ForeColor="Red" Text="Label" Visible="False"></asp:Label>
     <br />
     <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" />
+    
+    <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px"/>
     &nbsp;
     <asp:Label ID="lblError" runat="server" ForeColor="Red" Text="Label" Visible="False"></asp:Label>
-    <br />
+<%--Cancel button--%>    
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
+    <asp:Button ID="btnCancel" runat="server" Text="Go back" BackColor="red" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnCancel_Click" />
 
-
+            </div>
+            </div>
+        </div>
 </asp:Content>
