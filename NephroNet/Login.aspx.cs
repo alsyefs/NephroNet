@@ -22,8 +22,8 @@ namespace NephroNet
         }
 
         protected void btnLogin_Click(object sender, EventArgs e)
-        {            
-            string username = txtUsername.Text;
+        {
+            string username = txtUsername.Text.Replace("'", "''");            
             string password = txtPassword.Text;
             check(username, password);
         }
@@ -62,18 +62,19 @@ namespace NephroNet
                 Boolean exists = checkIfExists(username); //check if username in DB.
                 if (exists)//if user exists in the DB.
                 {
-                    //Boolean correctPassword = checkPassword(username, password); //check if password is correct.
+                    Boolean correctPassword = checkPassword(username, password); //check if password is correct.
                     //Boolean correctEndDate = checkEndDate(username);
                     //if (correctPassword && correctEndDate)
-                    //{
-                    //    string roleId = findRole(username); //find the roleId.                        
-                    //    success(username, roleId);
-                    //}
-                    //else if (!correctPassword)//if password incorrect, display the same message for security reasons.
-                    //{
-                    //    lblError.Visible = true;
-                    //    lblError.Text = errorMessage;
-                    //}
+                    if (correctPassword)
+                    {
+                        string roleId = findRole(username); //find the roleId.                        
+                        success(username, roleId);
+                    }
+                    else if (!correctPassword)//if password incorrect, display the same message for security reasons.
+                    {
+                        lblError.Visible = true;
+                        lblError.Text = errorMessage;
+                    }
                     //else if (!correctEndDate)
                     //{
                     //    lblError.Visible = true;
@@ -136,60 +137,88 @@ namespace NephroNet
         protected Boolean checkPassword(string username, string password)
         {
             Boolean correct = true;
-            //string hashed = Encryption.hash(password);
-            //password = "";            
-            //connect.Open();
-            //SqlCommand cmd = connect.CreateCommand();
-            //cmd.CommandType = CommandType.Text;
-            //cmd.CommandText = "select count (*) from login where username like '" + username + "' and password like '" + hashed + "' ";
-            //int correctCombination = Convert.ToInt32(cmd.ExecuteScalar()); //count matching. result either 0 or 1.
-            //if (correctCombination == 0)
-            //{
-            //    correct = false;
-            //}
-            //connect.Close();
+            string hashed = Encryption.hash(password);
+            password = "";            
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "select count (*) from logins where login_username like '" + username + "' and login_password like '" + hashed + "' ";
+            int correctCombination = Convert.ToInt32(cmd.ExecuteScalar()); //count matching. result either 0 or 1.
+            if (correctCombination == 0)
+            {
+                correct = false;
+            }
+            connect.Close();
             return correct;
         }
 
         protected string findRole(string username)
         {
             string roleId = "";
-            //connect.Open();
-            //SqlCommand cmd = connect.CreateCommand();
-            //cmd.CommandText = "select count(roleId) from login where username like '" + username + "'";
-            //int isThereRoleInDB = Convert.ToInt32(cmd.ExecuteScalar());
-            //if (isThereRoleInDB > 0) //means the user has a stored roleId in DB. This is to prevent DB error.
-            //{
-            //    cmd.CommandText = "select roleId from login where username like '" + username + "'";
-            //    roleId = cmd.ExecuteScalar().ToString();
-            //}
-            //else //DB error: roleId was not stored for user. It is an extreme case, but it can happen somehow.
-            //{
-            //    lblError.Visible = true;
-            //    lblError.Text = "Database Error: Username has no role. Please contact the support.";
-            //}
-            //connect.Close();
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(roleId) from logins where login_username like '" + username + "'";
+            int isThereRoleInDB = Convert.ToInt32(cmd.ExecuteScalar());
+            if (isThereRoleInDB > 0) //means the user has a stored roleId in DB. This is to prevent DB error.
+            {
+                cmd.CommandText = "select roleId from logins where login_username like '" + username + "'";
+                roleId = cmd.ExecuteScalar().ToString();
+            }
+            else //DB error: roleId was not stored for user. It is an extreme case, but it can happen somehow.
+            {
+                lblError.Visible = true;
+                lblError.Text = "Database Error: Username has no role. Please contact the support.";
+            }
+            connect.Close();
             return roleId;
+        }
+        protected bool checkIfUserHasSecurityQuestions()
+        {
+            bool hasThem = true;
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select loginId from Logins where login_username like '" + txtUsername.Text+"' ";
+            string loginId = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select count(*) from SecurityQuestions where loginId = '"+loginId+"' ";
+            int questionsCount = Convert.ToInt32(cmd.ExecuteScalar());
+            if (questionsCount < 3)
+                hasThem = false;
+            connect.Close();
+            return hasThem;
         }
         protected void success(string username, string roleId)
         {
-            //Session.Add("username", username);
-            //Session.Add("roleId", roleId);
+            Session.Add("username", username);
+            Session.Add("roleId", roleId);
+            //check if user has three security questions:
+            bool hasSecurityQuestions = checkIfUserHasSecurityQuestions();
+            //if the user has three security questions, answer them:
+            if(hasSecurityQuestions)
+                Response.Redirect("~/SecurityQuestions.aspx");
+            //if the user doesn't have three security questions, create them:
+            else
+                Response.Redirect("~/CreateSecurityQuestions.aspx");
             //if (roleId.Equals("1"))
             //{
-            //    //admin.
+            //    //Admin.
             //    Response.Redirect("~/Accounts/Admin/Home.aspx");
             //}
             //else if (roleId.Equals("2"))
             //{
-            //    //manager.
-            //    Response.Redirect("~/Accounts/ProgramManager/Home.aspx");
+            //    //Physician.
+            //    Response.Redirect("~/Accounts/Physician/Home.aspx");
             //}
             //else if (roleId.Equals("3"))
             //{
-            //    //volunteer.
-            //    Response.Redirect("~/Accounts/Volunteer/Home.aspx");
+            //    //Patient.
+            //    Response.Redirect("~/Accounts/Patient/Home.aspx");
             //}
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            //Go home:
+            Response.Redirect("~/");
         }
     }
 }

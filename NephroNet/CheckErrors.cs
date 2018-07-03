@@ -176,5 +176,29 @@ namespace NephroNet
             }
             return correct;
         }
+        //Validate question
+        public bool validQuestion(string question, out string result)
+        {
+            bool correct = true;
+            result = "";
+            if (string.IsNullOrEmpty(question))
+            {
+                correct = false;
+                result = "Invalid input: Please type the question.";
+            }
+            return correct;
+        }
+        //Validate answer
+        public bool validAnswer(string answer, out string result)
+        {
+            bool correct = true;
+            result = "";
+            if (string.IsNullOrEmpty(answer))
+            {
+                correct = false;
+                result = "Invalid input: Please type the answer.";
+            }
+            return correct;
+        }
     }
 }

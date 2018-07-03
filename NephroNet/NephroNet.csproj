@@ -130,10 +130,13 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Accounts\Admin\Home.aspx" />
+    <Content Include="Accounts\Patient\Home.aspx" />
+    <Content Include="Accounts\Physician\Home.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="CreateSecurityQuestions.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -147,6 +150,7 @@
     <None Include="Properties\PublishProfiles\LaptopNephroNet.pubxml" />
     <None Include="Properties\PublishProfiles\ServerNephroNet.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="images\background_2.jpg" />
     <Content Include="Login.aspx" />
     <Content Include="Logout.aspx" />
     <Content Include="Register.aspx" />
@@ -178,6 +182,7 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="SecurityQuestions.aspx" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -192,6 +197,20 @@
     <Compile Include="Accounts\Admin\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Patient\Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\Home.aspx.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\Home.aspx.designer.cs">
+      <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
@@ -202,6 +221,13 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="CheckErrors.cs" />
+    <Compile Include="CreateSecurityQuestions.aspx.cs">
+      <DependentUpon>CreateSecurityQuestions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CreateSecurityQuestions.aspx.designer.cs">
+      <DependentUpon>CreateSecurityQuestions.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Email.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Contact.aspx.cs">
@@ -244,6 +270,13 @@
     <Compile Include="Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
+    <Compile Include="SecurityQuestions.aspx.cs">
+      <DependentUpon>SecurityQuestions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SecurityQuestions.aspx.designer.cs">
+      <DependentUpon>SecurityQuestions.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -267,8 +300,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Accounts\Patient\" />
-    <Folder Include="Accounts\Physician\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
