@@ -9,9 +9,9 @@ namespace NephroNet
     public class Configuration
     {
         //The below is Saleh's personal connection string:
-        //static string connectionString = "data source=R14\\SALEH;initial catalog=NephroNetDB;Trusted_Connection=True;MultipleActiveResultSets=True;";
+        static string connectionString = "data source=R14\\SALEH;initial catalog=NephroNetDB;Trusted_Connection=True;MultipleActiveResultSets=True;";
         //The server's connection string:
-        static string connectionString = "data source=Murcap02;initial catalog=NephroNetDB;MultipleActiveResultSets=True; user id=sa; password=Saleh.Alsyefi1988";
+        //static string connectionString = "data source=Murcap02;initial catalog=NephroNetDB;Trusted_Connection=True;MultipleActiveResultSets=True;";
         public string getConnectionString()
         {
             SqlConnection connect = new SqlConnection(connectionString);
