@@ -11,17 +11,77 @@ namespace NephroNet
 {
     public partial class CreateSecurityQuestions : System.Web.UI.Page
     {
-        string username = "", roleId = "";
+        string username = "", roleId = "", g_loginId = "";
         Configuration config = new Configuration();        
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             bool correctInput = checkInputs();
             if (correctInput)
+            {
                 store();
+                goHome();
+            }
+        }
+        protected void goHome()
+        {
+            Session.Add("username", username);
+            Session.Add("roleId", roleId);
+            Session.Add("loginId", g_loginId);
+            if (roleId.Equals("1"))
+            {
+                //Admin.
+                Response.Redirect("~/Accounts/Admin/Home.aspx");
+            }
+            else if (roleId.Equals("2"))
+            {
+                //Physician.
+                Response.Redirect("~/Accounts/Physician/Home.aspx");
+            }
+            else if (roleId.Equals("3"))
+            {
+                //Patient.
+                Response.Redirect("~/Accounts/Patient/Home.aspx");
+            }
         }
         protected void store()
         {
-
+            txtQ1.Text = txtQ1.Text.Replace("'", "''");
+            txtQ2.Text = txtQ2.Text.Replace("'", "''");
+            txtQ3.Text = txtQ3.Text.Replace("'", "''");
+            txtA1.Text = txtA1.Text.Replace("'", "''");
+            txtA2.Text = txtA2.Text.Replace("'", "''");
+            txtA3.Text = txtA3.Text.Replace("'", "''");
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select loginId from Logins where login_username like '"+username+"' ";
+            string loginId = cmd.ExecuteScalar().ToString();
+            g_loginId = loginId;
+            //Insert questions:
+            cmd.CommandText = "insert into Questions (question_text) values ('"+txtQ1.Text+"') ";
+            cmd.ExecuteScalar();
+            cmd.CommandText = "insert into Questions (question_text) values ('" + txtQ2.Text + "') ";
+            cmd.ExecuteScalar();
+            cmd.CommandText = "insert into Questions (question_text) values ('" + txtQ3.Text + "') ";
+            cmd.ExecuteScalar();
+            //Get questions' IDs:
+            cmd.CommandText = "select questionId from questions where question_text like '"+txtQ1.Text+"' ";
+            string q1Id = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select questionId from questions where question_text like '" + txtQ2.Text + "' ";
+            string q2Id = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select questionId from questions where question_text like '" + txtQ3.Text + "' ";
+            string q3Id = cmd.ExecuteScalar().ToString();
+            //Insert answers with their questions' IDs:
+            cmd.CommandText = "insert into SecurityQuestions (loginId, questionId, securityQuestion_answer) values " +
+                "('"+loginId+"', '"+q1Id+"', '"+txtA1.Text+"')";
+            cmd.ExecuteScalar();
+            cmd.CommandText = "insert into SecurityQuestions (loginId, questionId, securityQuestion_answer) values " +
+                "('" + loginId + "', '" + q2Id + "', '" + txtA2.Text + "')";
+            cmd.ExecuteScalar();
+            cmd.CommandText = "insert into SecurityQuestions (loginId, questionId, securityQuestion_answer) values " +
+                "('" + loginId + "', '" + q3Id + "', '" + txtA3.Text + "')";
+            cmd.ExecuteScalar();
+            connect.Close();
         }
         protected bool checkInputs()
         {
