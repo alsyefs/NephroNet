@@ -221,6 +221,7 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="CheckErrors.cs" />
+    <Compile Include="CheckSession.cs" />
     <Compile Include="CreateSecurityQuestions.aspx.cs">
       <DependentUpon>CreateSecurityQuestions.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

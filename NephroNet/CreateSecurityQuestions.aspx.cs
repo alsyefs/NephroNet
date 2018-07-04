@@ -11,8 +11,8 @@ namespace NephroNet
 {
     public partial class CreateSecurityQuestions : System.Web.UI.Page
     {
-        string username = "", roleId = "", g_loginId = "";
-        Configuration config = new Configuration();        
+        string username = "", roleId = "", loginId = "", token = "";
+        Configuration config = new Configuration();
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             bool correctInput = checkInputs();
@@ -24,9 +24,7 @@ namespace NephroNet
         }
         protected void goHome()
         {
-            Session.Add("username", username);
-            Session.Add("roleId", roleId);
-            Session.Add("loginId", g_loginId);
+            addSession();
             if (roleId.Equals("1"))
             {
                 //Admin.
@@ -55,8 +53,8 @@ namespace NephroNet
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandText = "select loginId from Logins where login_username like '"+username+"' ";
-            string loginId = cmd.ExecuteScalar().ToString();
-            g_loginId = loginId;
+            string temp_loginId = cmd.ExecuteScalar().ToString();
+            //g_loginId = loginId;
             //Insert questions:
             cmd.CommandText = "insert into Questions (question_text) values ('"+txtQ1.Text+"') ";
             cmd.ExecuteScalar();
@@ -73,13 +71,13 @@ namespace NephroNet
             string q3Id = cmd.ExecuteScalar().ToString();
             //Insert answers with their questions' IDs:
             cmd.CommandText = "insert into SecurityQuestions (loginId, questionId, securityQuestion_answer) values " +
-                "('"+loginId+"', '"+q1Id+"', '"+txtA1.Text+"')";
+                "('"+ temp_loginId + "', '"+q1Id+"', '"+txtA1.Text+"')";
             cmd.ExecuteScalar();
             cmd.CommandText = "insert into SecurityQuestions (loginId, questionId, securityQuestion_answer) values " +
-                "('" + loginId + "', '" + q2Id + "', '" + txtA2.Text + "')";
+                "('" + temp_loginId + "', '" + q2Id + "', '" + txtA2.Text + "')";
             cmd.ExecuteScalar();
             cmd.CommandText = "insert into SecurityQuestions (loginId, questionId, securityQuestion_answer) values " +
-                "('" + loginId + "', '" + q3Id + "', '" + txtA3.Text + "')";
+                "('" + temp_loginId + "', '" + q3Id + "', '" + txtA3.Text + "')";
             cmd.ExecuteScalar();
             connect.Close();
         }
@@ -153,62 +151,39 @@ namespace NephroNet
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
+            clearSession();
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            getSession();
+            CheckSession session = new CheckSession();
+            bool correctSession = session.sessionIsCorrect(username, roleId, token);
+            if (!correctSession)
+                clearSession();
+        }
+        protected void clearSession()
+        {
+
             Session.RemoveAll();
             Session.Clear();
             Session.Abandon();
             Response.Redirect("~/");
         }
-
-        protected void Page_Load(object sender, EventArgs e)
+        protected void addSession()
+        {
+            Session.Add("username", username);
+            Session.Add("roleId", roleId);
+            Session.Add("loginId", loginId);
+            Session.Add("loginId", token);
+        }
+        protected void getSession()
         {
             username = (string)(Session["username"]);
             roleId = (string)(Session["roleId"]);
-            bool correctSession = sessionIsCorrect();
-            if (!correctSession)
-            {
-                Session.RemoveAll();
-                Session.Clear();
-                Session.Abandon();
-                Response.Redirect("~/");
-            }
+            loginId = (string)(Session["loginId"]);
+            token = (string)(Session["token"]);
         }
-        public Boolean sessionIsCorrect()
-        {                       
-            Boolean correctSession = true;
-            Boolean isEmptySession = checkIfSessionIsEmpty();
-            if (isEmptySession)
-                correctSession = false;
-            Boolean correctSessionValues = checkSeesionValues();
-            if (correctSessionValues == false)
-            {
-                correctSession = false;
-            }
-            return correctSession;
-        }
-        protected Boolean checkSeesionValues()
-        {
-            SqlConnection connect = new SqlConnection(config.getConnectionString());
-            Boolean correct = true;
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();            
-            cmd.CommandText = "select count(*) from logins where login_username like '" + username + "' and roleId = '" + roleId + "' ";
-            int countValues = Convert.ToInt32(cmd.ExecuteScalar());
-            if (countValues < 1)//session has wrong values for any role.
-                correct = false;
-            connect.Close();
-            return correct;
-        }
-        protected Boolean checkIfSessionIsEmpty()
-        {
-            Boolean itIsEmpty = false;
-            if (string.IsNullOrWhiteSpace(username) || (!roleId.Equals("1") && !roleId.Equals("2") && !roleId.Equals("3")))//if no session values for either username or roleId, set to false.
-            {
-                itIsEmpty = true;
-            }
-            return itIsEmpty;
-        }
-
-
 
     }
 }
