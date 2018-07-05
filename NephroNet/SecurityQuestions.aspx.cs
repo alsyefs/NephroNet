@@ -31,7 +31,8 @@ namespace NephroNet
                 clearSession();
             //get number of wrong attempts from the database:
             g_numOfTries = getNumberOfTries();
-            getQuestions();
+            if(!IsPostBack)
+                getQuestions();
         }
         protected void clearSession()
         {
@@ -58,21 +59,42 @@ namespace NephroNet
         protected void goHome()
         {
             addSession();
-            if (roleId.Equals("1"))
+            //check if this is the user's initial login:
+            bool initialLogin = checkIfUsersInitialLogin();
+            if (initialLogin)
             {
-                //Admin.
-                Response.Redirect("~/Accounts/Admin/Home.aspx");
+                Response.Redirect("~/ChangePassword.aspx");
             }
-            else if (roleId.Equals("2"))
+            else
             {
-                //Physician.
-                Response.Redirect("~/Accounts/Physician/Home.aspx");
+                if (roleId.Equals("1"))
+                {
+                    //Admin.
+                    Response.Redirect("~/Accounts/Admin/Home.aspx");
+                }
+                else if (roleId.Equals("2"))
+                {
+                    //Physician.
+                    Response.Redirect("~/Accounts/Physician/Home.aspx");
+                }
+                else if (roleId.Equals("3"))
+                {
+                    //Patient.
+                    Response.Redirect("~/Accounts/Patient/Home.aspx");
+                }
             }
-            else if (roleId.Equals("3"))
-            {
-                //Patient.
-                Response.Redirect("~/Accounts/Patient/Home.aspx");
-            }
+        }
+        protected bool checkIfUsersInitialLogin()
+        {
+            bool initial = true;
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select login_initial from Logins where loginId = '" + loginId + "' ";
+            int initialValue = Convert.ToInt32(cmd.ExecuteScalar());
+            if (initialValue == 0)
+                initial = false;
+            connect.Close();
+            return initial;
         }
         protected void getQuestions()
         {
@@ -88,20 +110,20 @@ namespace NephroNet
             {
                 getThreeQuestions(0);
                 lblQ.Text = getQuestion(g_id, g_q1);  //db.Questions.Find(g_q1).QuestionText;
-                g_final_question = g_q1;
+                //g_final_question = g_q1;
             }
             else if (pageRefreshes == 2)
             {
                 getThreeQuestions(1);
                 lblQ.Text = getQuestion(g_id, g_q2); //db.Questions.Find(g_q2).QuestionText;
-                g_final_question = g_q2;
+                //g_final_question = g_q2;
             }
             else
             {
                 getThreeQuestions(2);
                 lblQ.Text = getQuestion(g_id, g_q3);  //db.Questions.Find(g_q3).QuestionText;
                 pageRefreshes = 0;
-                g_final_question = g_q3;
+                //g_final_question = g_q3;
             }
         }
         protected string getQuestion(string g_id, int questionId)
@@ -114,6 +136,7 @@ namespace NephroNet
             //Get the questionId for the question text:
             cmd.CommandText = "select questionId from Questions where question_text like '" + question + "' ";
             string tempQuestionId = cmd.ExecuteScalar().ToString();
+            g_final_question = Convert.ToInt32(tempQuestionId);
             connect.Close();
             return question;
         }
@@ -204,18 +227,18 @@ namespace NephroNet
                     {
                         //getThreeQuestions();
                         lblQ.Text = getQuestion(g_id, g_q1);  //db.Questions.Find(g_q1).QuestionText;
-                        g_final_question = g_q1;
+                        //g_final_question = g_q1;
                     }
                     else if (pageRefreshes == 2)
                     {
                         lblQ.Text = getQuestion(g_id, g_q2); //db.Questions.Find(g_q2).QuestionText;
-                        g_final_question = g_q2;
+                        //g_final_question = g_q2;
                     }
                     else
                     {
                         lblQ.Text = getQuestion(g_id, g_q3);  //db.Questions.Find(g_q3).QuestionText;
                         pageRefreshes = 0;
-                        g_final_question = g_q3;
+                        //g_final_question = g_q3;
                     }
                     lblError.Visible = true;
                     lblError.Text = "Input Error: You have entered the wrong answer.";

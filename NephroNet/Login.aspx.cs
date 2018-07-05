@@ -12,7 +12,8 @@ namespace NephroNet
 {
     public partial class Login : System.Web.UI.Page
     {
-        string username = "", roleId = "", loginId = "", token = "";
+        //string username = "", roleId = "", token = "";
+        string loginId = "";
         static string connection_string = "";
         SqlConnection connect = new SqlConnection(connection_string);
         protected void Page_Load(object sender, EventArgs e)
@@ -224,7 +225,7 @@ namespace NephroNet
                 hasThem = false;
             connect.Close();
             return hasThem;
-        }
+        }        
         protected void success(string username, string roleId)
         {            
             //Generate a Token:
@@ -244,11 +245,11 @@ namespace NephroNet
             Session.Add("username", username);
             Session.Add("roleId", roleId);
             Session.Add("loginId", loginId);
-            Session.Add("token", token);
+            Session.Add("token", token);            
             //check if user has three security questions:
             bool hasSecurityQuestions = checkIfUserHasSecurityQuestions();
-            //if the user has three security questions, answer them:
-            if(hasSecurityQuestions)
+            //if the user has three security questions and changed password:
+            if (hasSecurityQuestions)
                 Response.Redirect("~/SecurityQuestions.aspx");
             //if the user doesn't have three security questions, create them:
             else

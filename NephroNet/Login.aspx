@@ -3,16 +3,14 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container">
-    <h2>Please fill the registration form</h2>    
+    <h2>Login</h2>
         <div class="panel panel-default">
         <div class="panel-body">
 
 
 
 
-    <h3>
-        Login
-    </h3>
+    
     <br />
     <asp:Label ID="lblUsername" runat="server" Text="Username:"></asp:Label>
     &nbsp;&nbsp;

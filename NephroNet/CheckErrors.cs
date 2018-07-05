@@ -200,5 +200,54 @@ namespace NephroNet
             }
             return correct;
         }
+        //Validate password
+        public bool validPassword(string password, out string result)
+        {
+            bool correct = true;
+            result = "";
+            if (string.IsNullOrEmpty(password))
+            {
+                correct = false;
+                result = "Invalid input: Please type the password.";
+            }
+            else if (password.Contains("'"))
+            {
+                correct = false;
+                result = "Invalid input: The character (') is not allowed for passwords.";
+            }
+            else if (!passwordRequirements(password))
+            {
+                correct = false;
+                result = "Invalid input: The new password must match the password requirements:\n" +
+                    "1. At least 8 characters long.\n" +
+                    "2. Contains at least 1 upper-case letter.\n" +
+                    "3. Contains at least 1 lower-case letter\n" +
+                    "4. Contains at least 1 digit (0-9)\n" +
+                    "5. Contains 1 of the following special characters ; , . ! @ # $ % ^ & * ( ) ";
+            }
+            return correct;
+        }
+        public bool passwordRequirements(string password)
+        {
+            bool correct = true;
+            if (password.Length < 8 || !password.Any(char.IsUpper) || !password.Any(char.IsLower)
+                || !password.Any(char.IsDigit) || password.IndexOfAny(";,.!@#$%^&*()".ToCharArray()) == -1)
+            {
+                correct = false;
+            }
+            
+            return correct;
+        }
+        public bool passwordsMatch(string p1, string p2, out string result)
+        {
+            bool correct = true;
+            result = "";
+            if (!p1.Equals(p2))
+            {
+                correct = false;
+                result = "Value error: The two passwords do not match.";
+            }
+            return correct;
+        }
     }
 }

@@ -24,22 +24,48 @@ namespace NephroNet
         }
         protected void goHome()
         {
-            addSession();
-            if (roleId.Equals("1"))
+            //addSession();
+            Session.Add("username", username);
+            Session.Add("roleId", roleId);
+            Session.Add("loginId", loginId);
+            Session.Add("token", token);
+            //check if this is the user's initial login:
+            bool initialLogin = checkIfUsersInitialLogin();
+            if (initialLogin)
             {
-                //Admin.
-                Response.Redirect("~/Accounts/Admin/Home.aspx");
+                Response.Redirect("~/ChangePassword.aspx");
             }
-            else if (roleId.Equals("2"))
+            else
             {
-                //Physician.
-                Response.Redirect("~/Accounts/Physician/Home.aspx");
+                if (roleId.Equals("1"))
+                {
+                    //Admin.
+                    Response.Redirect("~/Accounts/Admin/Home.aspx");
+                }
+                else if (roleId.Equals("2"))
+                {
+                    //Physician.
+                    Response.Redirect("~/Accounts/Physician/Home.aspx");
+                }
+                else if (roleId.Equals("3"))
+                {
+                    //Patient.
+                    Response.Redirect("~/Accounts/Patient/Home.aspx");
+                }
             }
-            else if (roleId.Equals("3"))
-            {
-                //Patient.
-                Response.Redirect("~/Accounts/Patient/Home.aspx");
-            }
+        }
+        protected bool checkIfUsersInitialLogin()
+        {
+            bool initial = true;
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select login_initial from Logins where loginId = '" + loginId + "' ";
+            int initialValue = Convert.ToInt32(cmd.ExecuteScalar());
+            if (initialValue == 0)
+                initial = false;
+            connect.Close();
+            return initial;
         }
         protected void store()
         {
