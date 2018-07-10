@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="NephroNet.Accounts.Physician.Home" %>
+﻿<%@ Page Title="Home" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="NephroNet.Accounts.Physician.Home" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
     <a class="navbar-brand" runat="server" href="Home">Nephro Net</a>
     <ul class="nav navbar-nav">            
@@ -10,4 +10,14 @@
     </ul>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container">
+    <h2><%: Title %>:</h2>
+        <div class="panel panel-default">
+        <div class="panel-body">
+
+
+
+            </div>
+            </div>
+        </div>
 </asp:Content>

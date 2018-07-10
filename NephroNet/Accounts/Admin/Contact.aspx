@@ -5,7 +5,8 @@
             <li><a runat="server" href="About">About</a></li>
             <li><a runat="server" href="Contact">Contact</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">                               
+        <ul class="nav navbar-nav navbar-right">                      
+            <li><a runat="server" href="Notifications">Alerts</a></li>
                 <li><a runat="server" href="~/Logout">Logout</a></li>
     </ul>
 </asp:Content>

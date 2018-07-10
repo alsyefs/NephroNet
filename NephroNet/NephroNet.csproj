@@ -132,6 +132,7 @@
     <Content Include="Accounts\Admin\About.aspx" />
     <Content Include="Accounts\Admin\Contact.aspx" />
     <Content Include="Accounts\Admin\Home.aspx" />
+    <Content Include="Accounts\Admin\Notifications.aspx" />
     <Content Include="Accounts\Patient\About.aspx" />
     <Content Include="Accounts\Patient\Contact.aspx" />
     <Content Include="Accounts\Patient\Home.aspx" />
@@ -218,6 +219,13 @@
     </Compile>
     <Compile Include="Accounts\Admin\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\Notifications.aspx.cs">
+      <DependentUpon>Notifications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\Notifications.aspx.designer.cs">
+      <DependentUpon>Notifications.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Patient\About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
