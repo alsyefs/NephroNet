@@ -24,6 +24,23 @@ namespace NephroNet
         }
         protected void goHome()
         {
+            ////addSession();
+            //Session.Add("username", username);
+            //Session.Add("roleId", roleId);
+            //Session.Add("loginId", loginId);
+            //Session.Add("token", token);
+            //Generate a Token:
+            byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+            byte[] key = Guid.NewGuid().ToByteArray();
+            token = Convert.ToBase64String(time.Concat(key).ToArray());
+            token = token.Replace("'", "''");
+            //Store the token in DB:
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "update logins set login_token = '" + token + "' where loginId = '" + loginId + "' ";
+            cmd.ExecuteScalar();
+            connect.Close();
             //addSession();
             Session.Add("username", username);
             Session.Add("roleId", roleId);
@@ -183,10 +200,32 @@ namespace NephroNet
         protected void Page_Load(object sender, EventArgs e)
         {
             getSession();
-            CheckSession session = new CheckSession();
-            bool correctSession = session.sessionIsCorrect(username, roleId, token);
-            if (!correctSession)
-                clearSession();
+            if (!IsPostBack)
+            {
+                CheckSession session = new CheckSession();
+                bool correctSession = session.sessionIsCorrect(username, roleId, token);
+                if (!correctSession)
+                    clearSession();
+                else
+                {
+                    updateToken();
+                }
+            }
+        }
+        protected void updateToken()
+        {
+            //Generate a Token:
+            byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+            byte[] key = Guid.NewGuid().ToByteArray();
+            token = Convert.ToBase64String(time.Concat(key).ToArray());
+            token = token.Replace("'", "''");
+            //Store the token in DB:
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "update logins set login_token = '" + token + "' where loginId = '" + loginId + "' ";
+            cmd.ExecuteScalar();
+            connect.Close();
         }
         protected void clearSession()
         {

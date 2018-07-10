@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace NephroNet.Accounts.Physician
 {
-    public partial class Home : System.Web.UI.Page
+    public partial class About : System.Web.UI.Page
     {
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);

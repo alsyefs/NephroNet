@@ -4,9 +4,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-namespace NephroNet
+namespace NephroNet.Accounts.Physician
 {
-    public class CheckSession
+    public class CheckPhysicianSession
     {
         string username = "", roleId = "", token = "";
         Configuration config = new Configuration();
@@ -47,12 +47,11 @@ namespace NephroNet
         protected Boolean checkIfSessionIsEmpty()
         {
             Boolean itIsEmpty = false;
-            if (string.IsNullOrWhiteSpace(username) || (!roleId.Equals("1") && !roleId.Equals("2") && !roleId.Equals("3")))//if no session values for either username or roleId, set to false.
+            if (string.IsNullOrWhiteSpace(username) || (!roleId.Equals("2") ))//if no session values for either username or roleId, set to false.
             {
                 itIsEmpty = true;
             }
             return itIsEmpty;
         }
-        
     }
 }

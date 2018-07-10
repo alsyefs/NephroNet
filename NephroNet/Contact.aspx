@@ -7,9 +7,7 @@
         <div class="panel-body">
     
     
-    
-    <%--<h2><%: Title %>:</h2>
-    <h3>&nbsp;</h3>--%>
+        
 
     <address>
         <strong>Support:</strong>   <a href="mailto:Saleh.Alsyefi@gmail.com">Saleh.Alsyefi@gmail.com</a><br />

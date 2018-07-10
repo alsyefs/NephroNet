@@ -23,16 +23,35 @@ namespace NephroNet
             Configuration config = new Configuration();
             conn = config.getConnectionString();
             connect = new SqlConnection(conn);
-            getSession();
-            addSession();
-            CheckSession session = new CheckSession();
-            bool correctSession = session.sessionIsCorrect(username, roleId, token);
-            if (!correctSession)
-                clearSession();
             //get number of wrong attempts from the database:
             g_numOfTries = getNumberOfTries();
-            if(!IsPostBack)
+            getSession();
+            if (!IsPostBack)
+            {
+                CheckSession session = new CheckSession();
+                bool correctSession = session.sessionIsCorrect(username, roleId, token);
+                if (!correctSession)
+                    clearSession();
+                else
+                {
+                    updateToken();
+                }
                 getQuestions();
+            }
+        }
+        protected void updateToken()
+        {
+            //Generate a Token:
+            byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+            byte[] key = Guid.NewGuid().ToByteArray();
+            token = Convert.ToBase64String(time.Concat(key).ToArray());
+            token = token.Replace("'", "''");
+            //Store the token in DB:
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "update logins set login_token = '" + token + "' where loginId = '" + loginId + "' ";
+            cmd.ExecuteScalar();
+            connect.Close();
         }
         protected void clearSession()
         {
@@ -58,7 +77,15 @@ namespace NephroNet
         }
         protected void goHome()
         {
+            //addSession();
+            //Generate a Token:
+            updateToken();
             addSession();
+            //addSession();
+            //Session.Add("username", username);
+            //Session.Add("roleId", roleId);
+            //Session.Add("loginId", loginId);
+            //Session.Add("token", token);
             //check if this is the user's initial login:
             bool initialLogin = checkIfUsersInitialLogin();
             if (initialLogin)
