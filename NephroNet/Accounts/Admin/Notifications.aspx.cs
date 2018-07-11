@@ -21,96 +21,6 @@ namespace NephroNet.Accounts.Admin
             countNewTopics();
             countNewMessages();
         }
-        protected void showAllFields()
-        {
-            btnNewUsers.Visible = true;
-            btnNewTopics.Visible = true;
-            btnNewMessages.Visible = true;
-        }
-        protected void countNewUsers()
-        {
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from Registrations";
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            if(count == 0)
-            {
-                lblNewUsers.Text = "There are no new users to review.";
-                btnNewUsers.Visible = false;
-            }
-            else if(count == 1)
-            {
-                lblNewUsers.Text = "There is one new user to review.";
-                btnNewUsers.Visible = true;
-            }
-            else
-            {
-                lblNewUsers.Text = "There are "+count+" new users to review.";
-                btnNewUsers.Visible = true;
-            }
-            connect.Close();
-        }
-        protected void countNewTopics()
-        {
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from [Topics] where topic_isApproved = 0";
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            if (count == 0)
-            {
-                lblNewTopics.Text = "There are no new topics to review.";
-                btnNewTopics.Visible = false;
-            }
-            else if (count == 1)
-            {
-                lblNewTopics.Text = "There is one new topic to review.";
-                btnNewTopics.Visible = true;
-            }
-            else
-            {
-                lblNewTopics.Text = "There are " + count + " new topics to review.";
-                btnNewTopics.Visible = true;
-            }
-            connect.Close();
-        }
-        protected void countNewMessages()
-        {
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from [Entries] where entry_isApproved = 0";
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            if (count == 0)
-            {
-                lblNewMessages.Text = "There are no new messages to review.";
-                btnNewMessages.Visible = false;
-            }
-            else if (count == 1)
-            {
-                lblNewMessages.Text = "There is one new message to review.";
-                btnNewMessages.Visible = true;
-            }
-            else
-            {
-                lblNewMessages.Text = "There are " + count + " new messages to review.";
-                btnNewMessages.Visible = true;
-            }
-            connect.Close();
-        }
-
-        protected void btnNewUsers_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void btnNewTopics_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void btnNewMessages_Click(object sender, EventArgs e)
-        {
-
-        }
         protected void initialPageAccess()
         {
             Configuration config = new Configuration();
@@ -144,5 +54,94 @@ namespace NephroNet.Accounts.Admin
             loginId = (string)(Session["loginId"]);
             token = (string)(Session["token"]);
         }
+        protected void showAllFields()
+        {
+            btnNewUsers.Visible = true;
+            btnNewTopics.Visible = true;
+            btnNewMessages.Visible = true;
+        }
+        protected void countNewUsers()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from Registrations";
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            if(count == 0)
+            {
+                lblNewUsers.Text = "There are no new users to review.";
+                btnNewUsers.Visible = false;
+            }
+            else if(count == 1)
+            {
+                lblNewUsers.Text = "There is one new user to review.";
+                btnNewUsers.Visible = true;
+            }
+            else
+            {
+                lblNewUsers.Text = "There are "+count+" new users to review.";
+                btnNewUsers.Visible = true;
+            }
+            connect.Close();
+        }
+        protected void countNewTopics()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from [Topics] where topic_isApproved = 0 and topic_isDenied = 0";
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            if (count == 0)
+            {
+                lblNewTopics.Text = "There are no new topics to review.";
+                btnNewTopics.Visible = false;
+            }
+            else if (count == 1)
+            {
+                lblNewTopics.Text = "There is one new topic to review.";
+                btnNewTopics.Visible = true;
+            }
+            else
+            {
+                lblNewTopics.Text = "There are " + count + " new topics to review.";
+                btnNewTopics.Visible = true;
+            }
+            connect.Close();
+        }
+        protected void countNewMessages()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //count messages that are not approved and have not been denied.
+            cmd.CommandText = "select count(*) from [Entries] where entry_isApproved = 0 and entry_isDenied = 0";
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            if (count == 0)
+            {
+                lblNewMessages.Text = "There are no new messages to review.";
+                btnNewMessages.Visible = false;
+            }
+            else if (count == 1)
+            {
+                lblNewMessages.Text = "There is one new message to review.";
+                btnNewMessages.Visible = true;
+            }
+            else
+            {
+                lblNewMessages.Text = "There are " + count + " new messages to review.";
+                btnNewMessages.Visible = true;
+            }
+            connect.Close();
+        }
+        protected void btnNewUsers_Click(object sender, EventArgs e)
+        {
+
+        }
+        protected void btnNewTopics_Click(object sender, EventArgs e)
+        {
+
+        }
+        protected void btnNewMessages_Click(object sender, EventArgs e)
+        {
+
+        }
+       
     }
 }

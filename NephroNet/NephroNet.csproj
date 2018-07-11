@@ -19,7 +19,7 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress>
     </Use64BitIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44379</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -130,6 +130,9 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Accounts\Admin\About.aspx" />
+    <Content Include="Accounts\Admin\ApproveMessages.aspx" />
+    <Content Include="Accounts\Admin\ApproveTopics.aspx" />
+    <Content Include="Accounts\Admin\ApproveUsers.aspx" />
     <Content Include="Accounts\Admin\Contact.aspx" />
     <Content Include="Accounts\Admin\Home.aspx" />
     <Content Include="Accounts\Admin\Notifications.aspx" />
@@ -204,6 +207,27 @@
     </Compile>
     <Compile Include="Accounts\Admin\About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\ApproveMessages.aspx.cs">
+      <DependentUpon>ApproveMessages.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\ApproveMessages.aspx.designer.cs">
+      <DependentUpon>ApproveMessages.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\ApproveTopics.aspx.cs">
+      <DependentUpon>ApproveTopics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\ApproveTopics.aspx.designer.cs">
+      <DependentUpon>ApproveTopics.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\ApproveUsers.aspx.cs">
+      <DependentUpon>ApproveUsers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\ApproveUsers.aspx.designer.cs">
+      <DependentUpon>ApproveUsers.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Admin\CheckAdminSession.cs" />
     <Compile Include="Accounts\Admin\Contact.aspx.cs">
