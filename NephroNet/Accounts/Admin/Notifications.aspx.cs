@@ -132,7 +132,8 @@ namespace NephroNet.Accounts.Admin
         }
         protected void btnNewUsers_Click(object sender, EventArgs e)
         {
-
+            addSession();
+            Response.Redirect("ApproveUsers");
         }
         protected void btnNewTopics_Click(object sender, EventArgs e)
         {

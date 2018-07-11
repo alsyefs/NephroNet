@@ -136,6 +136,9 @@
     <Content Include="Accounts\Admin\Contact.aspx" />
     <Content Include="Accounts\Admin\Home.aspx" />
     <Content Include="Accounts\Admin\Notifications.aspx" />
+    <Content Include="Accounts\Admin\ReviewMessage.aspx" />
+    <Content Include="Accounts\Admin\ReviewTopic.aspx" />
+    <Content Include="Accounts\Admin\ReviewUser.aspx" />
     <Content Include="Accounts\Patient\About.aspx" />
     <Content Include="Accounts\Patient\Contact.aspx" />
     <Content Include="Accounts\Patient\Home.aspx" />
@@ -250,6 +253,27 @@
     </Compile>
     <Compile Include="Accounts\Admin\Notifications.aspx.designer.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\ReviewMessage.aspx.cs">
+      <DependentUpon>ReviewMessage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\ReviewMessage.aspx.designer.cs">
+      <DependentUpon>ReviewMessage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\ReviewTopic.aspx.cs">
+      <DependentUpon>ReviewTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\ReviewTopic.aspx.designer.cs">
+      <DependentUpon>ReviewTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\ReviewUser.aspx.cs">
+      <DependentUpon>ReviewUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\ReviewUser.aspx.designer.cs">
+      <DependentUpon>ReviewUser.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Patient\About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
