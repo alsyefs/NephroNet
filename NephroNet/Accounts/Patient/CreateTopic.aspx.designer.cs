@@ -10,7 +10,7 @@
 namespace NephroNet.Accounts.Patient {
     
     
-    public partial class Contact {
+    public partial class CreateTopic {
         
         /// <summary>
         /// lblAlerts control.

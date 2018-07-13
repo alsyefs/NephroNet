@@ -6,9 +6,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace NephroNet.Accounts.Patient
+namespace NephroNet.Accounts.Admin
 {
-    public partial class Home : System.Web.UI.Page
+    public partial class CreateTopic : System.Web.UI.Page
     {
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);
@@ -19,8 +19,7 @@ namespace NephroNet.Accounts.Patient
             conn = config.getConnectionString();
             connect = new SqlConnection(conn);
             getSession();
-            //addSession();
-            CheckPatientSession session = new CheckPatientSession();
+            CheckAdminSession session = new CheckAdminSession();
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();

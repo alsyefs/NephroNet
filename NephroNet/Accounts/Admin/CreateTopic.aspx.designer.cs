@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NephroNet.Accounts.Patient {
+namespace NephroNet.Accounts.Admin {
     
     
-    public partial class Contact {
+    public partial class CreateTopic {
         
         /// <summary>
         /// lblAlerts control.

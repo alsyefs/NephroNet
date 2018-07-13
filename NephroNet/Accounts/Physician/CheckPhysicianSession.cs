@@ -27,6 +27,24 @@ namespace NephroNet.Accounts.Physician
             }
             return correctSession;
         }
+        public int countTotalAlerts()
+        {
+            //SqlConnection connect = new SqlConnection(config.getConnectionString());
+            //connect.Open();
+            //SqlCommand cmd = connect.CreateCommand();
+            int count = 0;
+            //count something:
+            //cmd.CommandText = "";
+            //count = Convert.ToInt32(cmd.ExecuteScalar());
+            //count something else:
+            //cmd.CommandText = "";
+            //count = count + Convert.ToInt32(cmd.ExecuteScalar());
+            //count messages to be approved:
+            //cmd.CommandText = "";
+            //count = count + Convert.ToInt32(cmd.ExecuteScalar());
+            //connect.Close();
+            return count;
+        }
         protected Boolean checkSeesionValues()
         {
             SqlConnection connect = new SqlConnection(config.getConnectionString());

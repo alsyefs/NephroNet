@@ -134,6 +134,7 @@
     <Content Include="Accounts\Admin\ApproveTopics.aspx" />
     <Content Include="Accounts\Admin\ApproveUsers.aspx" />
     <Content Include="Accounts\Admin\Contact.aspx" />
+    <Content Include="Accounts\Admin\CreateTopic.aspx" />
     <Content Include="Accounts\Admin\Home.aspx" />
     <Content Include="Accounts\Admin\Notifications.aspx" />
     <Content Include="Accounts\Admin\ReviewMessage.aspx" />
@@ -141,9 +142,11 @@
     <Content Include="Accounts\Admin\ReviewUser.aspx" />
     <Content Include="Accounts\Patient\About.aspx" />
     <Content Include="Accounts\Patient\Contact.aspx" />
+    <Content Include="Accounts\Patient\CreateTopic.aspx" />
     <Content Include="Accounts\Patient\Home.aspx" />
     <Content Include="Accounts\Physician\About.aspx" />
     <Content Include="Accounts\Physician\Contact.aspx" />
+    <Content Include="Accounts\Physician\CreateTopic.aspx" />
     <Content Include="Accounts\Physician\Home.aspx" />
     <Content Include="ChangePassword.aspx" />
     <Content Include="Contact.aspx" />
@@ -240,6 +243,13 @@
     <Compile Include="Accounts\Admin\Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Admin\CreateTopic.aspx.cs">
+      <DependentUpon>CreateTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\CreateTopic.aspx.designer.cs">
+      <DependentUpon>CreateTopic.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Admin\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -290,6 +300,13 @@
     <Compile Include="Accounts\Patient\Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Patient\CreateTopic.aspx.cs">
+      <DependentUpon>CreateTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\CreateTopic.aspx.designer.cs">
+      <DependentUpon>CreateTopic.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Patient\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -311,6 +328,13 @@
     </Compile>
     <Compile Include="Accounts\Physician\Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\CreateTopic.aspx.cs">
+      <DependentUpon>CreateTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\CreateTopic.aspx.designer.cs">
+      <DependentUpon>CreateTopic.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Physician\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>

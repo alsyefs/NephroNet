@@ -1,11 +1,12 @@
-﻿<%@ Page Title="Contact" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Contact.aspx.cs" Inherits="NephroNet.Accounts.Admin.Contact" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CreateTopic.aspx.cs" Inherits="NephroNet.Accounts.Patient.CreateTopic" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
-    <%--Header start --%>
+        <%--Header start--%>
     <a class="navbar-brand" runat="server" href="Home">Nephro Net</a>
     <ul class="nav navbar-nav">
         <li><a runat="server" href="CreateTopic">Create Topic</a></li>
         <li><a runat="server" href="About">About</a></li>
         <li><a runat="server" href="Contact">Contact</a></li>
+
     </ul>
     <ul class="nav navbar-nav navbar-right">
         <li><a runat="server" href="Notifications">Alerts
@@ -16,20 +17,14 @@
     <%--Header end--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+        <%--Body start--%>
     <div class="container">
     <h2><%: Title %>:</h2>
         <div class="panel panel-default">
         <div class="panel-body">
-    
-    
-        
-
-    <address>
-        <strong>Support:</strong>   <a href="mailto:Saleh.Alsyefi@gmail.com">Saleh.Alsyefi@gmail.com</a><br />
-        <strong>Support:</strong>   <a href="mailto:Alsyefi.Saleh@uwlax.edu">Alsyefi.Saleh@uwlax.edu</a><br />
-    </address>
 
             </div>
             </div>
         </div>
+    <%--Body end--%>
 </asp:Content>

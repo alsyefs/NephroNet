@@ -31,6 +31,7 @@ namespace NephroNet.Accounts.Admin
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
+            lblAlerts.Text = "("+session.countTotalAlerts()+")";
         }
         protected void clearSession()
         {
@@ -87,7 +88,7 @@ namespace NephroNet.Accounts.Admin
         {
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from [Topics] where topic_isApproved = 0 and topic_isDenied = 0";
+            cmd.CommandText = "select count(*) from [Topics] where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0";
             int count = Convert.ToInt32(cmd.ExecuteScalar());
             if (count == 0)
             {
@@ -111,7 +112,7 @@ namespace NephroNet.Accounts.Admin
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             //count messages that are not approved and have not been denied.
-            cmd.CommandText = "select count(*) from [Entries] where entry_isApproved = 0 and entry_isDenied = 0";
+            cmd.CommandText = "select count(*) from [Entries] where entry_isApproved = 0 and entry_isDenied = 0 and entry_isDeleted = 0";
             int count = Convert.ToInt32(cmd.ExecuteScalar());
             if (count == 0)
             {

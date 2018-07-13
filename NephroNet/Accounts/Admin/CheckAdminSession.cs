@@ -27,6 +27,23 @@ namespace NephroNet.Accounts.Admin
             }
             return correctSession;
         }
+        public int countTotalAlerts()
+        {
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //count users to be approved:
+            cmd.CommandText = "select count(*) from registrations";
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            //count topics to be approved:
+            cmd.CommandText = "select count(*) from Topics where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0";
+            count = count + Convert.ToInt32(cmd.ExecuteScalar());
+            //count messages to be approved:
+            cmd.CommandText = "select count(*) from Entries where entry_isApproved = 0 and entry_isDenied = 0 and entry_isDeleted = 0";
+            count = count + Convert.ToInt32(cmd.ExecuteScalar());
+            connect.Close();
+            return count;
+        }
         protected Boolean checkSeesionValues()
         {
             SqlConnection connect = new SqlConnection(config.getConnectionString());

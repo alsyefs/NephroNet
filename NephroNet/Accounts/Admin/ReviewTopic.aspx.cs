@@ -13,9 +13,108 @@ namespace NephroNet.Accounts.Admin
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);
         string username, roleId, loginId, token;
+        string topicId = "";
+        //Globals for "Topics" table:
+        int g_topic_isApproved, g_topic_isDenied;
+        string g_creator, g_topic_title, g_email;
         protected void Page_Load(object sender, EventArgs e)
         {
             initialPageAccess();
+            topicId = Request.QueryString["id"];
+            showTopicInformation();
+        }
+        protected void showTopicInformation()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Check if the ID exists in the database:
+            cmd.CommandText = "select count(*) from topics where topicId = '" + topicId + "' ";
+            int countTopic = Convert.ToInt32(cmd.ExecuteScalar());
+            if (countTopic > 0)//if ID exists, countTopic = 1
+            {
+                //Get topic_createdBy:
+                cmd.CommandText = "select topic_createdBy from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_createdBy = cmd.ExecuteScalar().ToString();
+                //Get creator's email:
+                cmd.CommandText = "select user_email from users where userId = '" + topic_createdBy + "' ";
+                string email = cmd.ExecuteScalar().ToString();
+                //Get creator's fullname:
+                cmd.CommandText = "select user_firstname from users where userId = '"+topic_createdBy+"' ";
+                string creator = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from users where userId = '" + topic_createdBy + "' ";
+                creator = creator = " " + cmd.ExecuteScalar().ToString();
+                //Get topic_type:
+                cmd.CommandText = "select topic_type from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_type = cmd.ExecuteScalar().ToString();
+                //Get topic_title:
+                cmd.CommandText = "select topic_title from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_title = cmd.ExecuteScalar().ToString();
+                //Get topic_time:
+                cmd.CommandText = "select topic_time from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_time = cmd.ExecuteScalar().ToString();
+                //Get topic_description:
+                cmd.CommandText = "select topic_description from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_description = cmd.ExecuteScalar().ToString();
+                //Get "Yes" or "No" for topic_hasImage:
+                cmd.CommandText = "select topic_hasImage from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_hasImage = cmd.ExecuteScalar().ToString();
+                if (topic_hasImage.Equals("0"))
+                    topic_hasImage = "Topic does not have an image.";
+                else
+                    topic_hasImage = "Topic has an image.";
+                //Get topic_isDeleted ?:
+                cmd.CommandText = "select topic_isDeleted from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_isDeleted = cmd.ExecuteScalar().ToString();
+                if (topic_isDeleted.Equals("0"))
+                    topic_isDeleted = "Topic has not been deleted.";
+                else
+                    topic_isDeleted = "Topic has been deleted.";
+                //Get topic_isApproved ?:
+                cmd.CommandText = "select topic_isApproved from [Topics] where [topicId] = '" + topicId + "' ";
+                int int_topic_isApproved = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+                string topic_isApproved;
+                if (int_topic_isApproved == 0)
+                    topic_isApproved = "Topic has not been approved.";
+                else
+                    topic_isApproved = "Topic has been approved.";
+                //Get topic_isDenied ?:
+                cmd.CommandText = "select topic_isDenied from [Topics] where [topicId] = '" + topicId + "' ";
+                int int_topic_isDenied = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+                string topic_isDenied;
+                if (int_topic_isDenied == 0)
+                    topic_isDenied = "Topic has not been denied.";
+                else
+                    topic_isDenied = "Topic has been denied.";
+                //Get topic_isTerminated ?:
+                cmd.CommandText = "select topic_isTerminated from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_isTerminated = cmd.ExecuteScalar().ToString();
+                if (topic_isTerminated.Equals("0"))
+                    topic_isTerminated = "Topic has not been terminated.";
+                else
+                    topic_isTerminated = "Topic has been terminated.";
+                //Create an informative message containing all information for the selected user:
+                lblTopicInformation.Text = "Creator: " + creator + "<br />" +
+                    "Type: " + topic_type + "<br />" +
+                    "Title: " + topic_title + "<br />" +
+                    "Time: " + topic_time + "<br />" +                    
+                    "Has image?: " + topic_hasImage + "<br />" +
+                    "Deleted?: " + topic_isDeleted + "<br />" +
+                    "Approved?: " + topic_isApproved + "<br />" +
+                    "Denied?: " + topic_isDenied + "<br />" +
+                    "Terminated?: " + topic_isTerminated + "<br />"+
+                    "Description: " + topic_description + "<br />";
+
+                lblTopicInformation.Visible = true;
+                //Copy values to globals:
+                g_topic_isApproved = int_topic_isApproved; g_topic_isDenied = int_topic_isDenied;
+                g_creator = creator; g_topic_title = topic_title;g_email = email;
+            }
+            else
+            {
+                addSession();
+                Response.Redirect("ApproveTopics");
+            }
+            connect.Close();
         }
         protected void initialPageAccess()
         {
@@ -27,7 +126,68 @@ namespace NephroNet.Accounts.Admin
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
+            lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
         }
+
+        protected void btnDeny_Click(object sender, EventArgs e)
+        {
+            //Hide the success message:
+            lblMessage.Visible = false;
+            //Set topic_isApproved = 0, topic_isDenied = 1: (1 in bit = true)
+            //Store the previous information into the table "Logins":
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "update topics set topic_isApproved = 0 and topic_isDenied = 1 where topicId = '" + topicId + "' ";
+            cmd.ExecuteScalar();
+            connect.Close();
+            //Create an email message to be sent:
+            string emailMessage = "Hello " + g_creator + ",\n\n" +
+                "This email is to inform you that your topic (" + g_topic_title + ") has been denied for NephroNet.\n\n" +
+                "Best regards,\nNephroNet Support\nNephroNet2018@gmail.com";
+            //Send an email notification to the user using the stored email:
+            Email emailClass = new Email();
+            emailClass.sendEmail(g_email, emailMessage);
+            //Display a success message:
+            lblMessage.Visible = true;
+            lblMessage.Text = "The selected topic has been successfully denied and a notification email has been sent to the user!";
+            //Hide "Approve" and "Deny" buttons:
+            hideApproveDeny();
+        }
+
+        protected void btnApprove_Click(object sender, EventArgs e)
+        {
+            //Hide the success message:
+            lblMessage.Visible = false;
+            //Set topic_isApproved = 1, topic_isDenied = 0: (1 in bit = true)
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "update topics set topic_isApproved = 1 and topic_isDenied = 0 where topicId = '"+topicId+"' ";
+            cmd.ExecuteScalar();
+            connect.Close();
+            //Create an email message to be sent:
+            string emailMessage = "Hello " + g_creator + ",\n\n" +
+                "This email is to inform you that your topic ("+ g_topic_title + ") has been approved for NephroNet.\n\n" +
+                "Best regards,\nNephroNet Support\nNephroNet2018@gmail.com";
+            //Send an email notification to the user using the stored email:
+            Email emailClass = new Email();
+            emailClass.sendEmail(g_email, emailMessage);
+            //Display a success message:
+            lblMessage.Visible = true;
+            lblMessage.Text = "The selected topic has been successfully approved and a notification email has been sent to the user!";
+            //Hide "Approve" and "Deny" buttons:
+            hideApproveDeny();
+        }
+        protected void hideApproveDeny()
+        {
+            btnApprove.Visible = false;
+            btnDeny.Visible = false;
+        }
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            addSession();
+            Response.Redirect("ApproveTopics");
+        }
+
         protected void clearSession()
         {
 

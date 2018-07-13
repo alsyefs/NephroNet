@@ -22,8 +22,7 @@ namespace NephroNet.Accounts.Admin
         {
             initialPageAccess();
             registerId = Request.QueryString["id"];
-            //if (!IsPostBack)
-                showUserInformation();
+            showUserInformation();
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)
@@ -105,6 +104,7 @@ namespace NephroNet.Accounts.Admin
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
+            lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
         }
         protected string createUsername()
         {

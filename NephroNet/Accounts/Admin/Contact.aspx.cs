@@ -19,11 +19,11 @@ namespace NephroNet.Accounts.Admin
             conn = config.getConnectionString();
             connect = new SqlConnection(conn);
             getSession();
-            //addSession();
             CheckAdminSession session = new CheckAdminSession();
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
+            lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
         }
         protected void clearSession()
         {

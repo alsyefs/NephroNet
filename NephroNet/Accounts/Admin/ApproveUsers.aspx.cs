@@ -20,7 +20,12 @@ namespace NephroNet.Accounts.Admin
             int countNewUsers = getTotalNewUsers();
             if(countNewUsers > 0)
             {
+                lblMessage.Visible = false;
                 createTable(countNewUsers);
+            }
+            else if (countNewUsers == 0)
+            {
+                lblMessage.Visible = true;
             }
         }
         protected int getTotalNewUsers()
@@ -83,6 +88,7 @@ namespace NephroNet.Accounts.Admin
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
+            lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
         }
         protected void clearSession()
         {

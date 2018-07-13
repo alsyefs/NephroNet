@@ -1,16 +1,19 @@
 ﻿<%@ Page Title="Approve Users" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ApproveUsers.aspx.cs" Inherits="NephroNet.Accounts.Admin.ApproveUsers" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
-    <%--Page header start:--%>
+    <%--Header start --%>
     <a class="navbar-brand" runat="server" href="Home">Nephro Net</a>
-    <ul class="nav navbar-nav">            
-            <li><a runat="server" href="About">About</a></li>
-            <li><a runat="server" href="Contact">Contact</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">                       
-            <li><a runat="server" href="Notifications">Alerts</a></li>
-                <li><a runat="server" href="~/Logout">Logout</a></li>
+    <ul class="nav navbar-nav">
+        <li><a runat="server" href="CreateTopic">Create Topic</a></li>
+        <li><a runat="server" href="About">About</a></li>
+        <li><a runat="server" href="Contact">Contact</a></li>
     </ul>
-    <%--Page header end.--%>
+    <ul class="nav navbar-nav navbar-right">
+        <li><a runat="server" href="Notifications">Alerts
+            <asp:Label ID="lblAlerts" runat="server" Text=" (0)"></asp:Label>
+            </a></li>
+        <li><a runat="server" href="~/Logout">Logout</a></li>
+    </ul>
+    <%--Header end--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%--Page body start:--%>
@@ -19,7 +22,8 @@
         <div class="panel panel-default">
         <div class="panel-body">
 
-
+            <%--Message to be displaied if there is nothing to show:--%>
+            <asp:Label ID="lblMessage" runat="server" Text="There is nothing to display!" Visible="false" ForeColor="Red" Font-Size="Medium" Font-Bold="true"></asp:Label>
 
             <asp:GridView ID="grdUsers" runat="server" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical"  PageSize ="20" AllowPaging="True" OnPageIndexChanging="grdUsers_PageIndexChanging">
                 <AlternatingRowStyle BackColor="White" />
