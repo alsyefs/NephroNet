@@ -160,19 +160,17 @@ namespace NephroNet
         protected Boolean checkIfExists(string username)
         {
             Boolean exists = true;
-            //connect.Open();
-            //SqlCommand cmd = connect.CreateCommand();
-            //cmd.CommandType = CommandType.Text;
-            //cmd.CommandText = "select count(*) from login where username like '" + username + "' ";
-            //int countUser = Convert.ToInt32(cmd.ExecuteScalar());
-            //if (countUser < 1) //user does not exist.
-            //{
-            //    exists = false;
-            //    //lblError.Visible = true;
-            //    //lblError.Text = username+" does not exist";
-            //}
-
-            //connect.Close();
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from logins where login_username like '" + username + "' ";
+            int countUser = Convert.ToInt32(cmd.ExecuteScalar());
+            if (countUser < 1) //user does not exist.
+            {
+                exists = false;
+                lblError.Visible = true;
+                lblError.Text = username+" does not exist";
+            }
+            connect.Close();
             return exists;
         }
         protected Boolean checkPassword(string username, string password)

@@ -42,7 +42,7 @@ namespace NephroNet.Accounts.Admin
                 cmd.CommandText = "select user_firstname from users where userId = '"+topic_createdBy+"' ";
                 string creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + topic_createdBy + "' ";
-                creator = creator = " " + cmd.ExecuteScalar().ToString();
+                creator = creator + " " + cmd.ExecuteScalar().ToString();
                 //Get topic_type:
                 cmd.CommandText = "select topic_type from [Topics] where [topicId] = '" + topicId + "' ";
                 string topic_type = cmd.ExecuteScalar().ToString();
@@ -64,14 +64,15 @@ namespace NephroNet.Accounts.Admin
                     topic_hasImage = "Topic has an image.";
                 //Get topic_isDeleted ?:
                 cmd.CommandText = "select topic_isDeleted from [Topics] where [topicId] = '" + topicId + "' ";
-                string topic_isDeleted = cmd.ExecuteScalar().ToString();
-                if (topic_isDeleted.Equals("0"))
+                int int_topic_isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+                string topic_isDeleted = "";
+                if (int_topic_isDeleted == 0)
                     topic_isDeleted = "Topic has not been deleted.";
                 else
                     topic_isDeleted = "Topic has been deleted.";
                 //Get topic_isApproved ?:
                 cmd.CommandText = "select topic_isApproved from [Topics] where [topicId] = '" + topicId + "' ";
-                int int_topic_isApproved = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+                int int_topic_isApproved = Convert.ToInt32(cmd.ExecuteScalar());
                 string topic_isApproved;
                 if (int_topic_isApproved == 0)
                     topic_isApproved = "Topic has not been approved.";
@@ -79,7 +80,7 @@ namespace NephroNet.Accounts.Admin
                     topic_isApproved = "Topic has been approved.";
                 //Get topic_isDenied ?:
                 cmd.CommandText = "select topic_isDenied from [Topics] where [topicId] = '" + topicId + "' ";
-                int int_topic_isDenied = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+                int int_topic_isDenied = Convert.ToInt32(cmd.ExecuteScalar());
                 string topic_isDenied;
                 if (int_topic_isDenied == 0)
                     topic_isDenied = "Topic has not been denied.";
@@ -102,7 +103,7 @@ namespace NephroNet.Accounts.Admin
                     "Approved?: " + topic_isApproved + "<br />" +
                     "Denied?: " + topic_isDenied + "<br />" +
                     "Terminated?: " + topic_isTerminated + "<br />"+
-                    "Description: " + topic_description + "<br />";
+                    "Description: \"" + topic_description + "\"<br />";
 
                 lblTopicInformation.Visible = true;
                 //Copy values to globals:
@@ -137,7 +138,7 @@ namespace NephroNet.Accounts.Admin
             //Store the previous information into the table "Logins":
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "update topics set topic_isApproved = 0 and topic_isDenied = 1 where topicId = '" + topicId + "' ";
+            cmd.CommandText = "update topics set topic_isApproved = 0, topic_isDenied = 1 where topicId = '" + topicId + "' ";
             cmd.ExecuteScalar();
             connect.Close();
             //Create an email message to be sent:
@@ -161,7 +162,7 @@ namespace NephroNet.Accounts.Admin
             //Set topic_isApproved = 1, topic_isDenied = 0: (1 in bit = true)
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "update topics set topic_isApproved = 1 and topic_isDenied = 0 where topicId = '"+topicId+"' ";
+            cmd.CommandText = "update topics set topic_isApproved = 1, topic_isDenied = 0 where topicId = '"+topicId+"' ";
             cmd.ExecuteScalar();
             connect.Close();
             //Create an email message to be sent:
