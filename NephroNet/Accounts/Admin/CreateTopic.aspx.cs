@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -28,6 +29,28 @@ namespace NephroNet.Accounts.Admin
             if (!correctSession)
                 clearSession();
             lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
+        }
+        protected void clearSession()
+        {
+
+            Session.RemoveAll();
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("~/");
+        }
+        protected void addSession()
+        {
+            Session.Add("username", username);
+            Session.Add("roleId", roleId);
+            Session.Add("loginId", loginId);
+            Session.Add("token", token);
+        }
+        protected void getSession()
+        {
+            username = (string)(Session["username"]);
+            roleId = (string)(Session["roleId"]);
+            loginId = (string)(Session["loginId"]);
+            token = (string)(Session["token"]);
         }
 
         protected void btnSubmit_Click(object sender, EventArgs e)
@@ -60,22 +83,55 @@ namespace NephroNet.Accounts.Admin
         }
         protected void addNewEntry()
         {
-            string imageName=""; int hasImage = 0;
+            //string imageName="";
+            int hasImage = 0;
+            ArrayList files = new ArrayList();
             if (FileUpload1.HasFile)
             {
-                imageName = getImageName();
+                //Count number of files:
+                int fileCount = FileUpload1.PostedFiles.Count;
+                for (int i = 0; i < fileCount; i++)
+                {
+                    //Store the file names in an array list:
+                    files.Add(FileUpload1.PostedFiles[i].FileName);
+                }
+                storeImagesInServer();
                 hasImage = 1;
             }
             //Store new topic as neither approved nor denied and return its ID:
             string topicId = storeTopic(hasImage);
-            //Store metadata:
-            storeMetaData(topicId, hasImage, imageName);
+            //Allow the creator of topic to access it when it's approved and add the new tags to the topic:
+            allowUserAccessTopicAndStoreTags(topicId);
+            storeImagesInDB(topicId, hasImage, files);
             lblError.Visible = true;
             lblError.ForeColor = System.Drawing.Color.Green;
             lblError.Text = "The topic has been successfully submitted and an email notification has been sent to you. <br/>"+
                 "Your topic will be reviewed and you will be notified by email once the review is complete.";
         }
-        protected void storeMetaData(string topicId, int hasImage, string imageName)
+        protected void storeImagesInDB(string topicId, int hasImage, ArrayList files)
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Check if there is an image:
+            if (hasImage == 1)
+            {
+                for (int i = 0; i < files.Count; i++)
+                {
+                    string imageName = files[i].ToString().Replace("'", "''");
+                    //Add to Images:
+                    cmd.CommandText = "insert into Images (image_name) values ('" + imageName + "')";
+                    cmd.ExecuteScalar();
+                    //Get the image ID:
+                    cmd.CommandText = "select imageId from Images where image_name like '" + imageName + "' ";
+                    string imageId = cmd.ExecuteScalar().ToString();
+                    //Add ImagesForTopics:
+                    cmd.CommandText = "insert into ImagesForTopics (imageId, topicId) values ('" + imageId + "', '" + topicId + "')";
+                    cmd.ExecuteScalar();
+                }
+            }
+            connect.Close();
+        }
+        protected void allowUserAccessTopicAndStoreTags(string topicId)
         {
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
@@ -98,31 +154,20 @@ namespace NephroNet.Accounts.Admin
                 cmd.CommandText = "insert into TagsForTopics (topicId, tagId) values ('"+topicId+"', '"+tagId+"')";
                 cmd.ExecuteScalar();
             }
-            //Check if there is an image:
-            if(hasImage == 1)
-            {
-                //Add to Images:
-                cmd.CommandText = "insert into Images (image_name) values ('"+ imageName.Replace("'", "''") + "')";
-                cmd.ExecuteScalar();
-                //Get the image ID:
-                cmd.CommandText = "select imageId from Images where image_name like '"+ imageName.Replace("'", "''") + "' ";
-                string imageId = cmd.ExecuteScalar().ToString();
-                //Add ImagesForTopics:
-                cmd.CommandText = "insert into ImagesForTopics (imageId, topicId) values ('"+imageId+"', '"+topicId+"')";
-                cmd.ExecuteScalar();
-            }
+            
             connect.Close();
         }
-        protected string getImageName()
+        protected void storeImagesInServer()
         {
-            string name = "";
-            string path = Server.MapPath("~/images/" + FileUpload1.FileName);
-            System.Drawing.Bitmap image = new System.Drawing.Bitmap(FileUpload1.PostedFile.InputStream);
-            System.Drawing.Bitmap image_copy = new System.Drawing.Bitmap(image);
-            System.Drawing.Image img = RezizeImage(System.Drawing.Image.FromStream(FileUpload1.PostedFile.InputStream), 500, 500);
-            img.Save(path, ImageFormat.Jpeg);
-            name = FileUpload1.FileName;
-            return name;
+            //Loop through images and store each one of them:
+            for (int i = 0; i < FileUpload1.PostedFiles.Count; i++)
+            {
+                string path = Server.MapPath("~/images/" + FileUpload1.PostedFiles[i].FileName);
+                System.Drawing.Bitmap image = new System.Drawing.Bitmap(FileUpload1.PostedFiles[i].InputStream);
+                System.Drawing.Bitmap image_copy = new System.Drawing.Bitmap(image);
+                System.Drawing.Image img = RezizeImage(System.Drawing.Image.FromStream(FileUpload1.PostedFiles[i].InputStream), 500, 500);
+                img.Save(path, ImageFormat.Jpeg);
+            }
         }
         private MemoryStream BytearrayToStream(byte[] arr)
         {
@@ -243,28 +288,6 @@ namespace NephroNet.Accounts.Admin
             addSession();
             Response.Redirect("Home");
         }
-
-        protected void clearSession()
-        {
-
-            Session.RemoveAll();
-            Session.Clear();
-            Session.Abandon();
-            Response.Redirect("~/");
-        }
-        protected void addSession()
-        {
-            Session.Add("username", username);
-            Session.Add("roleId", roleId);
-            Session.Add("loginId", loginId);
-            Session.Add("token", token);
-        }
-        protected void getSession()
-        {
-            username = (string)(Session["username"]);
-            roleId = (string)(Session["roleId"]);
-            loginId = (string)(Session["loginId"]);
-            token = (string)(Session["token"]);
-        }
+        
     }
 }
