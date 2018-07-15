@@ -1,4 +1,4 @@
-﻿<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="About.aspx.cs" Inherits="NephroNet.Accounts.Admin.About" %>
+﻿<%@ Page Title="View Topic" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ViewTopic.aspx.cs" Inherits="NephroNet.Accounts.Admin.ViewTopic" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
     <%--Header start --%>
@@ -17,14 +17,13 @@
     <%--Header end--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <%--Body start--%>
     <div class="container">
         <h2><%: Title %>:</h2>
         <div class="panel panel-default">
             <div class="panel-body">
-
-                <h3>Nephrology social network</h3>
-                <p>This website serves as a social network for people who need to communicate with others having the same medical situations to find help.</p>
             </div>
         </div>
     </div>
+    <%--Body end--%>
 </asp:Content>

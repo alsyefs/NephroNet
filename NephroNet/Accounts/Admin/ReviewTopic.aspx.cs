@@ -57,11 +57,12 @@ namespace NephroNet.Accounts.Admin
                 string topic_description = cmd.ExecuteScalar().ToString();
                 //Get "Yes" or "No" for topic_hasImage:
                 cmd.CommandText = "select topic_hasImage from [Topics] where [topicId] = '" + topicId + "' ";
-                string topic_hasImage = cmd.ExecuteScalar().ToString();
-                if (topic_hasImage.Equals("0"))
-                    topic_hasImage = "Topic does not have an image.";
+                int topic_hasImage = Convert.ToInt32(cmd.ExecuteScalar());
+                string str_topic_hasImage = "";
+                if (topic_hasImage == 0)
+                    str_topic_hasImage = "Topic does not have an image.";
                 else
-                    topic_hasImage = "Topic has an image.";
+                    str_topic_hasImage = "Topic has an image.";
                 //Get topic_isDeleted ?:
                 cmd.CommandText = "select topic_isDeleted from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
@@ -93,18 +94,69 @@ namespace NephroNet.Accounts.Admin
                     topic_isTerminated = "Topic has not been terminated.";
                 else
                     topic_isTerminated = "Topic has been terminated.";
+                //Get tags:
+                string tagNames = "";
+                cmd.CommandText = "select count(*) from TagsForTopics where topicId = '"+topicId+"' ";
+                int totalTags = Convert.ToInt32(cmd.ExecuteScalar());
+                if (totalTags == 0)
+                    tagNames = "There are no tags for the selected topic";
+                for (int i = 1; i <= totalTags; i++)
+                {
+                    cmd.CommandText = "select [tagId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY tagId ASC), * FROM [TagsForTopics] where topicId = '" + topicId + "') as t where rowNum = '" + i + "'";
+                    string tagId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select tag_name from Tags where tagId = '"+tagId+"' ";
+                    if (totalTags == 1)
+                        tagNames = cmd.ExecuteScalar().ToString();
+                    else if (totalTags > 1)
+                    {
+                        if(i==0)
+                            tagNames = cmd.ExecuteScalar().ToString();
+                        else
+                            tagNames = tagNames + ", " + cmd.ExecuteScalar().ToString();
+                    }
+                }
                 //Create an informative message containing all information for the selected user:
-                lblTopicInformation.Text = "Creator: " + creator + "<br />" +
-                    "Type: " + topic_type + "<br />" +
-                    "Title: " + topic_title + "<br />" +
-                    "Time: " + topic_time + "<br />" +                    
-                    "Has image?: " + topic_hasImage + "<br />" +
-                    "Deleted?: " + topic_isDeleted + "<br />" +
-                    "Approved?: " + topic_isApproved + "<br />" +
-                    "Denied?: " + topic_isDenied + "<br />" +
-                    "Terminated?: " + topic_isTerminated + "<br />"+
-                    "Description: \"" + topic_description + "\"<br />";
-
+                if (topic_hasImage == 1)
+                {
+                    
+                    cmd.CommandText = "select count(*) from ImagesForTopics where topicId = '"+topicId+"' ";
+                    int totalImages = Convert.ToInt32(cmd.ExecuteScalar());
+                    string imagesHTML = "";
+                    for(int i = 1; i <= totalImages; i++)
+                    {
+                        cmd.CommandText = "select [imageId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY imageId ASC), * FROM [ImagesForTopics] where topicId = '" + topicId + "') as t where rowNum = '" + i + "'";
+                        string imageId = cmd.ExecuteScalar().ToString();
+                        cmd.CommandText = "select image_name from Images where imageId = '"+imageId+"' ";
+                        string image_name = cmd.ExecuteScalar().ToString();
+                        imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br />";
+                    }
+                    lblTopicInformation.Text = "Creator: " + creator + "<br />" +
+                        "Type: " + topic_type + "<br />" +
+                        "Title: " + topic_title + "<br />" +
+                        "Time: " + topic_time + "<br />" +
+                        "Has image?: " + str_topic_hasImage + "<br />" +
+                        "Deleted?: " + topic_isDeleted + "<br />" +
+                        "Approved?: " + topic_isApproved + "<br />" +
+                        "Denied?: " + topic_isDenied + "<br />" +
+                        "Terminated?: " + topic_isTerminated + "<br />" +
+                        "Description: \"" + topic_description + "\"<br />" +
+                        "Tags: \"" + tagNames + "\"<br />" +
+                        imagesHTML;
+                }
+                else
+                {
+                    lblTopicInformation.Text = "Creator: " + creator + "<br />" +
+                        "Type: " + topic_type + "<br />" +
+                        "Title: " + topic_title + "<br />" +
+                        "Time: " + topic_time + "<br />" +
+                        "Has image?: " + str_topic_hasImage + "<br />" +
+                        "Deleted?: " + topic_isDeleted + "<br />" +
+                        "Approved?: " + topic_isApproved + "<br />" +
+                        "Denied?: " + topic_isDenied + "<br />" +
+                        "Terminated?: " + topic_isTerminated + "<br />" +
+                        "Description: \"" + topic_description + "\"<br />"+
+                        "Tags: \"" + tagNames + "\"<br />";
+                }
                 lblTopicInformation.Visible = true;
                 //Copy values to globals:
                 g_topic_isApproved = int_topic_isApproved; g_topic_isDenied = int_topic_isDenied;

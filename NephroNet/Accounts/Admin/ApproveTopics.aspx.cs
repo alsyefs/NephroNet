@@ -28,52 +28,7 @@ namespace NephroNet.Accounts.Admin
                 lblMessage.Visible = true;
             }
         }
-        protected void createTable(int count)
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(string));
-            dt.Columns.Add("Title", typeof(string));
-            dt.Columns.Add("Type", typeof(string));
-            dt.Columns.Add("Creator", typeof(string));
-            string id = "", title = "", type = "", creator = "";
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            for (int i = 1; i <= count; i++)
-            {
-                //Get the topic ID:
-                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                id = cmd.ExecuteScalar().ToString();
-                //Get title:
-                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                title = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_type] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                type = cmd.ExecuteScalar().ToString();
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '"+creatorId+"' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(id, title, type, creator);
-            }
-            connect.Close();
-            grdTopics.DataSource = dt;
-            grdTopics.DataBind();
-        }
-        protected int getTotalNewTopics()
-        {
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            //count the not-approved topics:
-            cmd.CommandText = "select count(*) from Topics where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0";
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            connect.Close();
-            return count;
-        }
+      
         protected void initialPageAccess()
         {
             Configuration config = new Configuration();
@@ -112,6 +67,52 @@ namespace NephroNet.Accounts.Admin
         {
             grdTopics.PageIndex = e.NewPageIndex;
             grdTopics.DataBind();
+        }
+        protected void createTable(int count)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("Type", typeof(string));
+            dt.Columns.Add("Creator", typeof(string));
+            string id = "", title = "", type = "", creator = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            for (int i = 1; i <= count; i++)
+            {
+                //Get the topic ID:
+                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                id = cmd.ExecuteScalar().ToString();
+                //Get title:
+                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                title = cmd.ExecuteScalar().ToString();
+                //Get type:
+                cmd.CommandText = "select [topic_type] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                type = cmd.ExecuteScalar().ToString();
+                //Get creator's ID:
+                cmd.CommandText = "select [topic_createdBy] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                string creatorId = cmd.ExecuteScalar().ToString();
+                //Get creator's name:
+                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
+                creator = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
+                creator = creator + " " + cmd.ExecuteScalar().ToString();
+                dt.Rows.Add(id, title, type, creator);
+            }
+            connect.Close();
+            grdTopics.DataSource = dt;
+            grdTopics.DataBind();
+        }
+        protected int getTotalNewTopics()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //count the not-approved topics:
+            cmd.CommandText = "select count(*) from Topics where topic_isApproved = 0 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0";
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            connect.Close();
+            return count;
         }
     }
 }
