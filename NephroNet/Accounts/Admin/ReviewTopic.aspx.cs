@@ -89,8 +89,9 @@ namespace NephroNet.Accounts.Admin
                     topic_isDenied = "Topic has been denied.";
                 //Get topic_isTerminated ?:
                 cmd.CommandText = "select topic_isTerminated from [Topics] where [topicId] = '" + topicId + "' ";
-                string topic_isTerminated = cmd.ExecuteScalar().ToString();
-                if (topic_isTerminated.Equals("0"))
+                int int_topic_isTerminated = Convert.ToInt32(cmd.ExecuteScalar());
+                string topic_isTerminated = "";
+                if (int_topic_isTerminated == 0)
                     topic_isTerminated = "Topic has not been terminated.";
                 else
                     topic_isTerminated = "Topic has been terminated.";
@@ -215,6 +216,10 @@ namespace NephroNet.Accounts.Admin
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandText = "update topics set topic_isApproved = 1, topic_isDenied = 0 where topicId = '"+topicId+"' ";
+            cmd.ExecuteScalar();
+            cmd.CommandText = "select topic_createdBy from topics where topicId = '"+topicId+"' ";
+            string creatorId = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "update UsersForTopics set isApproved = 1 where topicId = '" + topicId + "' and userId = '"+ creatorId + "' ";
             cmd.ExecuteScalar();
             connect.Close();
             //Create an email message to be sent:

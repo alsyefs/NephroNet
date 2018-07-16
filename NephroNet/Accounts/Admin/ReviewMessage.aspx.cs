@@ -118,8 +118,9 @@ namespace NephroNet.Accounts.Admin
                 string entry_text = cmd.ExecuteScalar().ToString();
                 //Get entry_isDeleted:
                 cmd.CommandText = "select entry_isDeleted from [Entries] where [entryId] = '" + messageId + "' ";
-                string entry_isDeleted = cmd.ExecuteScalar().ToString();
-                if (entry_isDeleted.Equals("0"))
+                int int_entry_isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+                string entry_isDeleted = "";
+                if (int_entry_isDeleted == 0)
                     entry_isDeleted = "Topic has not been deleted.";
                 else
                     entry_isDeleted = "Topic has been deleted.";

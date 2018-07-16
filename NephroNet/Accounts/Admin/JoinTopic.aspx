@@ -1,5 +1,4 @@
-﻿<%@ Page Title="View Topic" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ViewTopic.aspx.cs" Inherits="NephroNet.Accounts.Admin.ViewTopic" %>
-
+﻿<%@ Page Title="Request To Join" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="JoinTopic.aspx.cs" Inherits="NephroNet.Accounts.Admin.JoinTopic" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
     <%--Header start --%>
     <a class="navbar-brand" runat="server" href="Home">Nephro Net</a>
@@ -17,35 +16,14 @@
     <%--Header end--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <%--Body start--%>
     <div class="container">
         <h2><%: Title %>:</h2>
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Content start--%>
-                <asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>
                 <br />
-                <asp:Label ID="lblEntry" runat="server" Text="Message"></asp:Label>
-                &nbsp;
-                <style>
-                    .content {
-                        min-width: 100%;
-                    }
-                </style>
-                <asp:TextBox ID="txtEntry" runat="server" Height="130px" Width="959px" TextMode="MultiLine" CssClass="content"></asp:TextBox>
-                <br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:Label ID="lblEntryError" runat="server" Text="Invalid input: Please type a description." Visible="false" ForeColor="red"></asp:Label>
-                <br />
-                <br />
-
-
-                <asp:FileUpload ID="FileUpload1" runat="server" Width="385px" AllowMultiple="true" class="btn btn-primary" />
-                &nbsp;
-                <asp:Label ID="lblImageError" runat="server" Text="Image" Visible="false" ForeColor="red"></asp:Label>
-                <%--Submit--%><br />
-                <br />
-                <asp:Button ID="btnSubmit" runat="server" Text="Submit" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnSubmit_Click" />
+                <%--Request to join--%>
+                <asp:Button ID="btnRequest" runat="server" Text="Join Topic" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" Visible="false" OnClick="btnRequest_Click" />
                 &nbsp;
                 
                 <%--Cancel button--%>    
@@ -60,5 +38,4 @@
             </div>
         </div>
     </div>
-    <%--Body end--%>
 </asp:Content>

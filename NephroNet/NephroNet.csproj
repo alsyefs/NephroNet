@@ -136,6 +136,7 @@
     <Content Include="Accounts\Admin\Contact.aspx" />
     <Content Include="Accounts\Admin\CreateTopic.aspx" />
     <Content Include="Accounts\Admin\Home.aspx" />
+    <Content Include="Accounts\Admin\JoinTopic.aspx" />
     <Content Include="Accounts\Admin\Notifications.aspx" />
     <Content Include="Accounts\Admin\ReviewMessage.aspx" />
     <Content Include="Accounts\Admin\ReviewTopic.aspx" />
@@ -257,6 +258,13 @@
     </Compile>
     <Compile Include="Accounts\Admin\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\JoinTopic.aspx.cs">
+      <DependentUpon>JoinTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\JoinTopic.aspx.designer.cs">
+      <DependentUpon>JoinTopic.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Admin\Notifications.aspx.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
