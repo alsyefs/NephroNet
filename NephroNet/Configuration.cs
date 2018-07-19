@@ -24,7 +24,7 @@ namespace NephroNet
         //The password cannot be hashed as password are already in Gmail database; therefore, sending a hashed password will result rehashing the 
         // hash and password will be wrong. to verify password, Gmail does: hash(password) = hashedPassword
         //if we send the hashed password, Gmail would do: hash(hashedPassword) != hashedPassword
-        string password = setPassword();
+        string password = setPassword(); 
         protected static string setEmail()
         {
             string str_email = "";

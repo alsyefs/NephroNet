@@ -16,7 +16,7 @@ namespace NephroNet
         SqlConnection connect = new SqlConnection(connString);        
         public Encryption()
         {
-            connString = getConnection();
+            connString = getConnection(); 
             PasswordHash = setPasswordHash();
             SaltKey = setSaltKey();
             VIKey = setVIKey();
