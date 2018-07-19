@@ -17,15 +17,45 @@ namespace NephroNet
         public Encryption()
         {
             connString = getConnection();
-            PasswordHash = "P@@Sw0rd";
-            SaltKey = "S@LT&KEY";
-            VIKey = "@1B2c3D4e5F6g7H8";
+            PasswordHash = setPasswordHash();
+            SaltKey = setSaltKey();
+            VIKey = setVIKey();
         }
         public static string getConnection()
         {
             Configuration config = new Configuration();
             string conn = config.getConnectionString();            
             return conn;
+        }
+        protected string setVIKey()
+        {
+            string str_vIKey = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select TOP 1 key_vIKey from Keys";
+            str_vIKey = cmd.ExecuteScalar().ToString();
+            connect.Close();
+            return str_vIKey;
+        }
+        protected string setSaltKey()
+        {
+            string str_saltKey = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select TOP 1 key_saltKey from Keys";
+            str_saltKey = cmd.ExecuteScalar().ToString();
+            connect.Close();
+            return str_saltKey;
+        }
+        protected string setPasswordHash()
+        {
+            string str_passwordHash = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select TOP 1 key_passwordHash from Keys";
+            str_passwordHash = cmd.ExecuteScalar().ToString();
+            connect.Close();
+            return str_passwordHash;
         }
         public static string hash(string clearText)
         {
@@ -102,13 +132,8 @@ namespace NephroNet
             }
             catch (Exception)
             {
-                //decryptedByteCount = 0;
                 return encryptedText;
             }
-            //
-            //memoryStream.Close();
-            //cryptoStream.Close();
-            //return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount).TrimEnd("\0".ToCharArray());
         }
 
     }
