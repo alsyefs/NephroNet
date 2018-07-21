@@ -130,6 +130,7 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="Accounts\Admin\About.aspx" />
+    <Content Include="Accounts\Admin\ApproveJoinTopics.aspx" />
     <Content Include="Accounts\Admin\ApproveMessages.aspx" />
     <Content Include="Accounts\Admin\ApproveTopics.aspx" />
     <Content Include="Accounts\Admin\ApproveUsers.aspx" />
@@ -138,6 +139,7 @@
     <Content Include="Accounts\Admin\Home.aspx" />
     <Content Include="Accounts\Admin\JoinTopic.aspx" />
     <Content Include="Accounts\Admin\Notifications.aspx" />
+    <Content Include="Accounts\Admin\ReviewJoinTopic.aspx" />
     <Content Include="Accounts\Admin\ReviewMessage.aspx" />
     <Content Include="Accounts\Admin\ReviewTopic.aspx" />
     <Content Include="Accounts\Admin\ReviewUser.aspx" />
@@ -216,6 +218,13 @@
     <Compile Include="Accounts\Admin\About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Admin\ApproveJoinTopics.aspx.cs">
+      <DependentUpon>ApproveJoinTopics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\ApproveJoinTopics.aspx.designer.cs">
+      <DependentUpon>ApproveJoinTopics.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Admin\ApproveMessages.aspx.cs">
       <DependentUpon>ApproveMessages.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -272,6 +281,13 @@
     </Compile>
     <Compile Include="Accounts\Admin\Notifications.aspx.designer.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\ReviewJoinTopic.aspx.cs">
+      <DependentUpon>ReviewJoinTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\ReviewJoinTopic.aspx.designer.cs">
+      <DependentUpon>ReviewJoinTopic.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Admin\ReviewMessage.aspx.cs">
       <DependentUpon>ReviewMessage.aspx</DependentUpon>

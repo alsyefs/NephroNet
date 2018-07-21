@@ -62,19 +62,25 @@ namespace NephroNet.Accounts.Admin
             //Get the userId:
             cmd.CommandText = "select userId from Users where loginId = '"+loginId+"' ";
             string userId = cmd.ExecuteScalar().ToString();
-            //Count to check if the user has requested join:
-            cmd.CommandText = "select count(*) from UsersForTopics where topicId = '"+topicId+"' and userId = '"+ userId + "'  ";
-            int countUserForTopic = Convert.ToInt32(cmd.ExecuteScalar());
-            if (countUserForTopic > 0)
+            //check if topic is for dissemination. If type = Dissemination, then ignore authorization:
+            cmd.CommandText = "select topic_type from Topics where topicId = '"+topicId+"' ";
+            string type = cmd.ExecuteScalar().ToString();
+            if (type.Equals("Discussion"))
             {
-                //Check if the user is approved:
-                cmd.CommandText = "select isApproved from UsersForTopics where topicId = '" + topicId + "' and userId = '" + userId + "'  ";
-                int isApproved = Convert.ToInt32(cmd.ExecuteScalar());
-                if (isApproved == 0)
+                //Count to check if the user has requested join:
+                cmd.CommandText = "select count(*) from UsersForTopics where topicId = '" + topicId + "' and userId = '" + userId + "'  ";
+                int countUserForTopic = Convert.ToInt32(cmd.ExecuteScalar());
+                if (countUserForTopic > 0)
+                {
+                    //Check if the user is approved:
+                    cmd.CommandText = "select isApproved from UsersForTopics where topicId = '" + topicId + "' and userId = '" + userId + "'  ";
+                    int isApproved = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (isApproved == 0)
+                        authorized = false;
+                }
+                else
                     authorized = false;
             }
-            else
-                authorized = false;
             connect.Close();
             return authorized;
         }

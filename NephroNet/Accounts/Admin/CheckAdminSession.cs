@@ -41,6 +41,28 @@ namespace NephroNet.Accounts.Admin
             //count messages to be approved:
             cmd.CommandText = "select count(*) from Entries where entry_isApproved = 0 and entry_isDenied = 0 and entry_isDeleted = 0";
             count = count + Convert.ToInt32(cmd.ExecuteScalar());
+            //Count join-topic requests:
+            //Get this user's ID:
+            cmd.CommandText = "select loginId from logins where login_username = '" + username + "' ";
+            string loginId = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+            string userId = cmd.ExecuteScalar().ToString();
+            //Count the approved, not-deleted, not-denied, and not-terminated topics for this user:
+            cmd.CommandText = "select count(*) from topics where topic_createdBy = '" + userId + "' and topic_isApproved = 1 and topic_isDeleted = 0 and topic_isDenied = 0 and topic_isTerminated = 0 ";
+            int topicsForThisUser = Convert.ToInt32(cmd.ExecuteScalar());
+            if (topicsForThisUser > 0)
+            {
+                int topicsToReview = 0;
+                ////Get Topic IDs for this user:
+                for (int i = 1; i <= topicsForThisUser; i++)
+                {
+                    cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_createdBy = '" + userId + "' and topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                    string topicId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select count(*) from [UsersForTopics] where topicId = '" + topicId + "' and isApproved = 0 ";
+                    topicsToReview = topicsToReview + Convert.ToInt32(cmd.ExecuteScalar());
+                }
+                count = count + topicsToReview;
+            }
             connect.Close();
             return count;
         }

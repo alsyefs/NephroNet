@@ -28,7 +28,6 @@ namespace NephroNet.Accounts.Admin
                 lblMessage.Visible = true;
             }
         }
-      
         protected void initialPageAccess()
         {
             Configuration config = new Configuration();
