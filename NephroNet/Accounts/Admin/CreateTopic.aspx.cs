@@ -63,6 +63,32 @@ namespace NephroNet.Accounts.Admin
                 sendEmail();
             }
         }
+        protected void allowUserAccessTopicAndStoreTags(string topicId)
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Get the current user's ID:
+            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+            string userId = cmd.ExecuteScalar().ToString();
+            //Add the creator to UsersForTopics:
+            cmd.CommandText = "insert into UsersForTopics (userId, topicId) values ('" + userId + "', '" + topicId + "')";
+            cmd.ExecuteScalar();
+            //Check if there is a tag entered:
+            if (!string.IsNullOrWhiteSpace(txtTags.Text))
+            {
+                //Add to Tags:
+                cmd.CommandText = "insert into tags (tag_name) values ('" + txtTags.Text.Replace("'", "''") + "')";
+                cmd.ExecuteScalar();
+                //Get the tag ID:
+                cmd.CommandText = "select tagId from tags where tag_name like '" + txtTags.Text.Replace("'", "''") + "' ";
+                string tagId = cmd.ExecuteScalar().ToString();
+                //Store values into TagsForTopics:
+                cmd.CommandText = "insert into TagsForTopics (topicId, tagId) values ('" + topicId + "', '" + tagId + "')";
+                cmd.ExecuteScalar();
+            }
+
+            connect.Close();
+        }
         protected void sendEmail()
         {
             connect.Open();
@@ -129,32 +155,6 @@ namespace NephroNet.Accounts.Admin
                     cmd.ExecuteScalar();
                 }
             }
-            connect.Close();
-        }
-        protected void allowUserAccessTopicAndStoreTags(string topicId)
-        {
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            //Get the current user's ID:
-            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
-            string userId = cmd.ExecuteScalar().ToString();
-            //Add the creator to UsersForTopics:
-            cmd.CommandText = "insert into UsersForTopics (userId, topicId) values ('"+userId+"', '"+topicId+"')";
-            cmd.ExecuteScalar();
-            //Check if there is a tag entered:
-            if (!string.IsNullOrWhiteSpace(txtTags.Text))
-            {
-                //Add to Tags:
-                cmd.CommandText = "insert into tags (tag_name) values ('"+txtTags.Text.Replace("'", "''")+"')";
-                cmd.ExecuteScalar();
-                //Get the tag ID:
-                cmd.CommandText = "select tagId from tags where tag_name like '"+ txtTags.Text.Replace("'", "''") + "' ";
-                string tagId = cmd.ExecuteScalar().ToString();
-                //Store values into TagsForTopics:
-                cmd.CommandText = "insert into TagsForTopics (topicId, tagId) values ('"+topicId+"', '"+tagId+"')";
-                cmd.ExecuteScalar();
-            }
-            
             connect.Close();
         }
         protected void storeImagesInServer()

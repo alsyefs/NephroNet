@@ -117,21 +117,21 @@ namespace NephroNet.Accounts.Admin
                     }
                 }
                 //Create an informative message containing all information for the selected user:
+                string imagesHTML = "";
                 if (topic_hasImage == 1)
                 {
-                    
-                    cmd.CommandText = "select count(*) from ImagesForTopics where topicId = '"+topicId+"' ";
+                    cmd.CommandText = "select count(*) from ImagesForTopics where topicId = '" + topicId + "' ";
                     int totalImages = Convert.ToInt32(cmd.ExecuteScalar());
-                    string imagesHTML = "";
-                    for(int i = 1; i <= totalImages; i++)
+                    for (int i = 1; i <= totalImages; i++)
                     {
                         cmd.CommandText = "select [imageId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY imageId ASC), * FROM [ImagesForTopics] where topicId = '" + topicId + "') as t where rowNum = '" + i + "'";
                         string imageId = cmd.ExecuteScalar().ToString();
-                        cmd.CommandText = "select image_name from Images where imageId = '"+imageId+"' ";
+                        cmd.CommandText = "select image_name from Images where imageId = '" + imageId + "' ";
                         string image_name = cmd.ExecuteScalar().ToString();
-                        imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br />";
+                        imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br /> <br/>";
                     }
-                    lblTopicInformation.Text = "Creator: " + creator + "<br />" +
+                }
+                lblTopicInformation.Text = "Creator: " + creator + "<br />" +
                         "Type: " + topic_type + "<br />" +
                         "Title: " + topic_title + "<br />" +
                         "Time: " + topic_time + "<br />" +
@@ -143,21 +143,6 @@ namespace NephroNet.Accounts.Admin
                         "Description: \"" + topic_description + "\"<br />" +
                         "Tags: \"" + tagNames + "\"<br />" +
                         imagesHTML;
-                }
-                else
-                {
-                    lblTopicInformation.Text = "Creator: " + creator + "<br />" +
-                        "Type: " + topic_type + "<br />" +
-                        "Title: " + topic_title + "<br />" +
-                        "Time: " + topic_time + "<br />" +
-                        "Has image?: " + str_topic_hasImage + "<br />" +
-                        "Deleted?: " + topic_isDeleted + "<br />" +
-                        "Approved?: " + topic_isApproved + "<br />" +
-                        "Denied?: " + topic_isDenied + "<br />" +
-                        "Terminated?: " + topic_isTerminated + "<br />" +
-                        "Description: \"" + topic_description + "\"<br />"+
-                        "Tags: \"" + tagNames + "\"<br />";
-                }
                 lblTopicInformation.Visible = true;
                 //Copy values to globals:
                 g_topic_isApproved = int_topic_isApproved; g_topic_isDenied = int_topic_isDenied;

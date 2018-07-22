@@ -22,7 +22,9 @@
         <h2><%: Title %>:</h2>
         <div class="panel panel-default">
             <div class="panel-body">
-                <%--Content start--%>
+                <%--Content start--%>                    
+                <asp:Label ID="lblHeader" runat="server" Text="Header" Font-Bold="True"></asp:Label>
+                <br />
                 <asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>
                 <br />
                 <asp:Label ID="lblEntry" runat="server" Text="Message"></asp:Label>

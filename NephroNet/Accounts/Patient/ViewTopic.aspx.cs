@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -27,10 +32,42 @@ namespace NephroNet.Accounts.Patient
                 clearSession();
             lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
             topicId = Request.QueryString["id"];
+            int pageNum = Convert.ToInt32(Request.QueryString["page"]);
+            bool topicApproved = isTopicApproved();
+            if (!topicApproved)
+                topicNotApproved();
             bool authorized = isUserAuthorizedToView();
             if (!authorized)
                 unauthorized();
-            showInformation();
+            showInformation(pageNum);
+            checkIfTerminated();
+        }
+        protected bool isTopicApproved()
+        {
+            bool approved = true;
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from topics where topicId = '"+topicId+"' and topic_isApproved = 1 ";
+            int totalTopics = Convert.ToInt32(cmd.ExecuteScalar());
+            connect.Close();
+            if (totalTopics == 0)
+                approved = false;
+            return approved;
+        }
+        protected void topicNotApproved()
+        {
+            hideLabels();
+            lblError.Visible = true;
+            lblError.Text = "The topic you are trying to access has not been aproved yet!";
+        }
+        protected void hideLabels()
+        {
+            hideErrorLabels();
+            btnSubmit.Visible = false;
+            FileUpload1.Visible = false;
+            txtEntry.Visible = false;
+            lblContents.Visible = false;
+            lblEntry.Visible = false;
         }
         protected void clearSession()
         {
@@ -60,10 +97,10 @@ namespace NephroNet.Accounts.Patient
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             //Get the userId:
-            cmd.CommandText = "select userId from Users where loginId = '"+loginId+"' ";
+            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string userId = cmd.ExecuteScalar().ToString();
             //check if topic is for dissemination. If type = Dissemination, then ignore authorization:
-            cmd.CommandText = "select topic_type from Topics where topicId = '"+topicId+"' ";
+            cmd.CommandText = "select topic_type from Topics where topicId = '" + topicId + "' ";
             string type = cmd.ExecuteScalar().ToString();
             if (type.Equals("Discussion"))
             {
@@ -89,21 +126,429 @@ namespace NephroNet.Accounts.Patient
             addSession();
             Response.Redirect("JoinTopic.aspx?id=" + topicId);
         }
-        protected void showInformation()
+        protected string getHeader()
         {
-            //Get information from DB:
-
+            string header = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Check if the ID exists in the database:
+            cmd.CommandText = "select count(*) from topics where topicId = '" + topicId + "' ";
+            int countTopic = Convert.ToInt32(cmd.ExecuteScalar());
+            if (countTopic > 0)//if ID exists, countTopic = 1
+            {
+                //Get topic_createdBy:
+                cmd.CommandText = "select topic_createdBy from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_createdBy = cmd.ExecuteScalar().ToString();
+                //Get creator's email:
+                cmd.CommandText = "select user_email from users where userId = '" + topic_createdBy + "' ";
+                string email = cmd.ExecuteScalar().ToString();
+                //Get creator's fullname:
+                cmd.CommandText = "select user_firstname from users where userId = '" + topic_createdBy + "' ";
+                string creator = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from users where userId = '" + topic_createdBy + "' ";
+                creator = creator + " " + cmd.ExecuteScalar().ToString();
+                //Get topic_type:
+                cmd.CommandText = "select topic_type from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_type = cmd.ExecuteScalar().ToString();
+                //Get topic_title:
+                cmd.CommandText = "select topic_title from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_title = cmd.ExecuteScalar().ToString();
+                //Get topic_time:
+                cmd.CommandText = "select topic_time from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_time = cmd.ExecuteScalar().ToString();
+                //Get topic_description:
+                cmd.CommandText = "select topic_description from [Topics] where [topicId] = '" + topicId + "' ";
+                string topic_description = cmd.ExecuteScalar().ToString();
+                //Get "Yes" or "No" for topic_hasImage:
+                cmd.CommandText = "select topic_hasImage from [Topics] where [topicId] = '" + topicId + "' ";
+                int topic_hasImage = Convert.ToInt32(cmd.ExecuteScalar());
+                string str_topic_hasImage = "";
+                if (topic_hasImage == 0)
+                    str_topic_hasImage = "Topic does not have an image.";
+                else
+                    str_topic_hasImage = "Topic has an image.";
+                //Get topic_isDeleted ?:
+                cmd.CommandText = "select topic_isDeleted from [Topics] where [topicId] = '" + topicId + "' ";
+                int int_topic_isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+                string topic_isDeleted = "";
+                if (int_topic_isDeleted == 0)
+                    topic_isDeleted = "Topic has not been deleted.";
+                else
+                    topic_isDeleted = "Topic has been deleted.";
+                //Get topic_isApproved ?:
+                cmd.CommandText = "select topic_isApproved from [Topics] where [topicId] = '" + topicId + "' ";
+                int int_topic_isApproved = Convert.ToInt32(cmd.ExecuteScalar());
+                string topic_isApproved;
+                if (int_topic_isApproved == 0)
+                    topic_isApproved = "Topic has not been approved.";
+                else
+                    topic_isApproved = "Topic has been approved.";
+                //Get topic_isDenied ?:
+                cmd.CommandText = "select topic_isDenied from [Topics] where [topicId] = '" + topicId + "' ";
+                int int_topic_isDenied = Convert.ToInt32(cmd.ExecuteScalar());
+                string topic_isDenied;
+                if (int_topic_isDenied == 0)
+                    topic_isDenied = "Topic has not been denied.";
+                else
+                    topic_isDenied = "Topic has been denied.";
+                //Get topic_isTerminated ?:
+                cmd.CommandText = "select topic_isTerminated from [Topics] where [topicId] = '" + topicId + "' ";
+                int int_topic_isTerminated = Convert.ToInt32(cmd.ExecuteScalar());
+                string topic_isTerminated = "";
+                if (int_topic_isTerminated == 0)
+                    topic_isTerminated = "Topic has not been terminated.";
+                else
+                    topic_isTerminated = "Topic has been terminated.";
+                //Get tags:
+                string tagNames = "";
+                cmd.CommandText = "select count(*) from TagsForTopics where topicId = '" + topicId + "' ";
+                int totalTags = Convert.ToInt32(cmd.ExecuteScalar());
+                if (totalTags == 0)
+                    tagNames = "There are no tags for the selected topic";
+                for (int i = 1; i <= totalTags; i++)
+                {
+                    cmd.CommandText = "select [tagId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY tagId ASC), * FROM [TagsForTopics] where topicId = '" + topicId + "') as t where rowNum = '" + i + "'";
+                    string tagId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select tag_name from Tags where tagId = '" + tagId + "' ";
+                    if (totalTags == 1)
+                        tagNames = cmd.ExecuteScalar().ToString();
+                    else if (totalTags > 1)
+                    {
+                        if (i == 0)
+                            tagNames = cmd.ExecuteScalar().ToString();
+                        else
+                            tagNames = tagNames + ", " + cmd.ExecuteScalar().ToString();
+                    }
+                }
+                //Create an informative message containing all information for the selected user:
+                string imagesHTML = "";
+                if (topic_hasImage == 1)
+                {
+                    cmd.CommandText = "select count(*) from ImagesForTopics where topicId = '" + topicId + "' ";
+                    int totalImages = Convert.ToInt32(cmd.ExecuteScalar());
+                    for (int i = 1; i <= totalImages; i++)
+                    {
+                        cmd.CommandText = "select [imageId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY imageId ASC), * FROM [ImagesForTopics] where topicId = '" + topicId + "') as t where rowNum = '" + i + "'";
+                        string imageId = cmd.ExecuteScalar().ToString();
+                        cmd.CommandText = "select image_name from Images where imageId = '" + imageId + "' ";
+                        string image_name = cmd.ExecuteScalar().ToString();
+                        imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br />";
+                    }
+                }
+                string background_color = "style = \"background-color:#CECECE; width: 100%;\"";
+                header =
+                    "<p " + background_color + " >"+
+                    //"______________________________________________________________________________________________________________________________<br />" +
+                    "Creator: " + creator + "<br />" +
+                    "Type: " + topic_type + "<br />" +
+                    "Title: " + topic_title + "<br />" +
+                    "Time: " + topic_time + "<br />" +
+                    //"Terminated?: " + topic_isTerminated + "<br />" +
+                    "Description: \"" + topic_description + "\"<br />" +
+                    imagesHTML+ "<br />"+
+                    //"______________________________________________________________________________________________________________________________"+
+                    "</p>";
+            }
+            else
+            {
+                addSession();
+                Response.Redirect("Home");
+            }
+            connect.Close();
+            return header;
+        }
+        protected string getContents(int pageNum)
+        {
+            string content = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Count entries for this topic that are approved, not denied, and not deleted:
+            cmd.CommandText = "select count(*) from Entries where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0 ";
+            int totalEntries = Convert.ToInt32(cmd.ExecuteScalar());
+            for (int i = 1; i <= totalEntries; i++)
+            {
+                //Get entry ID:
+                cmd.CommandText = "select [entryId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                string entryId = cmd.ExecuteScalar().ToString();
+                //Get entry text:
+                cmd.CommandText = "select [entry_text] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                string entry_text = cmd.ExecuteScalar().ToString();
+                //Get entry time:
+                cmd.CommandText = "select [entry_time] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                string entry_time = cmd.ExecuteScalar().ToString();
+                //Get entry's creator:
+                cmd.CommandText = "select [userId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                string entry_creatorId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_firstname from users where userId = '"+ entry_creatorId + "' ";
+                string creator_name = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from users where userId = '" + entry_creatorId + "' ";
+                creator_name = creator_name + " " + cmd.ExecuteScalar().ToString();
+                //Check if entry has images:
+                string imagesHtml = "";
+                string deleteCommand = "";
+                cmd.CommandText = "select [entry_hasImage] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                int hasImage = Convert.ToInt32(cmd.ExecuteScalar());
+                if(hasImage == 1)
+                {
+                    //Count total images for this entry:
+                    cmd.CommandText = "select count(*) from ImagesForEntries where entryId = '"+entryId+"' ";
+                    int totalImages = Convert.ToInt32(cmd.ExecuteScalar());
+                    //Loop through images and store their names:
+                    for (int j = 1; j <= totalImages; j++)
+                    {
+                        //Get the entry's images:
+                        cmd.CommandText = "select [imageId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY imagesForEntriesId ASC), * FROM [imagesForEntries] where entryId = '" + entryId + "' ) as t where rowNum = '" + j + "'";
+                        string imageId = cmd.ExecuteScalar().ToString();
+                        //Get the image name:
+                        cmd.CommandText = "select image_name from images where imageId = '"+imageId+"' ";
+                        string image_name = cmd.ExecuteScalar().ToString();
+                        imagesHtml = imagesHtml + "<img src='../../images/" + image_name + "'></img> <br /> <br/>";
+                    }
+                }
+                //Get userId of current user viewing:
+                cmd.CommandText = "select userId from Users where loginId = '"+loginId+"' ";
+                string userId = cmd.ExecuteScalar().ToString();
+                //Check if the user viewing has an entry he/she created:
+                if (entry_creatorId.Equals(userId))
+                    deleteCommand = "<a href=\"DeleteEntry.aspx?entryId=" + entryId + "\"> Remove Entry " + i + "</a> <br />";
+                //Check if user viewing is the topic creator:
+                cmd.CommandText = "select topic_createdBy from Topics where topicId = '"+topicId+"' ";
+                string topic_creatorId = cmd.ExecuteScalar().ToString();
+                if (topic_creatorId.Equals(userId))
+                    deleteCommand = "<a href=\"DeleteEntry.aspx?entryId=" + entryId + "\"> Remove Entry " + i + "</a> <br />";
+                string background_color = "";
+                if (i%2 == 0)
+                    background_color = "style = \"background-color:#CCCC99; width: 100%;\"";
+                else
+                    background_color = "style = \"background-color:#F7F7DE; width: 100%;\"";
+                content = content + "<p "+background_color+" >Message " + i + " - added by " + creator_name + " on " + entry_time + "<br />" +
+                    entry_text + "<br /> " +
+                        imagesHtml +
+                        "<br /> " +
+                    deleteCommand+
+                    "--------------------------------------------------------------------------------------------" +
+                        "<br /></p>";
+            }
+            connect.Close();
+            return content;
+        }
+        protected void showInformation(int pageNum)
+        {            
+            //Show header:
+            lblHeader.Text = getHeader();
             //Display info:
-            lblContents.Text = "";
-
+            lblContents.Text = getContents(pageNum);
             //Maybe create new labels and place them for each entry:
-            //Label label = new Label();
-            //label.Visible = true;
-
+            //<div id="div1" runat = "sever" ></div> //<-- Add this in the web page as a placeholder for the label.
+            //Label lblNew = new Label();
+            //div1.Controls.Add(lblNew);
+            //lblNew.Visible = true;
+        }
+        protected void checkIfTerminated()
+        {
+            // hide 3 things if terminated.
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "select topic_isTerminated from Topics where topicId = '" + topicId + "' ";
+            int terminated = Convert.ToInt32(cmd.ExecuteScalar());
+            if (terminated == 1)
+            {
+                txtEntry.Visible = false;
+                btnSubmit.Visible = false;
+                FileUpload1.Visible = false;
+                lblError.Visible = true;
+                lblError.Text = "This discussion has been terminated and no more messages can be added.";
+            }
+            connect.Close();
         }
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
+            hideErrorLabels();
+            Boolean correct = checkInput();
+            if (correct)
+            {
+                addNewEntry();
+                sendEmail();
+            }
+        }
+        protected void sendEmail()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+            string userId = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select user_email from Users where userId like '" + userId + "' ";
+            string emailTo = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select user_firstname from Users where userId like '" + userId + "' ";
+            string name = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select user_lastname from Users where userId like '" + userId + "' ";
+            name = name + " " + cmd.ExecuteScalar().ToString();
+            //Get topic title:
+            cmd.CommandText = "select topic_title from Topics where topicId = '"+topicId+"' ";
+            string topic_title = cmd.ExecuteScalar().ToString();
+            connect.Close();
+            string messageBody = "Hello " + name + ",\nThis email is to notify you that your message for the topic titled (" + topic_title + ") has been successfully submitted and will be reviewed.\n" +
+                "You will be notified by email once the review is complete. The below is the message text you typed: \n\n\"" + txtEntry.Text + "\"\n\nBest regards,\nNephroNet Support\nNephroNet2018@gmail.com";
+            Email email = new Email();
+            email.sendEmail(emailTo, messageBody);
+        }
+        protected void addNewEntry()
+        {
+            //string imageName="";
+            int hasImage = 0;
+            ArrayList files = new ArrayList();
+            if (FileUpload1.HasFile)
+            {
+                //Count number of files:
+                int fileCount = FileUpload1.PostedFiles.Count;
+                for (int i = 0; i < fileCount; i++)
+                {
+                    //Store the file names in an array list:
+                    files.Add(FileUpload1.PostedFiles[i].FileName);
+                }
+                storeImagesInServer();
+                hasImage = 1;
+            }
+            //Store new topic as neither approved nor denied and return its ID:
+            string entryId = storeEntry(hasImage);
+            storeImagesInDB(entryId, hasImage, files);
+            lblError.Visible = true;
+            lblError.ForeColor = System.Drawing.Color.Green;
+            lblError.Text = "The message has been successfully submitted and an email notification has been sent to you. <br/>" +
+                "Your message will be reviewed and you will be notified by email once the review is complete.";
+        }
+        protected void storeImagesInDB(string entryId, int hasImage, ArrayList files)
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Check if there is an image:
+            if (hasImage == 1)
+            {
+                for (int i = 0; i < files.Count; i++)
+                {
+                    string imageName = files[i].ToString().Replace("'", "''");
+                    //Add to Images:
+                    cmd.CommandText = "insert into Images (image_name) values ('" + imageName + "')";
+                    cmd.ExecuteScalar();
+                    //Get the image ID:
+                    cmd.CommandText = "select imageId from Images where image_name like '" + imageName + "' ";
+                    string imageId = cmd.ExecuteScalar().ToString();
+                    //Add ImagesForTopics:
+                    cmd.CommandText = "insert into ImagesForEntries (imageId, entryId) values ('" + imageId + "', '" + entryId + "')";
+                    cmd.ExecuteScalar();
+                }
+            }
+            connect.Close();
+        }
+        protected void storeImagesInServer()
+        {
+            //Loop through images and store each one of them:
+            for (int i = 0; i < FileUpload1.PostedFiles.Count; i++)
+            {
+                string path = Server.MapPath("~/images/" + FileUpload1.PostedFiles[i].FileName);
+                System.Drawing.Bitmap image = new System.Drawing.Bitmap(FileUpload1.PostedFiles[i].InputStream);
+                System.Drawing.Bitmap image_copy = new System.Drawing.Bitmap(image);
+                System.Drawing.Image img = RezizeImage(System.Drawing.Image.FromStream(FileUpload1.PostedFiles[i].InputStream), 500, 500);
+                img.Save(path, ImageFormat.Jpeg);
+            }
+        }
+        private MemoryStream BytearrayToStream(byte[] arr)
+        {
+            return new MemoryStream(arr, 0, arr.Length);
+        }
+        private System.Drawing.Image RezizeImage(System.Drawing.Image img, int maxWidth, int maxHeight)
+        {
+            if (img.Height < maxHeight && img.Width < maxWidth) return img;
+            using (img)
+            {
+                Double xRatio = (double)img.Width / maxWidth;
+                Double yRatio = (double)img.Height / maxHeight;
+                Double ratio = Math.Max(xRatio, yRatio);
+                int nnx = (int)Math.Floor(img.Width / ratio);
+                int nny = (int)Math.Floor(img.Height / ratio);
+                Bitmap cpy = new Bitmap(nnx, nny, PixelFormat.Format32bppArgb);
+                using (Graphics gr = Graphics.FromImage(cpy))
+                {
+                    gr.Clear(Color.Transparent);
 
+                    // This is said to give best quality when resizing images
+                    gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+                    gr.DrawImage(img,
+                        new Rectangle(0, 0, nnx, nny),
+                        new Rectangle(0, 0, img.Width, img.Height),
+                        GraphicsUnit.Pixel);
+                }
+                return cpy;
+            }
+
+        }
+        protected string storeEntry(int hasImage)
+        {
+            string entryId = "";
+            DateTime entry_time = DateTime.Now;
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Get the current user's ID:
+            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+            string userId = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "insert into Entries (topicId, userId, entry_time, entry_text, entry_isDeleted, entry_isApproved, entry_isDenied, entry_hasImage) values " +
+                "('" + topicId + "', '" + userId + "', '" + entry_time + "', '" + txtEntry.Text.Replace("'", "''") + "', ' 0 ', '0', '0', '"+ hasImage + "')";
+            cmd.ExecuteScalar();
+            cmd.CommandText = "select [entryId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] " +
+                "where topicId = '" + topicId + "' and userId = '" + userId + "' and entry_text like '" + txtEntry.Text.Replace("'", "''") + "' " +
+                "and entry_isDeleted = '0' and entry_hasImage = '" + hasImage +
+                "' and entry_isApproved = '0' and entry_isDenied = '0' " +
+                " ) as t where rowNum = '1'";
+            entryId = cmd.ExecuteScalar().ToString();
+            connect.Close();
+            return entryId;
+        }
+        protected Boolean checkInput()
+        {
+            Boolean correct = true;
+
+            if (FileUpload1.HasFile)
+            {
+                string fileExtension = System.IO.Path.GetExtension(FileUpload1.FileName);
+                int filesize = FileUpload1.PostedFile.ContentLength;
+                string filename = FileUpload1.FileName;
+                if (fileExtension.ToLower() != ".jpg" && fileExtension.ToLower() != ".tiff" && fileExtension.ToLower() != ".jpeg" &&
+                    fileExtension.ToLower() != ".png" && fileExtension.ToLower() != ".gif" && fileExtension.ToLower() != ".bmp" &&
+                    fileExtension.ToLower() != ".tif")
+                {
+                    correct = false;
+                    lblImageError.Visible = true;
+                    lblImageError.Text = "File Error: The supported formats for files are: jpg, jpeg, tif, tiff, png, gif, and bmp.";
+                }
+
+                if (filesize > 5242880)
+                {
+                    correct = false;
+                    lblImageError.Visible = true;
+                    lblImageError.Text = "File Error: The size of any uploaded file needs to be less than 5MB.";
+                }
+                if (string.IsNullOrWhiteSpace(filename))
+                {
+                    correct = false;
+                    lblImageError.Visible = true;
+                    lblImageError.Text = "File Error: The file you are trying to upload must have a name.";
+                }
+            }
+            //Check for blank title:
+            if (string.IsNullOrWhiteSpace(txtEntry.Text))
+            {
+                correct = false;
+                lblEntryError.Visible = true;
+                lblEntryError.Text = "Input Error: Please type something for the title.";
+            }
+            return correct;
+        }
+        protected void hideErrorLabels()
+        {
+            lblImageError.Visible = false;
+            lblError.Visible = false;
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
