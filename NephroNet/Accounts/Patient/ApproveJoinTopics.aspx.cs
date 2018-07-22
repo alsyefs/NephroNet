@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace NephroNet.Accounts.Admin
+namespace NephroNet.Accounts.Patient
 {
     public partial class ApproveJoinTopics : System.Web.UI.Page
     {
@@ -34,7 +34,7 @@ namespace NephroNet.Accounts.Admin
             conn = config.getConnectionString();
             connect = new SqlConnection(conn);
             getSession();
-            CheckAdminSession session = new CheckAdminSession();
+            CheckPatientSession session = new CheckPatientSession();
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();

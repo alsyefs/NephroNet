@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NephroNet.Accounts.Physician {
+namespace NephroNet.Accounts.Patient {
     
     
-    public partial class Home {
+    public partial class JoinTopic {
         
         /// <summary>
         /// lblAlerts control.
@@ -22,30 +22,39 @@ namespace NephroNet.Accounts.Physician {
         protected global::System.Web.UI.WebControls.Label lblAlerts;
         
         /// <summary>
-        /// lblMessage control.
+        /// lblTopic control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.Label lblTopic;
         
         /// <summary>
-        /// grdTopics control.
+        /// btnRequest control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grdTopics;
+        protected global::System.Web.UI.WebControls.Button btnRequest;
         
         /// <summary>
-        /// lblTable control.
+        /// btnCancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTable;
+        protected global::System.Web.UI.WebControls.Button btnCancel;
+        
+        /// <summary>
+        /// lblError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblError;
     }
 }

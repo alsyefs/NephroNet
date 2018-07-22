@@ -145,13 +145,23 @@
     <Content Include="Accounts\Admin\ReviewUser.aspx" />
     <Content Include="Accounts\Admin\ViewTopic.aspx" />
     <Content Include="Accounts\Patient\About.aspx" />
+    <Content Include="Accounts\Patient\ApproveJoinTopics.aspx" />
     <Content Include="Accounts\Patient\Contact.aspx" />
     <Content Include="Accounts\Patient\CreateTopic.aspx" />
     <Content Include="Accounts\Patient\Home.aspx" />
+    <Content Include="Accounts\Patient\JoinTopic.aspx" />
+    <Content Include="Accounts\Patient\Notifications.aspx" />
+    <Content Include="Accounts\Patient\ReviewJoinTopic.aspx" />
+    <Content Include="Accounts\Patient\ViewTopic.aspx" />
     <Content Include="Accounts\Physician\About.aspx" />
+    <Content Include="Accounts\Physician\ApproveJoinTopics.aspx" />
     <Content Include="Accounts\Physician\Contact.aspx" />
     <Content Include="Accounts\Physician\CreateTopic.aspx" />
     <Content Include="Accounts\Physician\Home.aspx" />
+    <Content Include="Accounts\Physician\JoinTopic.aspx" />
+    <Content Include="Accounts\Physician\Notifications.aspx" />
+    <Content Include="Accounts\Physician\ReviewJoinTopic.aspx" />
+    <Content Include="Accounts\Physician\ViewTopic.aspx" />
     <Content Include="ChangePassword.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap.css" />
@@ -324,6 +334,13 @@
     <Compile Include="Accounts\Patient\About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Patient\ApproveJoinTopics.aspx.cs">
+      <DependentUpon>ApproveJoinTopics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\ApproveJoinTopics.aspx.designer.cs">
+      <DependentUpon>ApproveJoinTopics.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Patient\CheckPatientSession.cs" />
     <Compile Include="Accounts\Patient\Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
@@ -346,12 +363,47 @@
     <Compile Include="Accounts\Patient\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Patient\JoinTopic.aspx.cs">
+      <DependentUpon>JoinTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\JoinTopic.aspx.designer.cs">
+      <DependentUpon>JoinTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Patient\Notifications.aspx.cs">
+      <DependentUpon>Notifications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\Notifications.aspx.designer.cs">
+      <DependentUpon>Notifications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Patient\ReviewJoinTopic.aspx.cs">
+      <DependentUpon>ReviewJoinTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\ReviewJoinTopic.aspx.designer.cs">
+      <DependentUpon>ReviewJoinTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Patient\ViewTopic.aspx.cs">
+      <DependentUpon>ViewTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\ViewTopic.aspx.designer.cs">
+      <DependentUpon>ViewTopic.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Physician\About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Accounts\Physician\About.aspx.designer.cs">
       <DependentUpon>About.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\ApproveJoinTopics.aspx.cs">
+      <DependentUpon>ApproveJoinTopics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\ApproveJoinTopics.aspx.designer.cs">
+      <DependentUpon>ApproveJoinTopics.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Physician\CheckPhysicianSession.cs" />
     <Compile Include="Accounts\Physician\Contact.aspx.cs">
@@ -374,6 +426,34 @@
     </Compile>
     <Compile Include="Accounts\Physician\Home.aspx.designer.cs">
       <DependentUpon>Home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\JoinTopic.aspx.cs">
+      <DependentUpon>JoinTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\JoinTopic.aspx.designer.cs">
+      <DependentUpon>JoinTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\Notifications.aspx.cs">
+      <DependentUpon>Notifications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\Notifications.aspx.designer.cs">
+      <DependentUpon>Notifications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\ReviewJoinTopic.aspx.cs">
+      <DependentUpon>ReviewJoinTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\ReviewJoinTopic.aspx.designer.cs">
+      <DependentUpon>ReviewJoinTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\ViewTopic.aspx.cs">
+      <DependentUpon>ViewTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\ViewTopic.aspx.designer.cs">
+      <DependentUpon>ViewTopic.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">

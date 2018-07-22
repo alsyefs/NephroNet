@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CreateTopic.aspx.cs" Inherits="NephroNet.Accounts.Physician.CreateTopic" %>
+﻿<%@ Page Title="Create Topic" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CreateTopic.aspx.cs" Inherits="NephroNet.Accounts.Physician.CreateTopic" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
         <%--Header start--%>
     <a class="navbar-brand" runat="server" href="Home">Nephro Net</a>

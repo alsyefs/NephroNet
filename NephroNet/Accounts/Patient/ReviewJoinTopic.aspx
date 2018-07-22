@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Review Join Request" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ReviewJoinTopic.aspx.cs" Inherits="NephroNet.Accounts.Admin.ReviewJoinTopic" %>
+﻿<%@ Page Title="Review Join Request" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ReviewJoinTopic.aspx.cs" Inherits="NephroNet.Accounts.Patient.ReviewJoinTopic" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
     <%--Header start --%>

@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NephroNet.Accounts.Physician {
+namespace NephroNet.Accounts.Patient {
     
     
-    public partial class Home {
+    public partial class ApproveJoinTopics {
         
         /// <summary>
         /// lblAlerts control.
@@ -38,14 +38,5 @@ namespace NephroNet.Accounts.Physician {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView grdTopics;
-        
-        /// <summary>
-        /// lblTable control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTable;
     }
 }

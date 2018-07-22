@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NephroNet.Accounts.Physician {
+namespace NephroNet.Accounts.Patient {
     
     
-    public partial class Home {
+    public partial class Notifications {
         
         /// <summary>
         /// lblAlerts control.
@@ -22,30 +22,30 @@ namespace NephroNet.Accounts.Physician {
         protected global::System.Web.UI.WebControls.Label lblAlerts;
         
         /// <summary>
-        /// lblMessage control.
+        /// lblNewJoinTopicRequests control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.Label lblNewJoinTopicRequests;
         
         /// <summary>
-        /// grdTopics control.
+        /// btnNewJoinTopicRequests control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grdTopics;
+        protected global::System.Web.UI.WebControls.Button btnNewJoinTopicRequests;
         
         /// <summary>
-        /// lblTable control.
+        /// lblError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTable;
+        protected global::System.Web.UI.WebControls.Label lblError;
     }
 }

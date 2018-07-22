@@ -29,7 +29,7 @@
                 <asp:GridView ID="grdTopics" runat="server" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical" PageSize="20" AllowPaging="True" OnPageIndexChanging="grdTopics_PageIndexChanging">
                     <AlternatingRowStyle BackColor="White" />
                     <Columns>
-                        <asp:HyperLinkField DataNavigateUrlFields="id" DataNavigateUrlFormatString="~/Accounts/Admin/ViewTopic.aspx?id={0}" SortExpression="id" Text="Enter" />
+                        <asp:HyperLinkField DataNavigateUrlFields="id" DataNavigateUrlFormatString="~/Accounts/Patient/ViewTopic.aspx?id={0}" SortExpression="id" Text="Enter" />
                     </Columns>
                     <FooterStyle BackColor="#CCCC99" />
                     <HeaderStyle BackColor="#6B696B" Font-Bold="True" ForeColor="White" />
