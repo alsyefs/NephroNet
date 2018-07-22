@@ -56,13 +56,13 @@ namespace NephroNet.Accounts.Admin
         }
         protected void topicNotApproved()
         {
+            hideErrorLabels();
             hideLabels();
             lblError.Visible = true;
             lblError.Text = "The topic you are trying to access has not been aproved yet!";
         }
         protected void hideLabels()
-        {
-            hideErrorLabels();
+        {            
             btnSubmit.Visible = false;
             FileUpload1.Visible = false;
             txtEntry.Visible = false;
@@ -117,6 +117,13 @@ namespace NephroNet.Accounts.Admin
                 }
                 else
                     authorized = false;
+            }
+            else
+            {
+                hideLabels();
+                hideErrorLabels();
+                lblError.Visible = true;
+                lblError.Text = "This is a dissemination topic and no participations are allowed";
             }
             connect.Close();
             return authorized;

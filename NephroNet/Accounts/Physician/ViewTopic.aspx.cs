@@ -47,7 +47,7 @@ namespace NephroNet.Accounts.Physician
             bool approved = true;
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from topics where topicId = '"+topicId+"' and topic_isApproved = 1 ";
+            cmd.CommandText = "select count(*) from topics where topicId = '" + topicId + "' and topic_isApproved = 1 ";
             int totalTopics = Convert.ToInt32(cmd.ExecuteScalar());
             connect.Close();
             if (totalTopics == 0)
@@ -56,13 +56,13 @@ namespace NephroNet.Accounts.Physician
         }
         protected void topicNotApproved()
         {
+            hideErrorLabels();
             hideLabels();
             lblError.Visible = true;
             lblError.Text = "The topic you are trying to access has not been aproved yet!";
         }
         protected void hideLabels()
         {
-            hideErrorLabels();
             btnSubmit.Visible = false;
             FileUpload1.Visible = false;
             txtEntry.Visible = false;
@@ -117,6 +117,13 @@ namespace NephroNet.Accounts.Physician
                 }
                 else
                     authorized = false;
+            }
+            else
+            {
+                hideLabels();
+                hideErrorLabels();
+                lblError.Visible = true;
+                lblError.Text = "This is a dissemination topic and no participations are allowed";
             }
             connect.Close();
             return authorized;
@@ -237,7 +244,7 @@ namespace NephroNet.Accounts.Physician
                 }
                 string background_color = "style = \"background-color:#CECECE; width: 100%;\"";
                 header =
-                    "<p " + background_color + " >"+
+                    "<p " + background_color + " >" +
                     //"______________________________________________________________________________________________________________________________<br />" +
                     "Creator: " + creator + "<br />" +
                     "Type: " + topic_type + "<br />" +
@@ -245,7 +252,7 @@ namespace NephroNet.Accounts.Physician
                     "Time: " + topic_time + "<br />" +
                     //"Terminated?: " + topic_isTerminated + "<br />" +
                     "Description: \"" + topic_description + "\"<br />" +
-                    imagesHTML+ "<br />"+
+                    imagesHTML + "<br />" +
                     //"______________________________________________________________________________________________________________________________"+
                     "</p>";
             }
@@ -279,7 +286,7 @@ namespace NephroNet.Accounts.Physician
                 //Get entry's creator:
                 cmd.CommandText = "select [userId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
                 string entry_creatorId = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_firstname from users where userId = '"+ entry_creatorId + "' ";
+                cmd.CommandText = "select user_firstname from users where userId = '" + entry_creatorId + "' ";
                 string creator_name = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + entry_creatorId + "' ";
                 creator_name = creator_name + " " + cmd.ExecuteScalar().ToString();
@@ -288,10 +295,10 @@ namespace NephroNet.Accounts.Physician
                 string deleteCommand = "";
                 cmd.CommandText = "select [entry_hasImage] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
                 int hasImage = Convert.ToInt32(cmd.ExecuteScalar());
-                if(hasImage == 1)
+                if (hasImage == 1)
                 {
                     //Count total images for this entry:
-                    cmd.CommandText = "select count(*) from ImagesForEntries where entryId = '"+entryId+"' ";
+                    cmd.CommandText = "select count(*) from ImagesForEntries where entryId = '" + entryId + "' ";
                     int totalImages = Convert.ToInt32(cmd.ExecuteScalar());
                     //Loop through images and store their names:
                     for (int j = 1; j <= totalImages; j++)
@@ -300,32 +307,32 @@ namespace NephroNet.Accounts.Physician
                         cmd.CommandText = "select [imageId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY imagesForEntriesId ASC), * FROM [imagesForEntries] where entryId = '" + entryId + "' ) as t where rowNum = '" + j + "'";
                         string imageId = cmd.ExecuteScalar().ToString();
                         //Get the image name:
-                        cmd.CommandText = "select image_name from images where imageId = '"+imageId+"' ";
+                        cmd.CommandText = "select image_name from images where imageId = '" + imageId + "' ";
                         string image_name = cmd.ExecuteScalar().ToString();
                         imagesHtml = imagesHtml + "<img src='../../images/" + image_name + "'></img> <br /> <br/>";
                     }
                 }
                 //Get userId of current user viewing:
-                cmd.CommandText = "select userId from Users where loginId = '"+loginId+"' ";
+                cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
                 string userId = cmd.ExecuteScalar().ToString();
                 //Check if the user viewing has an entry he/she created:
                 if (entry_creatorId.Equals(userId))
                     deleteCommand = "<a href=\"DeleteEntry.aspx?entryId=" + entryId + "\"> Remove Entry " + i + "</a> <br />";
                 //Check if user viewing is the topic creator:
-                cmd.CommandText = "select topic_createdBy from Topics where topicId = '"+topicId+"' ";
+                cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
                 string topic_creatorId = cmd.ExecuteScalar().ToString();
                 if (topic_creatorId.Equals(userId))
                     deleteCommand = "<a href=\"DeleteEntry.aspx?entryId=" + entryId + "\"> Remove Entry " + i + "</a> <br />";
                 string background_color = "";
-                if (i%2 == 0)
+                if (i % 2 == 0)
                     background_color = "style = \"background-color:#CCCC99; width: 100%;\"";
                 else
                     background_color = "style = \"background-color:#F7F7DE; width: 100%;\"";
-                content = content + "<p "+background_color+" >Message " + i + " - added by " + creator_name + " on " + entry_time + "<br />" +
+                content = content + "<p " + background_color + " >Message " + i + " - added by " + creator_name + " on " + entry_time + "<br />" +
                     entry_text + "<br /> " +
                         imagesHtml +
                         "<br /> " +
-                    deleteCommand+
+                    deleteCommand +
                     "--------------------------------------------------------------------------------------------" +
                         "<br /></p>";
             }
@@ -333,7 +340,7 @@ namespace NephroNet.Accounts.Physician
             return content;
         }
         protected void showInformation(int pageNum)
-        {            
+        {
             //Show header:
             lblHeader.Text = getHeader();
             //Display info:
@@ -385,7 +392,7 @@ namespace NephroNet.Accounts.Physician
             cmd.CommandText = "select user_lastname from Users where userId like '" + userId + "' ";
             name = name + " " + cmd.ExecuteScalar().ToString();
             //Get topic title:
-            cmd.CommandText = "select topic_title from Topics where topicId = '"+topicId+"' ";
+            cmd.CommandText = "select topic_title from Topics where topicId = '" + topicId + "' ";
             string topic_title = cmd.ExecuteScalar().ToString();
             connect.Close();
             string messageBody = "Hello " + name + ",\nThis email is to notify you that your message for the topic titled (" + topic_title + ") has been successfully submitted and will be reviewed.\n" +
@@ -494,7 +501,7 @@ namespace NephroNet.Accounts.Physician
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string userId = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "insert into Entries (topicId, userId, entry_time, entry_text, entry_isDeleted, entry_isApproved, entry_isDenied, entry_hasImage) values " +
-                "('" + topicId + "', '" + userId + "', '" + entry_time + "', '" + txtEntry.Text.Replace("'", "''") + "', ' 0 ', '0', '0', '"+ hasImage + "')";
+                "('" + topicId + "', '" + userId + "', '" + entry_time + "', '" + txtEntry.Text.Replace("'", "''") + "', ' 0 ', '0', '0', '" + hasImage + "')";
             cmd.ExecuteScalar();
             cmd.CommandText = "select [entryId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] " +
                 "where topicId = '" + topicId + "' and userId = '" + userId + "' and entry_text like '" + txtEntry.Text.Replace("'", "''") + "' " +
