@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="Review Topic" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ReviewTopic.aspx.cs" Inherits="NephroNet.Accounts.Admin.ReviewTopic" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
     <%--Header start --%>
     <a class="navbar-brand" runat="server" href="Home">Nephro Net</a>
@@ -10,38 +11,38 @@
     <ul class="nav navbar-nav navbar-right">
         <li><a runat="server" href="Notifications">Alerts
             <asp:Label ID="lblAlerts" runat="server" Text=" (0)"></asp:Label>
-            </a></li>
+        </a></li>
         <li><a runat="server" href="~/Logout">Logout</a></li>
     </ul>
     <%--Header end--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-     <%--Page body start:--%>
+    <%--Page body start:--%>
     <div class="container">
-    <h2><%: Title %>:</h2>
+        <h2><%: Title %>:</h2>
         <div class="panel panel-default">
-        <div class="panel-body">
-
-            <%--Show topic information:--%>
-            <asp:Label ID="lblTopicInformation" runat="server" Text="Label"></asp:Label>
-
-            <%--Approve--%>
-            <br /> <br />
-            <asp:Button ID="btnApprove" runat="server" Text="Approve" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnApprove_Click"/>            
-            <%--Deny:--%>
+            <div class="panel-body">
+                <%--Show topic information:--%>
+                <asp:Label ID="lblTopicInformation" runat="server" Text="Label"></asp:Label>
+                <%--Approve--%>
+                <br />
+                <br />
+                <asp:Button ID="btnApprove" runat="server" Text="Approve" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnApprove_Click" />
+                <%--Deny:--%>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <asp:Button ID="btnDeny" runat="server" Text="Deny" BackColor="red" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnDeny_Click"/>
-            <%--Go back:--%>
+            <asp:Button ID="btnDeny" runat="server" Text="Deny" BackColor="red" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnDeny_Click" />
+                <%--Go back:--%>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <asp:Button ID="btnCancel" runat="server" Text="Go Back" BackColor="yellow" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnCancel_Click" />
-            <br /><br />
-            &nbsp;
+                <br />
+                <br />
+                &nbsp;
             <asp:Label ID="lblMessage" runat="server" ForeColor="green" Text="Label" Visible="False"></asp:Label>
 
-             </div>
             </div>
         </div>
+    </div>
     <%--Page body end.--%>
 </asp:Content>

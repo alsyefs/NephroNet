@@ -21,9 +21,11 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Content start--%>
+                <%--Show topic basic information:--%>
+                <asp:Label ID="lblTopic" runat="server" Text=" "></asp:Label>
                 <br />
                 <%--Request to join--%>
-                <asp:Button ID="btnRequest" runat="server" Text="Join Topic" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" Visible="false" OnClick="btnRequest_Click" />
+                <asp:Button ID="btnRequest" runat="server" Text="Join Topic" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnRequest_Click" />
                 &nbsp;
                 
                 <%--Cancel button--%>    

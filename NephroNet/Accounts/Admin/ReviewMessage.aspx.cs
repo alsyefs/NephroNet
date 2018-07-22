@@ -25,7 +25,7 @@ namespace NephroNet.Accounts.Admin
             //Set entry_isApproved = 1, entry_isDenied = 0: (1 in bit = true)            
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "update Entries set entry_isApproved = 1 and entry_isDenied = 0 where entryId = '" + messageId + "' ";
+            cmd.CommandText = "update Entries set entry_isApproved = 1 , entry_isDenied = 0 where entryId = '" + messageId + "' ";
             cmd.ExecuteScalar();
             connect.Close();
             //Create an email message to be sent:
@@ -126,7 +126,7 @@ namespace NephroNet.Accounts.Admin
                     entry_isDeleted = "Topic has been deleted.";
                 //Get entry_isApproved:
                 cmd.CommandText = "select entry_isApproved from [Entries] where [entryId] = '" + messageId + "' ";
-                int int_entry_isApproved = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+                int int_entry_isApproved = Convert.ToInt32(cmd.ExecuteScalar());
                 string entry_isApproved;
                 if (int_entry_isApproved == 0)
                     entry_isApproved = "Message has not been approved.";
@@ -134,7 +134,7 @@ namespace NephroNet.Accounts.Admin
                     entry_isApproved = "Message has been approved.";
                 //Get entry_isDenied:
                 cmd.CommandText = "select entry_isDenied from [Entries] where [entryId] = '" + messageId + "' ";
-                int int_entry_isDenied = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+                int int_entry_isDenied = Convert.ToInt32(cmd.ExecuteScalar());
                 string entry_isDenied;
                 if (int_entry_isDenied == 0)
                     entry_isDenied = "Message has not been approved.";
@@ -148,33 +148,12 @@ namespace NephroNet.Accounts.Admin
                     str_entry_hasImage = "Message does not have an image.";
                 else
                     str_entry_hasImage = "Message has an image.";
-                //Get tags:
-                string tagNames = "";
-                cmd.CommandText = "select count(*) from TagsForMessages where entryId = '" + messageId + "' ";
-                int totalTags = Convert.ToInt32(cmd.ExecuteScalar());
-                if (totalTags == 0)
-                    tagNames = "There are no tags for the selected message";
-                for (int i = 1; i <= totalTags; i++)
-                {
-                    cmd.CommandText = "select [tagId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY tagId ASC), * FROM [TagsForEntries] where entryId = '" + messageId + "') as t where rowNum = '" + i + "'";
-                    string tagId = cmd.ExecuteScalar().ToString();
-                    cmd.CommandText = "select tag_name from Tags where tagId = '" + tagId + "' ";
-                    if (totalTags == 1)
-                        tagNames = cmd.ExecuteScalar().ToString();
-                    else if (totalTags > 1)
-                    {
-                        if (i == 0)
-                            tagNames = cmd.ExecuteScalar().ToString();
-                        else
-                            tagNames = tagNames + ", " + cmd.ExecuteScalar().ToString();
-                    }
-                }
                 //Create an informative message containing all information for the selected user:
+                string imagesHTML = "";
                 if (entry_hasImage == 1)
                 {
                     cmd.CommandText = "select count(*) from ImagesForEntries where entryId = '" + messageId + "' ";
                     int totalImages = Convert.ToInt32(cmd.ExecuteScalar());
-                    string imagesHTML = "";
                     for (int i = 1; i <= totalImages; i++)
                     {
                         cmd.CommandText = "select [imageId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY imageId ASC), * FROM [ImagesForEntries] where entryId = '" + messageId + "') as t where rowNum = '" + i + "'";
@@ -183,28 +162,16 @@ namespace NephroNet.Accounts.Admin
                         string image_name = cmd.ExecuteScalar().ToString();
                         imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br />";
                     }
-                    lblMessageInformation.Text = "Creator: " + creator + "<br />" +
-                        "Topic related: " + topic_title + "<br />" +
-                        "Message time: " + entry_time + "<br />" +
-                        "Deleted?: " + entry_isDeleted + "<br />" +
-                        "Has image?: " + str_entry_hasImage + "<br />" +
-                        "Approved?: " + entry_isApproved + "<br />" +
-                        "Denied?: " + entry_isDenied + "<br />" +
-                        "Messages: " + entry_text + "<br />"+
-                        "Tags: \"" + tagNames + "\"<br />" +
-                        imagesHTML;
                 }
-                else
-                {
-                    lblMessageInformation.Text = "Creator: " + creator + "<br />" +
-                        "Topic related: " + topic_title + "<br />" +
-                        "Message time: " + entry_time + "<br />" +
-                        "Deleted?: " + entry_isDeleted + "<br />" +
-                        "Has image?: " + str_entry_hasImage + "<br />" +
-                        "Approved?: " + entry_isApproved + "<br />" +
-                        "Denied?: " + entry_isDenied + "<br />" +
-                        "Messages: " + entry_text + "<br />";
-                }
+                lblMessageInformation.Text = "Creator: " + creator + "<br />" +
+                    "Topic related: " + topic_title + "<br />" +
+                    "Message time: " + entry_time + "<br />" +
+                    "Deleted?: " + entry_isDeleted + "<br />" +
+                    "Has image?: " + str_entry_hasImage + "<br />" +
+                    "Approved?: " + entry_isApproved + "<br />" +
+                    "Denied?: " + entry_isDenied + "<br />" +
+                    "Message: " + entry_text + "<br />"+                        
+                    imagesHTML;
                 lblMessageInformation.Visible = true;
                 //Copy values to globals:
                 g_topic_isApproved = int_entry_isApproved; g_topic_isDenied = int_entry_isDenied;
