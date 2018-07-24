@@ -9,6 +9,16 @@ namespace NephroNet
 {
     public class CheckErrors
     {
+        public bool isDigit(string value)
+        {
+            bool correct = true;
+            foreach (char c in value)
+            {
+                if (c < '0' || c > '9')
+                    return false;
+            }
+            return correct;
+        }
         //Validate all input to avoid special characters:
         public Boolean ContainsSpecialChars(string value, out string result)
         {
