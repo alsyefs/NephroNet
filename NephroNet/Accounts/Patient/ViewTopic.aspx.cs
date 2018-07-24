@@ -32,6 +32,9 @@ namespace NephroNet.Accounts.Patient
                 clearSession();
             lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
             topicId = Request.QueryString["id"];
+            CheckErrors check = new CheckErrors();
+            if (!check.isDigit(topicId))
+                goBack();
             int pageNum = Convert.ToInt32(Request.QueryString["page"]);
             bool topicApproved = isTopicApproved();
             if (!topicApproved)
@@ -99,6 +102,11 @@ namespace NephroNet.Accounts.Patient
             //Get the userId:
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string userId = cmd.ExecuteScalar().ToString();
+            //Check if the topic exist by counting its ID:
+            cmd.CommandText = "select count(*) from Topics where topicId = '" + topicId + "' ";
+            int topicCount = Convert.ToInt32(cmd.ExecuteScalar());
+            if (topicCount == 0)
+                goBack();
             //check if topic is for dissemination. If type = Dissemination, then ignore authorization:
             cmd.CommandText = "select topic_type from Topics where topicId = '" + topicId + "' ";
             string type = cmd.ExecuteScalar().ToString();
@@ -118,12 +126,16 @@ namespace NephroNet.Accounts.Patient
                 else
                     authorized = false;
             }
-            else
+            else if (type.Equals("Dissemination"))
             {
                 hideLabels();
                 hideErrorLabels();
                 lblError.Visible = true;
                 lblError.Text = "This is a dissemination topic and no participations are allowed";
+            }
+            else
+            {
+                goBack();
             }
             connect.Close();
             return authorized;
@@ -242,19 +254,7 @@ namespace NephroNet.Accounts.Patient
                         imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br />";
                     }
                 }
-                string background_color = "style = \"background-color:#CECECE; width: 100%;\"";
-                header =
-                    "<p " + background_color + " >" +
-                    //"______________________________________________________________________________________________________________________________<br />" +
-                    "Creator: " + creator + "<br />" +
-                    "Type: " + topic_type + "<br />" +
-                    "Title: " + topic_title + "<br />" +
-                    "Time: " + topic_time + "<br />" +
-                    //"Terminated?: " + topic_isTerminated + "<br />" +
-                    "Description: \"" + topic_description + "\"<br />" +
-                    imagesHTML + "<br />" +
-                    //"______________________________________________________________________________________________________________________________"+
-                    "</p>";
+                header = Layouts.postHeader(creator, topic_type, topic_title, topic_time, topic_description, imagesHTML);
             }
             else
             {
@@ -292,7 +292,6 @@ namespace NephroNet.Accounts.Patient
                 creator_name = creator_name + " " + cmd.ExecuteScalar().ToString();
                 //Check if entry has images:
                 string imagesHtml = "";
-                string deleteCommand = "";
                 cmd.CommandText = "select [entry_hasImage] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
                 int hasImage = Convert.ToInt32(cmd.ExecuteScalar());
                 if (hasImage == 1)
@@ -315,26 +314,10 @@ namespace NephroNet.Accounts.Patient
                 //Get userId of current user viewing:
                 cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
                 string userId = cmd.ExecuteScalar().ToString();
-                //Check if the user viewing has an entry he/she created:
-                if (entry_creatorId.Equals(userId))
-                    deleteCommand = "<a href=\"DeleteEntry.aspx?entryId=" + entryId + "\"> Remove Entry " + i + "</a> <br />";
-                //Check if user viewing is the topic creator:
+                //Get topic creator ID of current user viewing:
                 cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
                 string topic_creatorId = cmd.ExecuteScalar().ToString();
-                if (topic_creatorId.Equals(userId))
-                    deleteCommand = "<a href=\"DeleteEntry.aspx?entryId=" + entryId + "\"> Remove Entry " + i + "</a> <br />";
-                string background_color = "";
-                if (i % 2 == 0)
-                    background_color = "style = \"background-color:#CCCC99; width: 100%;\"";
-                else
-                    background_color = "style = \"background-color:#F7F7DE; width: 100%;\"";
-                content = content + "<p " + background_color + " >Message " + i + " - added by " + creator_name + " on " + entry_time + "<br />" +
-                    entry_text + "<br /> " +
-                        imagesHtml +
-                        "<br /> " +
-                    deleteCommand +
-                    "--------------------------------------------------------------------------------------------" +
-                        "<br /></p>";
+                content = content + Layouts.postMessage(i, creator_name, entry_time, entry_text, imagesHtml, entry_creatorId, topic_creatorId, userId, entryId);
             }
             connect.Close();
             return content;
@@ -558,6 +541,10 @@ namespace NephroNet.Accounts.Patient
             lblError.Visible = false;
         }
         protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            goBack();
+        }
+        protected void goBack()
         {
             addSession();
             Response.Redirect("Home");

@@ -134,7 +134,7 @@ namespace NephroNet.Accounts.Admin
                 lblTopicInformation.Text = "Creator: " + creator + "<br />" +
                         "Type: " + topic_type + "<br />" +
                         "Title: " + topic_title + "<br />" +
-                        "Time: " + topic_time + "<br />" +
+                        "Time: " + Layouts.getTimeFormat(topic_time) + "<br />" +
                         "Has image?: " + str_topic_hasImage + "<br />" +
                         "Deleted?: " + topic_isDeleted + "<br />" +
                         "Approved?: " + topic_isApproved + "<br />" +

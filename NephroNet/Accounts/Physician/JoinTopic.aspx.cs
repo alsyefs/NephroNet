@@ -137,7 +137,7 @@ namespace NephroNet.Accounts.Physician
             info = "Creator: " + creator + "<br />" +
                         "Type: " + type + "<br />" +
                         "Title: " + title + "<br />" +
-                        "Time: " + time + "<br />" +
+                        "Time: " + Layouts.getTimeFormat(time) + "<br />" +
                         "Description: \"" + description + "\"<br />" +
                         imagesHTML;
             connect.Close();

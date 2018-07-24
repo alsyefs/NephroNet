@@ -22,99 +22,11 @@ namespace NephroNet.Accounts.Admin
             {
                 lblMessage.Visible = false;
                 createTable(countNewTopics);
-                //int pageNum = Convert.ToInt32(Request.QueryString["page"]);
-                //createTableHtml(countNewTopics, pageNum);
             }
             else if (countNewTopics == 0)
             {
                 lblMessage.Visible = true;
             }
-        }
-        protected void createTableHtml(int countTopics, int pageNum)
-        {
-            string table_start = "<table style=\"width: 100 %; \">";
-            //string row_start = "<tr>";
-            string row_end = "</tr>";
-            string column_start = "<td>";
-            string column_end = "</td>";
-            string table_end = "</table>";
-            string table = "", rows = "";
-            int rowsPerPage = 2;
-            int pages = countTopics / rowsPerPage;
-            for (int i = 1 + (pageNum * rowsPerPage); i <= countTopics; i++)
-            {
-                connect.Open();
-                SqlCommand cmd = connect.CreateCommand();
-                //Get the topic ID:
-                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                string id = cmd.ExecuteScalar().ToString();
-                //Get title:
-                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                string title = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_type] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                string type = cmd.ExecuteScalar().ToString();
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                string creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
-                connect.Close();
-                string color = "";
-                if(i%2 == 1)//change color for each odd numbered row
-                {
-                    color = "#F7F7DE";
-                }
-                string row ="<tr bgcolor=\""+color+"\">" + column_start + i + column_end + column_start + "<a href = \"ViewTopic.aspx?id=" + id + "\"> Enter </a>" + column_end + column_start + title + column_end + column_start + type + column_end + column_start + creator + column_end + row_end;
-                rows = rows + row;
-                if (i % rowsPerPage == 0)//limit to 10 rows
-                {
-                    if (pageNum == 0)
-                        pageNum = 1;
-                    string pageNumbers = ""; //"<a href=\"Home\\?page=" + pageNum + "\">Next >></a>";
-                    //Show current and previous pages up to 5 page numbers, then display the first page number followed by "...":
-                    //for (int k = pages; k >= pageNum; k--)
-                    //{
-                    //    if (k > pageNum + 2)
-                    //        pageNumbers = pageNumbers + "<a href=\"Home.aspx?page=" + k + "\"> " + k + " </a>";
-                    //    if (k == pageNum && k <= pages + 2)
-                    //    {
-                    //        pageNumbers = pageNumbers + "....<a href=\"Home.aspx?page=" + k + "\"> " + k + " </a>";
-                    //    }
-                    //}
-                    int tempPageNum = pageNum;
-                    //Show current and next pages up to 5 page numbers, then display "..." followed by the last page number:
-                    for (int k = pageNum; k <= pages; k++)
-                    {
-                        tempPageNum--;
-                        if (pageNum > 1 && tempPageNum > 0)//(pageNum > 3 && tempPageNum > 0)
-                        {                            
-                            //pageNumbers = pageNumbers + "<a href=\"Home.aspx?page=" + 1 + "\"> 1 </a>...";
-                            pageNumbers = pageNumbers + "<a href=\"Home.aspx?page=" + tempPageNum + "\"> " + tempPageNum + " </a>";
-                        }
-                        if (k < pageNum + 2)
-                            pageNumbers = pageNumbers + "<a href=\"Home.aspx?page=" + k + "\"> "+ k + " </a>";
-                        if(k == pages && k >= pageNum + 2)
-                        {                            
-                            pageNumbers = pageNumbers + "....<a href=\"Home.aspx?page=" + k + "\"> " + k + " </a>";
-                        }
-                    }
-                    rows = rows + "<tr bgcolor=\"" + color + "\">" + column_start + " " + column_end + column_start + "" + column_end + column_start + "" + column_end + column_start + pageNumbers + column_end + row_end;
-                    break;
-                }
-            }
-            string fontColor = "white";
-            string header = "<tr bgcolor=\"#6B696B\">" + 
-                column_start + " " + column_end +
-                column_start + " " + column_end +
-                column_start + "<font color=\""+fontColor+"\">Title</font>" + column_end + 
-                column_start + "<font color=\"" + fontColor + "\">Type</font>" + column_end + 
-                column_start + "<font color=\"" + fontColor + "\">Creator</font>" + column_end + row_end;
-            table = table + table_start + header + rows + table_end;
-            lblTable.Text = table;
         }
         protected void initialPageAccess()
         {
@@ -159,10 +71,11 @@ namespace NephroNet.Accounts.Admin
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Title", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
-            string id = "", title = "", type = "", creator = "";
+            string id = "", title = "", type = "", creator = "", time = "";
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             for (int i = 1; i <= count; i++)
@@ -170,6 +83,9 @@ namespace NephroNet.Accounts.Admin
                 //Get the topic ID:
                 cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
                 id = cmd.ExecuteScalar().ToString();
+                //Get type:
+                cmd.CommandText = "select [topic_time] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                time = cmd.ExecuteScalar().ToString();
                 //Get title:
                 cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
                 title = cmd.ExecuteScalar().ToString();
@@ -184,11 +100,20 @@ namespace NephroNet.Accounts.Admin
                 creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(id, title, type, creator);
+                dt.Rows.Add(id, Layouts.getTimeFormat(time), title, type, creator);
             }
             connect.Close();
             grdTopics.DataSource = dt;
             grdTopics.DataBind();
+            grdTopics.AutoGenerateColumns = false;
+            //Hide the header called "ID":
+            grdTopics.HeaderRow.Cells[1].Visible = false;
+            //Hide IDs column and content which are located in column index 1:
+            for (int i = 0; i<grdTopics.Rows.Count; i++)
+            {
+                grdTopics.Rows[i].Cells[1].Visible = false;
+            }
+            
         }
         protected int getTotalApprovedTopics()
         {

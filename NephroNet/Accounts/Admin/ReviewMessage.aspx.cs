@@ -165,7 +165,7 @@ namespace NephroNet.Accounts.Admin
                 }
                 lblMessageInformation.Text = "Creator: " + creator + "<br />" +
                     "Topic related: " + topic_title + "<br />" +
-                    "Message time: " + entry_time + "<br />" +
+                    "Message time: " + Layouts.getTimeFormat(entry_time) + "<br />" +
                     "Deleted?: " + entry_isDeleted + "<br />" +
                     "Has image?: " + str_entry_hasImage + "<br />" +
                     "Approved?: " + entry_isApproved + "<br />" +

@@ -159,10 +159,11 @@ namespace NephroNet.Accounts.Patient
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Title", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
-            string id = "", title = "", type = "", creator = "";
+            string id = "", title = "", type = "", creator = "", time = "";
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             for (int i = 1; i <= count; i++)
@@ -170,6 +171,9 @@ namespace NephroNet.Accounts.Patient
                 //Get the topic ID:
                 cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
                 id = cmd.ExecuteScalar().ToString();
+                //Get type:
+                cmd.CommandText = "select [topic_time] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                time = cmd.ExecuteScalar().ToString();
                 //Get title:
                 cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isTerminated = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
                 title = cmd.ExecuteScalar().ToString();
@@ -184,11 +188,20 @@ namespace NephroNet.Accounts.Patient
                 creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(id, title, type, creator);
+                dt.Rows.Add(id, Layouts.getTimeFormat(time), title, type, creator);
             }
             connect.Close();
             grdTopics.DataSource = dt;
             grdTopics.DataBind();
+            grdTopics.AutoGenerateColumns = false;
+            //Hide the header called "ID":
+            grdTopics.HeaderRow.Cells[1].Visible = false;
+            //Hide IDs column and content which are located in column index 1:
+            for (int i = 0; i < grdTopics.Rows.Count; i++)
+            {
+                grdTopics.Rows[i].Cells[1].Visible = false;
+            }
+
         }
         protected int getTotalApprovedTopics()
         {

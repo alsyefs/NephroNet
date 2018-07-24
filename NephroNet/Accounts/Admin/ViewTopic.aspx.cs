@@ -254,19 +254,7 @@ namespace NephroNet.Accounts.Admin
                         imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br />";
                     }
                 }
-                string background_color = "style = \"background-color:#CECECE; width: 100%;\"";
-                header =
-                    "<p " + background_color + " >"+
-                    //"______________________________________________________________________________________________________________________________<br />" +
-                    "Creator: " + creator + "<br />" +
-                    "Type: " + topic_type + "<br />" +
-                    "Title: " + topic_title + "<br />" +
-                    "Time: " + topic_time + "<br />" +
-                    //"Terminated?: " + topic_isTerminated + "<br />" +
-                    "Description: \"" + topic_description + "\"<br />" +
-                    imagesHTML+ "<br />"+
-                    //"______________________________________________________________________________________________________________________________"+
-                    "</p>";
+                header = Layouts.postHeader(creator, topic_type, topic_title, topic_time, topic_description, imagesHTML);
             }
             else
             {

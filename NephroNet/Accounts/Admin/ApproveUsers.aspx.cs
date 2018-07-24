@@ -77,6 +77,13 @@ namespace NephroNet.Accounts.Admin
             connect.Close();
             grdUsers.DataSource = dt;
             grdUsers.DataBind();
+            //Hide the header called "ID":
+            grdUsers.HeaderRow.Cells[1].Visible = false;
+            //Hide IDs column and content which are located in column index 1:
+            for (int i = 0; i < grdUsers.Rows.Count; i++)
+            {
+                grdUsers.Rows[i].Cells[1].Visible = false;
+            }
         }
         protected void initialPageAccess()
         {

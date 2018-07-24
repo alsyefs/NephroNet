@@ -113,6 +113,13 @@ namespace NephroNet.Accounts.Admin
             connect.Close();
             grdTopics.DataSource = dt;
             grdTopics.DataBind();
+            //Hide the header called "ID":
+            grdTopics.HeaderRow.Cells[1].Visible = false;
+            //Hide IDs column and content which are located in column index 1:
+            for (int i = 0; i < grdTopics.Rows.Count; i++)
+            {
+                grdTopics.Rows[i].Cells[1].Visible = false;
+            }
         }
         protected int getTotalTopicsForUser()
         {
