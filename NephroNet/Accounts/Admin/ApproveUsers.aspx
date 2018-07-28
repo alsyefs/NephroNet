@@ -24,8 +24,8 @@
 
             <%--Message to be displaied if there is nothing to show:--%>
             <asp:Label ID="lblMessage" runat="server" Text="There is nothing to display!" Visible="false" ForeColor="Red" Font-Size="Medium" Font-Bold="true"></asp:Label>
-
-            <asp:GridView ID="grdUsers" runat="server" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical"  PageSize ="20" AllowPaging="True" OnPageIndexChanging="grdUsers_PageIndexChanging">
+            <div id="table">
+            <asp:GridView ID="grdUsers" runat="server" Width="100%" HorizontalAlign="Center" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical"  PageSize ="20" AllowPaging="True" OnPageIndexChanging="grdUsers_PageIndexChanging">
                 <AlternatingRowStyle BackColor="White" />
                 <Columns>
                     <asp:HyperLinkField DataNavigateUrlFields="id" DataNavigateUrlFormatString="~/Accounts/Admin/ReviewUser.aspx?id={0}" SortExpression="id" Text="Review" />
@@ -40,7 +40,7 @@
                 <SortedDescendingCellStyle BackColor="#EAEAD3" />
                 <SortedDescendingHeaderStyle BackColor="#575357" />
             </asp:GridView>
-
+                </div>
 
 
             

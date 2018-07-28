@@ -19,6 +19,7 @@ namespace NephroNet.Accounts.Admin
             initialPageAccess();
             topicId = Request.QueryString["id"];
             showTopicInformation();
+            checkIfDeleted();
         }
         protected void initialPageAccess()
         {
@@ -31,6 +32,26 @@ namespace NephroNet.Accounts.Admin
             if (!correctSession)
                 clearSession();
             lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
+        }
+        protected void checkIfDeleted()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + topicId + "' ";
+            int deleted = Convert.ToInt32(cmd.ExecuteScalar());
+            if (deleted == 1)
+            {
+                lblError.Visible = true;
+                lblError.Text = "This discussion has been removed and no more join requests can be sent.";
+                if (Convert.ToInt32(roleId) == 1)//if the one trying to access is an admin:
+                    btnRequest.Visible = false;
+                else
+                {
+                    btnRequest.Visible = false;
+                    lblTopic.Visible = false;
+                }
+            }
+            connect.Close();
         }
         protected void clearSession()
         {

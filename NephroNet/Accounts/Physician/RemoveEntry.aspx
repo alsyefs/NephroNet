@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Remove Message" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RemoveEntry.aspx.cs" Inherits="NephroNet.Accounts.Admin.RemoveEntry" %>
+﻿<%@ Page Title="Remove Message" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RemoveEntry.aspx.cs" Inherits="NephroNet.Accounts.Physician.RemoveEntry" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
     <%--Header start --%>
   

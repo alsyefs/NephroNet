@@ -36,6 +36,7 @@ namespace NephroNet
                 {
                     updateToken();
                 }
+                pageRefreshes = 0;
                 getQuestions();
             }
         }
@@ -130,28 +131,33 @@ namespace NephroNet
             if (!string.IsNullOrWhiteSpace(token))
                 g_token = token;
             pageRefreshes++;
-            //Random index = new Random();
+            /////The below new code is to generate a random number between 0 - 2 at each call:
+            Random random = new Random();
+            int random_index = random.Next(3);
+            getThreeQuestions(random_index);
+            lblQ.Text = getQuestion(g_id, g_q1);
+            //
             //g_q1 = questionIds[index.Next(1, 4) - 1];
             //The below guarantees us to have three non-redundant different random questions:
-            if (pageRefreshes == 1)
-            {
-                getThreeQuestions(0);
-                lblQ.Text = getQuestion(g_id, g_q1);  //db.Questions.Find(g_q1).QuestionText;
-                //g_final_question = g_q1;
-            }
-            else if (pageRefreshes == 2)
-            {
-                getThreeQuestions(1);
-                lblQ.Text = getQuestion(g_id, g_q2); //db.Questions.Find(g_q2).QuestionText;
-                //g_final_question = g_q2;
-            }
-            else
-            {
-                getThreeQuestions(2);
-                lblQ.Text = getQuestion(g_id, g_q3);  //db.Questions.Find(g_q3).QuestionText;
-                pageRefreshes = 0;
-                //g_final_question = g_q3;
-            }
+            //if (pageRefreshes == 1)
+            //{
+            //    getThreeQuestions(0);
+            //    lblQ.Text = getQuestion(g_id, g_q1);  //db.Questions.Find(g_q1).QuestionText;
+            //    //g_final_question = g_q1;
+            //}
+            //else if (pageRefreshes == 2)
+            //{
+            //    getThreeQuestions(1);
+            //    lblQ.Text = getQuestion(g_id, g_q2); //db.Questions.Find(g_q2).QuestionText;
+            //    //g_final_question = g_q2;
+            //}
+            //else
+            //{
+            //    getThreeQuestions(2);
+            //    lblQ.Text = getQuestion(g_id, g_q3);
+            //    pageRefreshes = 0;
+            //    //g_final_question = g_q3;
+            //}
         }
         protected string getQuestion(string g_id, int questionId)
         {
@@ -222,15 +228,15 @@ namespace NephroNet
             connect.Close();
         }
         protected void btnSubmit_Click(object sender, EventArgs e)
-        {
-            g_numOfTries++;
+        {            
             //Add the number of tries to the database:
             addNumberOfTries();
-
+            g_numOfTries = getNumberOfTries();
             Boolean correct = checkAnswer(g_final_question, txtA.Text, g_id);
             string id = g_id;
             if (correct)
             {
+                pageRefreshes = 0;
                 g_numOfTries = 0;
                 setNumberOfTriesToZero();
                 goHome();
@@ -241,9 +247,12 @@ namespace NephroNet
                 {
                     g_numOfTries = 0;
                     lblError.Visible = true;
-                    lblError.Text =  "Input Error: You have entered the answer three times already.";
+                    lblError.Text =  "Input Error: Your account has been locked for entering three incorrect answers.";
                     lockUser(id);
-                    clearSession();
+                    lblQ.Visible = false;
+                    txtA.Visible = false;
+                    btnSubmit.Visible = false;
+                    //clearSession();
                     //Response.Redirect("~/");
                 }
                 else

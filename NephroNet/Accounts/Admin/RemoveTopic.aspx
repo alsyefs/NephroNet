@@ -1,8 +1,6 @@
-﻿<%@ Page Title="Remove Message" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RemoveEntry.aspx.cs" Inherits="NephroNet.Accounts.Admin.RemoveEntry" %>
+﻿<%@ Page Title="Remove Topic" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RemoveTopic.aspx.cs" Inherits="NephroNet.Accounts.Admin.RemoveTopic" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
-    <%--Header start --%>
-  
-    <%--Header end--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%--Page body start:--%>
@@ -11,7 +9,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Show message information:--%>
-                <asp:Label ID="lblMessageInformation" runat="server" Text="Are you sure you want to remove the selected message?"></asp:Label>
+                <asp:Label ID="lblMessageInformation" runat="server" Text="Are you sure you want to remove the selected topic?"></asp:Label>
 
                 <%--Approve--%>
                 <br />

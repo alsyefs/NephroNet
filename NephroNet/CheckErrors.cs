@@ -20,6 +20,14 @@ namespace NephroNet
             return correct;
         }
         //Validate all input to avoid special characters:
+        public Boolean ContainsSpecialChars(string value)
+        {
+            Boolean itContainsSpecialCharacter = false;
+            Regex RgxUrl = new Regex("[^a-zA-Z0-9]");
+            itContainsSpecialCharacter = RgxUrl.IsMatch(value);
+            return itContainsSpecialCharacter;
+        }
+        //Validate all input to avoid special characters:
         public Boolean ContainsSpecialChars(string value, out string result)
         {
             result = "Invalid input: Special characters are not allowed.";

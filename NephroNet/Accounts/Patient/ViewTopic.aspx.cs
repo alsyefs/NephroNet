@@ -181,43 +181,23 @@ namespace NephroNet.Accounts.Patient
                 //Get "Yes" or "No" for topic_hasImage:
                 cmd.CommandText = "select topic_hasImage from [Topics] where [topicId] = '" + topicId + "' ";
                 int topic_hasImage = Convert.ToInt32(cmd.ExecuteScalar());
-                string str_topic_hasImage = "";
-                if (topic_hasImage == 0)
-                    str_topic_hasImage = "Topic does not have an image.";
-                else
-                    str_topic_hasImage = "Topic has an image.";
+                
                 //Get topic_isDeleted ?:
                 cmd.CommandText = "select topic_isDeleted from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
-                string topic_isDeleted = "";
-                if (int_topic_isDeleted == 0)
-                    topic_isDeleted = "Topic has not been deleted.";
-                else
-                    topic_isDeleted = "Topic has been deleted.";
+                
                 //Get topic_isApproved ?:
                 cmd.CommandText = "select topic_isApproved from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isApproved = Convert.ToInt32(cmd.ExecuteScalar());
-                string topic_isApproved;
-                if (int_topic_isApproved == 0)
-                    topic_isApproved = "Topic has not been approved.";
-                else
-                    topic_isApproved = "Topic has been approved.";
+                
                 //Get topic_isDenied ?:
                 cmd.CommandText = "select topic_isDenied from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isDenied = Convert.ToInt32(cmd.ExecuteScalar());
-                string topic_isDenied;
-                if (int_topic_isDenied == 0)
-                    topic_isDenied = "Topic has not been denied.";
-                else
-                    topic_isDenied = "Topic has been denied.";
+                
                 //Get topic_isTerminated ?:
                 cmd.CommandText = "select topic_isTerminated from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isTerminated = Convert.ToInt32(cmd.ExecuteScalar());
-                string topic_isTerminated = "";
-                if (int_topic_isTerminated == 0)
-                    topic_isTerminated = "Topic has not been terminated.";
-                else
-                    topic_isTerminated = "Topic has been terminated.";
+                
                 //Get tags:
                 string tagNames = "";
                 cmd.CommandText = "select count(*) from TagsForTopics where topicId = '" + topicId + "' ";
@@ -254,7 +234,10 @@ namespace NephroNet.Accounts.Patient
                         imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br />";
                     }
                 }
-                header = Layouts.postHeader(creator, topic_type, topic_title, topic_time, topic_description, imagesHTML);
+                //Get userId of current user viewing:
+                cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+                string userId = cmd.ExecuteScalar().ToString();
+                header = Layouts.postHeader(creator, topic_type, topic_title, topic_time, topic_description, imagesHTML, roleId, userId, topicId, topic_createdBy);
             }
             else
             {
@@ -317,7 +300,7 @@ namespace NephroNet.Accounts.Patient
                 //Get topic creator ID of current user viewing:
                 cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
                 string topic_creatorId = cmd.ExecuteScalar().ToString();
-                content = content + Layouts.postMessage(i, creator_name, entry_time, entry_text, imagesHtml, entry_creatorId, topic_creatorId, userId, entryId);
+                content = content + Layouts.postMessage(i, creator_name, entry_time, entry_text, imagesHtml, entry_creatorId, topic_creatorId, userId, entryId, roleId);
             }
             connect.Close();
             return content;

@@ -10,6 +10,13 @@ namespace NephroNet
     {
         //The below is Saleh's personal connection string:
         static string connectionString = "data source=R14\\SALEH;initial catalog=NephroNetDB;MultipleActiveResultSets=True;user id=sa; password=Saleh.Alsyefi1988 ";
+        //static string connectionString = "data source=R14\\SALEH;initial catalog=NephroNetDB;MultipleActiveResultSets=True;Integrated Security=true;";
+        //static string connectionString = "data source=R14\\SALEH;initial catalog=NephroNetDB;MultipleActiveResultSets=True;Integrated Security=false;";
+        //static string connectionString = "data source=R14\\SALEH;initial catalog=NephroNetDB;MultipleActiveResultSets=true;Trusted_Connection=false;";
+        //static string connectionString = "Data Source=.;Initial Catalog=NephroNetDB;Integrated Security=true;";
+
+
+
         //The server's connection string:
         //static string connectionString = "data source=Murcap02;initial catalog=NephroNetDB;MultipleActiveResultSets=True; user id=sa; password=Saleh.Alsyefi1988";
         static string dbId = setDBID();

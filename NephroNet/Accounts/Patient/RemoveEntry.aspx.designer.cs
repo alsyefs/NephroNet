@@ -10,33 +10,33 @@
 namespace NephroNet.Accounts.Patient {
     
     
-    public partial class Home {
+    public partial class RemoveEntry {
         
         /// <summary>
-        /// lblAlerts control.
+        /// lblMessageInformation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAlerts;
+        protected global::System.Web.UI.WebControls.Label lblMessageInformation;
         
         /// <summary>
-        /// lblMessage control.
+        /// btnRemove control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.Button btnRemove;
         
         /// <summary>
-        /// grdTopics control.
+        /// btnCancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grdTopics;
+        protected global::System.Web.UI.WebControls.Button btnCancel;
     }
 }

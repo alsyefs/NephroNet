@@ -8,28 +8,36 @@ namespace NephroNet
 {
 	public class Layouts
 	{
-		public static string postHeader(string creator, string topic_type, string topic_title, string topic_time, string topic_description, string imagesHTML)
-		{
-			string background_color = "style = \"background-color:#CECECE; width: 100%; border-bottom: 6px solid black; border: 2px solid black; border-radius: 5px;\"";
-			string header = "<div id=\"header\">" +
+		public static string postHeader(string creator, string topic_type, string topic_title, string topic_time, 
+            string topic_description, string imagesHTML, string roleId, string userId, string topicId, string topic_creatorId)
+		{            
+			//string background_color = "style = \"background-color:#CECECE; width: 100%; border-bottom: 6px solid black; border: 2px solid black; border-radius: 5px;\"";
+            string deleteCommand = "";
+            //Check if the user viewing the topic is the creator, or if the current user viewing is an admin:
+            int int_roleId = Convert.ToInt32(roleId);
+            if (topic_creatorId.Equals(userId) || int_roleId == 1)
+                deleteCommand = "&nbsp;<button id='remove_button'type='button' onmousedown=\"OpenPopup('RemoveTopic.aspx?id=" + topicId + "')\">Remove Topic</button><br/>";
+                string header = "<div id=\"header\">" +
             "<div id=\"messageHead\">" +
             "&nbsp;\"" + topic_title + "\" " +
             "Created by <a href=\"profile.aspx?id=\">" + creator + " </a>" +
             "as a " + topic_type.ToLower() + " topic on " + getTimeFormat(topic_time) + "</div>" +
             "<div id=\"messageDescription\"><br/>" + topic_description + "<br /><br/>" +
-			imagesHTML + "</div><br />" +
+			imagesHTML + "</div>" +
+            deleteCommand+
 			"</div>";
 			return header;
 		}
 
 		public static string postMessage(int i, string creator_name, string entry_time, string entry_text, string imagesHtml, 
-			string entry_creatorId, string topic_creatorId, string userId, string entryId)
+			string entry_creatorId, string topic_creatorId, string userId, string entryId, string roleId)
 		{
 			string deleteCommand = "";
-            //Check if the user viewing has an entry he/she created, or if the current user viewing is the topic creator::
-            if (entry_creatorId.Equals(userId) || topic_creatorId.Equals(userId))
+            //Check if the user viewing the message is the creator, or if the current user viewing is an admin:
+            int int_roleId = Convert.ToInt32(roleId);
+            if (entry_creatorId.Equals(userId) || int_roleId == 1)
                 //deleteCommand = "&nbsp;<a href=\"DeleteEntry.aspx?entryId=" + entryId + "\">Remove Entry " + i + "</a><br />";
-                deleteCommand = "&nbsp;<a onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "')\">Remove Entry " + i + "</a><br/>";
+                deleteCommand = "&nbsp;<button id='remove_button' type='button' onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "')\">Remove Entry " + i + "</button><br/>";
 			string background_color = "";
 			if (i % 2 == 0)
 				background_color = "style = \"background: rgb(255, 255, 255);background: rgba(203, 203, 152, 0.6);\"";

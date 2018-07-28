@@ -86,9 +86,9 @@ namespace NephroNet
                 {
                     getLoginId(username);
                     bool active = checkIfLocked(username);
-                    addNumberOfTries();                    
                     if (active)
                     {
+                        addNumberOfTries();
                         Boolean correctPassword = checkPassword(username, password); 
                         //check if password is correct.
                         //Boolean correctEndDate = checkEndDate(username);

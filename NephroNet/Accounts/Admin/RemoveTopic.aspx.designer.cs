@@ -7,36 +7,36 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NephroNet.Accounts.Patient {
+namespace NephroNet.Accounts.Admin {
     
     
-    public partial class Home {
+    public partial class RemoveTopic {
         
         /// <summary>
-        /// lblAlerts control.
+        /// lblMessageInformation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAlerts;
+        protected global::System.Web.UI.WebControls.Label lblMessageInformation;
         
         /// <summary>
-        /// lblMessage control.
+        /// btnRemove control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.Button btnRemove;
         
         /// <summary>
-        /// grdTopics control.
+        /// btnCancel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grdTopics;
+        protected global::System.Web.UI.WebControls.Button btnCancel;
     }
 }

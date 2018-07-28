@@ -34,7 +34,8 @@ namespace NephroNet.Accounts.Admin
             dt.Columns.Add("ID", typeof(string));
             dt.Columns.Add("Topic ID", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
-            string id = "", creator = "", topic = "";
+            dt.Columns.Add("Topic Title", typeof(string));
+            string id = "", creator = "", topic = "", title="";
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandType = CommandType.Text;
@@ -46,6 +47,9 @@ namespace NephroNet.Accounts.Admin
                 //Get topic ID for the selected message:
                 cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where entry_isApproved = 0 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
                 topic = cmd.ExecuteScalar().ToString();
+                //Get topic title:
+                cmd.CommandText = "select [topic_title] from [Topics] where topicId = '"+topic+"' ";
+                title = cmd.ExecuteScalar().ToString();
                 //Get creator's ID:
                 cmd.CommandText = "select [userId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where entry_isApproved = 0 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
                 string creatorId = cmd.ExecuteScalar().ToString();
@@ -54,17 +58,19 @@ namespace NephroNet.Accounts.Admin
                 creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(id, topic, creator);
+                dt.Rows.Add(id, topic, creator, title);
             }
             connect.Close();
             grdMessages.DataSource = dt;
             grdMessages.DataBind();
             //Hide the header called "ID":
             grdMessages.HeaderRow.Cells[1].Visible = false;
+            grdMessages.HeaderRow.Cells[2].Visible = false;
             //Hide IDs column and content which are located in column index 1:
             for (int i = 0; i < grdMessages.Rows.Count; i++)
             {
                 grdMessages.Rows[i].Cells[1].Visible = false;
+                grdMessages.Rows[i].Cells[2].Visible = false;
             }
         }
         protected int getTotalNewMessages()

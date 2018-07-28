@@ -26,7 +26,8 @@
                 <%--Message to be displayed if there is nothing to show:--%>
                 <asp:Label ID="lblMessage" runat="server" Text="There is nothing to display!" Visible="false" ForeColor="Red" Font-Size="Medium" Font-Bold="true"></asp:Label>
                 <%--Table to displayed if there is something to show:--%>
-                <asp:GridView ID="grdTopics" runat="server" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical" PageSize="20" AllowPaging="True" OnPageIndexChanging="grdTopics_PageIndexChanging">
+                <div id ="table">
+                <asp:GridView ID="grdTopics" runat="server" Width="100%" HorizontalAlign="Center" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical" PageSize="20" AllowPaging="True" OnPageIndexChanging="grdTopics_PageIndexChanging">
                     <AlternatingRowStyle BackColor="White" />
                     <Columns>
                         <asp:HyperLinkField DataNavigateUrlFields="id" DataNavigateUrlFormatString="~/Accounts/Patient/ViewTopic.aspx?id={0}" SortExpression="id" Text="Enter" />
@@ -41,10 +42,7 @@
                     <SortedDescendingCellStyle BackColor="#EAEAD3" />
                     <SortedDescendingHeaderStyle BackColor="#575357" />
                 </asp:GridView>
-                <%--New table HTML:--%>
-                <br /><br />
-                <asp:Label ID="lblTable" runat="server" Text=" "></asp:Label>
-                <%--table end--%>
+               </div>
             </div>
         </div>
     </div>

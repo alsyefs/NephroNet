@@ -22,7 +22,7 @@
         <h2><%: Title %>:</h2>
         <div class="panel panel-default">
             <div class="panel-body">
-                <%--Content start--%>                    
+                <%--Content start--%>
                 <asp:Label ID="lblHeader" runat="server" Text="Header" Font-Bold="True"></asp:Label>
                 <br />
                 <asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>
@@ -59,6 +59,29 @@
                 <br />
                 <asp:Label ID="lblError" runat="server" ForeColor="Red" Text="Label" Visible="False"></asp:Label>
                 <%--Content end--%>
+                <%--Popup message--%>
+                <script type="text/javascript">
+                    function OpenPopup(site) {popup(site);}
+                    // copied from http://www.dotnetfunda.com/codes/code419-code-to-open-popup-window-in-center-position-.aspx
+                    function popup(url) {
+                        var width = 500;
+                        var height = 300;
+                        var left = (screen.width - width) / 2;
+                        var top = (screen.height - height) / 2;
+                        var params = 'width=' + width + ', height=' + height;
+                        params += ', top=' + top + ', left=' + left;
+                        params += ', directories=no';
+                        params += ', location=no';
+                        params += ', menubar=no';
+                        params += ', resizable=no';
+                        params += ', scrollbars=no';
+                        params += ', status=no';
+                        params += ', toolbar=no';
+                        newwin = window.open(url, 'windowname5', params);
+                        if (window.focus) { newwin.focus() }
+                        return false;
+                    }
+                </script>               
             </div>
         </div>
     </div>

@@ -89,7 +89,7 @@ namespace NephroNet.Accounts.Admin
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             //Check if the ID exists in the database:
-            cmd.CommandText = "select count(*) from topics where topicId = '" + messageId + "' ";
+            cmd.CommandText = "select count(*) from [Entries] where [entryId] = '" + messageId + "' ";
             int countMessage = Convert.ToInt32(cmd.ExecuteScalar());
             if (countMessage > 0)//if ID exists, countMessage = 1
             {
