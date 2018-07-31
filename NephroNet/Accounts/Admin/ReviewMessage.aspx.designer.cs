@@ -13,15 +13,6 @@ namespace NephroNet.Accounts.Admin {
     public partial class ReviewMessage {
         
         /// <summary>
-        /// lblAlerts control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAlerts;
-        
-        /// <summary>
         /// lblMessageInformation control.
         /// </summary>
         /// <remarks>

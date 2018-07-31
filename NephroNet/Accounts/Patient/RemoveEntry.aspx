@@ -1,13 +1,10 @@
-﻿<%@ Page Title="Remove Message" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RemoveEntry.aspx.cs" Inherits="NephroNet.Accounts.Patient.RemoveEntry" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
-    <%--Header start --%>
-  
-    <%--Header end--%>
-</asp:Content>
+﻿<%@ Page Title="Remove Message" Language="C#" MasterPageFile="~/Patient.Master" AutoEventWireup="true" CodeBehind="RemoveEntry.aspx.cs" Inherits="NephroNet.Accounts.Patient.RemoveEntry" %>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%--Page body start:--%>
     <div class="container">
-        <h2><%: Title %>:</h2>
+        <br />
+        <h2><%: Title %></h2>
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Show message information:--%>

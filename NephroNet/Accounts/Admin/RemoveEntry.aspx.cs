@@ -48,7 +48,7 @@ namespace NephroNet.Accounts.Admin
                 //Get the deletion's status:
                 cmd.CommandText = "select entry_isDeleted from Entries where entryId = '" + messageId + "' ";
                 int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
-                connect.Close();
+                
                 //check if id belongs to a different user:
                 if (!userId.Equals(creatorId))
                     correct = false;
@@ -57,6 +57,7 @@ namespace NephroNet.Accounts.Admin
             }
             else
                 correct = false; // means that the topic ID does not exists in DB.
+            connect.Close();
             return correct;
         }
         protected void initialPageAccess()

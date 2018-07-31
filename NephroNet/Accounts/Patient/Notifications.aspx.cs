@@ -29,7 +29,7 @@ namespace NephroNet.Accounts.Patient
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            lblAlerts.Text = "("+session.countTotalAlerts()+")";
+            
             if (session.countTotalAlerts() == 0)
             {
                 lblError.Visible = true;

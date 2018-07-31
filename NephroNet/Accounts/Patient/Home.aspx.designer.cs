@@ -13,15 +13,6 @@ namespace NephroNet.Accounts.Patient {
     public partial class Home {
         
         /// <summary>
-        /// lblAlerts control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAlerts;
-        
-        /// <summary>
         /// lblMessage control.
         /// </summary>
         /// <remarks>

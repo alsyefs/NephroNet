@@ -15,6 +15,10 @@ namespace NephroNet.Accounts.Admin
         string username, roleId, loginId, token;
         protected void Page_Load(object sender, EventArgs e)
         {
+            initialAccess();
+        }
+        protected void initialAccess()
+        {
             Configuration config = new Configuration();
             conn = config.getConnectionString();
             connect = new SqlConnection(conn);
@@ -23,7 +27,6 @@ namespace NephroNet.Accounts.Admin
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
         }
         protected void clearSession()
         {

@@ -41,7 +41,7 @@ namespace NephroNet.Accounts.Physician
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
+            
         }
         protected void clearSession()
         {
@@ -69,6 +69,13 @@ namespace NephroNet.Accounts.Physician
         {
             grdTopics.PageIndex = e.NewPageIndex;
             grdTopics.DataBind();
+            //Hide the header called "ID":
+            grdTopics.HeaderRow.Cells[1].Visible = false;
+            //Hide IDs column and content which are located in column index 1:
+            for (int i = 0; i < grdTopics.Rows.Count; i++)
+            {
+                grdTopics.Rows[i].Cells[1].Visible = false;
+            }
         }
         protected void createTable(int count)
         {
@@ -108,7 +115,7 @@ namespace NephroNet.Accounts.Physician
             connect.Close();
             grdTopics.DataSource = dt;
             grdTopics.DataBind();
-            grdTopics.AutoGenerateColumns = false;
+            //grdTopics.AutoGenerateColumns = false;
             //Hide the header called "ID":
             grdTopics.HeaderRow.Cells[1].Visible = false;
             //Hide IDs column and content which are located in column index 1:

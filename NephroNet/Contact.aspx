@@ -2,7 +2,8 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container">
-    <h2><%: Title %>:</h2>
+        <br />
+    <h2><%: Title %></h2>
         <div class="panel panel-default">
         <div class="panel-body">
     

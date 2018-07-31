@@ -45,7 +45,7 @@ namespace NephroNet.Accounts.Physician
                 string userId = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + topicId + "' ";
                 int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
-                connect.Close();
+                
                 //check if id belongs to a different user:
                 if (!userId.Equals(creatorId))
                     correct = false;
@@ -54,6 +54,7 @@ namespace NephroNet.Accounts.Physician
             }
             else
                 correct = false; // means that the topic ID does not exists in DB.
+            connect.Close();
             return correct;
         }        
         protected void initialPageAccess()
@@ -98,16 +99,25 @@ namespace NephroNet.Accounts.Physician
             closePage();
         }
         protected void btnRemove_Click(object sender, EventArgs e)
-        {            
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            //update the DB and set isDeleted = true:
-            cmd.CommandText = "update Topics set topic_isDeleted = 1 where topicId = '"+topicId+"' ";
-            cmd.ExecuteScalar();
-            connect.Close();
-            //Email the topic creator about the topic being deleted:
-            sendEmailNotification();
-            closePage();
+        {
+            bool correct = isTopicCorrect();
+            if (!correct)
+            {
+                closePage();
+                lblMessageInformation.Text = "You are not authorized to remove the selected message!";
+            }
+            else
+            {
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //update the DB and set isDeleted = true:
+                cmd.CommandText = "update Topics set topic_isDeleted = 1 where topicId = '" + topicId + "' ";
+                cmd.ExecuteScalar();
+                connect.Close();
+                //Email the topic creator about the topic being deleted:
+                sendEmailNotification();
+                closePage();
+            }
         }
         protected void sendEmailNotification()
         {

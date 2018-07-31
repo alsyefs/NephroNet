@@ -93,7 +93,6 @@ namespace NephroNet.Accounts.Admin
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
         }
         protected void clearSession()
         {
@@ -121,6 +120,15 @@ namespace NephroNet.Accounts.Admin
         {
             grdMessages.PageIndex = e.NewPageIndex;
             grdMessages.DataBind();
+            //Hide the header called "ID":
+            grdMessages.HeaderRow.Cells[1].Visible = false;
+            grdMessages.HeaderRow.Cells[2].Visible = false;
+            //Hide IDs column and content which are located in column index 1:
+            for (int i = 0; i < grdMessages.Rows.Count; i++)
+            {
+                grdMessages.Rows[i].Cells[1].Visible = false;
+                grdMessages.Rows[i].Cells[2].Visible = false;
+            }
         }
     }
 }

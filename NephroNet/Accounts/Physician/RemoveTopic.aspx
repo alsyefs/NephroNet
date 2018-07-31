@@ -1,11 +1,11 @@
-﻿<%@ Page Title="Remove Topic" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RemoveTopic.aspx.cs" Inherits="NephroNet.Accounts.Physician.RemoveTopic" %>
+﻿<%@ Page Title="Remove Topic" Language="C#" MasterPageFile="~/Physician.Master" AutoEventWireup="true" CodeBehind="RemoveTopic.aspx.cs" Inherits="NephroNet.Accounts.Physician.RemoveTopic" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
-</asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%--Page body start:--%>
     <div class="container">
-        <h2><%: Title %>:</h2>
+        <br />
+        <h2><%: Title %></h2>
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Show message information:--%>

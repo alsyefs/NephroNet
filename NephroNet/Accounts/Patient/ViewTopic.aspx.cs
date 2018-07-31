@@ -30,7 +30,7 @@ namespace NephroNet.Accounts.Patient
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
+            
             topicId = Request.QueryString["id"];
             CheckErrors check = new CheckErrors();
             if (!check.isDigit(topicId))

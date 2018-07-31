@@ -45,7 +45,7 @@ namespace NephroNet.Accounts.Admin
                 string userId = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + topicId + "' ";
                 int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
-                connect.Close();
+                
                 //check if id belongs to a different user:
                 if (!userId.Equals(creatorId))
                     correct = false;
@@ -54,6 +54,7 @@ namespace NephroNet.Accounts.Admin
             }
             else
                 correct = false; // means that the topic ID does not exists in DB.
+            connect.Close();
             return correct;
         }        
         protected void initialPageAccess()
