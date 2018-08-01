@@ -48,11 +48,13 @@ namespace NephroNet.Accounts.Admin
                 //Get the deletion's status:
                 cmd.CommandText = "select entry_isDeleted from Entries where entryId = '" + messageId + "' ";
                 int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //check if id belongs to a different user:
-                if (!userId.Equals(creatorId))
-                    correct = false;
-                else if (isDeleted == 1)
+                //Admins can delete anything!
+                //if (!userId.Equals(creatorId))
+                //    correct = false;
+                //else
+                if (isDeleted == 1)
                     correct = false;
             }
             else

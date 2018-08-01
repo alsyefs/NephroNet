@@ -45,11 +45,12 @@ namespace NephroNet.Accounts.Admin
                 string userId = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + topicId + "' ";
                 int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //check if id belongs to a different user:
-                if (!userId.Equals(creatorId))
-                    correct = false;
-                else if (isDeleted == 1)
+                //if (!userId.Equals(creatorId))
+                //    correct = false;
+                //else 
+                if (isDeleted == 1)
                     correct = false;
             }
             else

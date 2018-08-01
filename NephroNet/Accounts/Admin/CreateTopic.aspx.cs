@@ -153,6 +153,7 @@ namespace NephroNet.Accounts.Admin
                     //Add ImagesForTopics:
                     cmd.CommandText = "insert into ImagesForTopics (imageId, topicId) values ('" + imageId + "', '" + topicId + "')";
                     cmd.ExecuteScalar();
+                    
                 }
             }
             connect.Close();
@@ -162,6 +163,7 @@ namespace NephroNet.Accounts.Admin
             //Loop through images and store each one of them:
             for (int i = 0; i < FileUpload1.PostedFiles.Count; i++)
             {
+                //System.IO.File.Move("oldfilename", "newfilename");
                 string path = Server.MapPath("~/images/" + FileUpload1.PostedFiles[i].FileName);
                 System.Drawing.Bitmap image = new System.Drawing.Bitmap(FileUpload1.PostedFiles[i].InputStream);
                 System.Drawing.Bitmap image_copy = new System.Drawing.Bitmap(image);
@@ -206,15 +208,23 @@ namespace NephroNet.Accounts.Admin
             DateTime entryTime = DateTime.Now;
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
+            string description = txtDescription.Text.Replace("'", "''");
+            description = description.Replace("\n", "<br />");
+            description = description.Replace("\r", "&nbsp;&nbsp;&nbsp;&nbsp;");
+            string title = txtTitle.Text.Replace("'", "''");
+            title = title.Replace("'", "''");
+            title = title.Replace("\n", "");
+            title = title.Replace("\r", "&nbsp;&nbsp;&nbsp;&nbsp;");
             //Get the current user's ID:
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string userId = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "insert into Topics (topic_createdBy, topic_type, topic_title, topic_time, topic_description, topic_hasImage, topic_isDeleted, topic_isApproved, topic_isDenied, topic_isTerminated) values " +
-                "('"+userId+"', '"+drpType.SelectedValue+"', '"+txtTitle.Text.Replace("'", "''") + "', '"+ entryTime + "', '"+txtDescription.Text.Replace("'", "''") + "', '"+ hasImage + "', '0', '0', '0', '0')";
+                "('"+userId+"', '"+drpType.SelectedValue+"', '"+title + "', '"+ entryTime + "', '"+description + "', '"+ hasImage + "', '0', '0', '0', '0')";
             cmd.ExecuteScalar();
             cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [topics] " +
-                "where topic_createdBy = '" + userId + "' and topic_type like '" + drpType.SelectedValue + "' and topic_title like '" + txtTitle.Text.Replace("'", "''") + "' " +
-                "and topic_description like '" + txtDescription.Text.Replace("'", "''") + "' and topic_hasImage = '" + hasImage +
+                "where topic_createdBy = '" + userId + "' and topic_type like '" + drpType.SelectedValue + "' and topic_title like '" + title + "' " 
+                //+"and topic_description like '" + description 
+                + " and topic_hasImage = '" + hasImage +
                 "' and topic_isDeleted = '0' and topic_isApproved = '0' and topic_isDenied = '0' and topic_isTerminated = '0' " +
                 " ) as t where rowNum = '1'";
             topicId = cmd.ExecuteScalar().ToString();

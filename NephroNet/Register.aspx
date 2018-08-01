@@ -3,6 +3,7 @@
 </asp:Content>--%>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container">
+        <br />
     <h2>Please fill the registration form</h2>    
         <div class="panel panel-default">
         <div class="panel-body">

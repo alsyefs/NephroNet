@@ -463,14 +463,17 @@ namespace NephroNet.Accounts.Physician
             DateTime entry_time = DateTime.Now;
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
+            string description = txtEntry.Text.Replace("'", "''");
+            description = description.Replace("\n", "<br />");
+            description = description.Replace("\r", "&nbsp;&nbsp;&nbsp;&nbsp;");
             //Get the current user's ID:
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string userId = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "insert into Entries (topicId, userId, entry_time, entry_text, entry_isDeleted, entry_isApproved, entry_isDenied, entry_hasImage) values " +
-                "('" + topicId + "', '" + userId + "', '" + entry_time + "', '" + txtEntry.Text.Replace("'", "''") + "', ' 0 ', '0', '0', '" + hasImage + "')";
+                "('" + topicId + "', '" + userId + "', '" + entry_time + "', '" + description + "', ' 0 ', '0', '0', '" + hasImage + "')";
             cmd.ExecuteScalar();
             cmd.CommandText = "select [entryId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] " +
-                "where topicId = '" + topicId + "' and userId = '" + userId + "' and entry_text like '" + txtEntry.Text.Replace("'", "''") + "' " +
+                "where topicId = '" + topicId + "' and userId = '" + userId + "'  " +
                 "and entry_isDeleted = '0' and entry_hasImage = '" + hasImage +
                 "' and entry_isApproved = '0' and entry_isDenied = '0' " +
                 " ) as t where rowNum = '1'";

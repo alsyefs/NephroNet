@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -24,13 +25,11 @@ namespace NephroNet.Accounts.Admin
             registerId = Request.QueryString["id"];
             showUserInformation();
         }
-
         protected void btnCancel_Click(object sender, EventArgs e)
         {
             addSession();
             Response.Redirect("ApproveUsers");
         }
-
         protected void showUserInformation()
         {
             connect.Open();
@@ -109,26 +108,53 @@ namespace NephroNet.Accounts.Admin
         protected string createUsername()
         {
             string generatedUsername = "";
-            generatedUsername = g_firstName + g_lastName + g_roleId + registerId;
+            //generatedUsername = g_firstName + g_lastName + g_roleId + registerId;
+            generatedUsername = g_firstName + "." + g_lastName;// + g_roleId + registerId;
             generatedUsername = generatedUsername.Replace(" ", "");
+            generatedUsername = generatedUsername.Replace("'", "");
             //Make sure the new username doesn't match another username in the system:
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandText = "select count(*) from Logins where login_username like '"+generatedUsername+"' ";
             int countDuplicateUsernames = Convert.ToInt32(cmd.ExecuteScalar());
-            connect.Close();
             if(countDuplicateUsernames > 0)
             {
-                Random rnd = new Random();
-                int addUniqueness = rnd.Next(1, 999);
-                generatedUsername = generatedUsername + addUniqueness;
+                //If the username exists, add the role ID at the end of it:
+                generatedUsername = generatedUsername + g_roleId;
+                cmd.CommandText = "select count(*) from Logins where login_username like '" + generatedUsername + "' ";
+                int countDuplicateUsernames_2 = Convert.ToInt32(cmd.ExecuteScalar());
+                if (countDuplicateUsernames_2 > 0)
+                {
+                    //If the username exists, add the register ID at the end of it:
+                    generatedUsername = generatedUsername + registerId;
+                    cmd.CommandText = "select count(*) from Logins where login_username like '" + generatedUsername + "' ";
+                    int countDuplicateUsernames_3 = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (countDuplicateUsernames_3 > 0)
+                    {
+                        Random rnd = new Random();
+                        int addUniqueness = rnd.Next(1, 999);
+                        //If the username exists, add a random integer at the end of it:
+                        generatedUsername = generatedUsername + addUniqueness;
+                        cmd.CommandText = "select count(*) from Logins where login_username like '" + generatedUsername + "' ";
+                        int countDuplicateUsernames_4 = Convert.ToInt32(cmd.ExecuteScalar());
+                        if(countDuplicateUsernames_4 > 0)
+                        {
+                            //In an extreme case, if that generated username duplicates with another one, add the login ID + 1 from the last login ID:
+                            cmd.CommandText = "select top 1 loginId from logins order by loginId desc";
+                            int lastLoginId = Convert.ToInt32(cmd.ExecuteScalar());
+                            lastLoginId++;
+                            generatedUsername = generatedUsername + lastLoginId;
+                        }
+                    }
+                }
             }
+            connect.Close();
             return generatedUsername;
         }
         protected string createPassword()
         {
-            string generatedPassword = "";
-            generatedPassword = "123";
+            //The below will generate a password of 8 characters having at least 4 non-alphanumeric characters:
+            string generatedPassword = Membership.GeneratePassword(8, 4);
             return generatedPassword;
         }
         protected void btnApprove_Click(object sender, EventArgs e)
