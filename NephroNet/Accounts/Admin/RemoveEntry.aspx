@@ -13,6 +13,7 @@
                 <%--Approve--%>
                 <br />
                 <br />
+                <%--<asp:Button ID="btnRemove" runat="server" Text="Remove" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnRemove_Click" />--%>
                 <asp:Button ID="btnRemove" runat="server" Text="Remove" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnRemove_Click" />
                 <%--Cancel, or Go Back button--%>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -21,6 +22,12 @@
                     function CloseWindow() {
                         window.close();
                     }
+                    //Refresh topics page:
+                    //function RefreshParent() {
+                    //    if (window.opener != null && !window.opener.closed) { window.opener.location.href = "ViewTopic.aspx"; 
+                    //    self.close(); //code for RemoveEntry.aspx close
+                    //    } 
+                    //} window.onbeforeunload = RefreshParent;
                 </script>
 
             </div>

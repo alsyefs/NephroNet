@@ -20,8 +20,17 @@
             <asp:TextBox ID="txtP2" runat="server" type="password" Font-Size="Medium"></asp:TextBox>
             &nbsp;
             <asp:Label ID="lblP2Error" runat="server" Text="P1 error" ForeColor="Red" Visible="False" Font-Size="Medium"></asp:Label>
+            <br /><br />
+            <%--Password rules:--%>
+            <pre style="font-family: Consolas; font-size:large; text-align:left; color: #dadada; background: #1e1e1e;">
+<span style="color:#57a64a;"> The&nbsp;password&nbsp;must&nbsp;match&nbsp;the&nbsp;following password&nbsp;requirements:</span>
+<span style="color:#57a64a;"> 1.&nbsp;At&nbsp;least&nbsp;eight&nbsp;characters&nbsp;long.</span>
+<span style="color:#57a64a;"> 2.&nbsp;Contains&nbsp;at&nbsp;least&nbsp;one&nbsp;upper-case&nbsp;letter.</span>
+<span style="color:#57a64a;"> 3.&nbsp;Contains&nbsp;at&nbsp;least&nbsp;one&nbsp;lower-case&nbsp;letter.</span>
+<span style="color:#57a64a;"> 4.&nbsp;Contains&nbsp;at&nbsp;least&nbsp;one&nbsp;digit&nbsp;(0-9).</span>
+<span style="color:#57a64a;"> 5.&nbsp;Contains&nbsp;one&nbsp;of&nbsp;the&nbsp;following&nbsp;special&nbsp;characters&nbsp;;&nbsp;,&nbsp;.&nbsp;!&nbsp;@&nbsp;#&nbsp;$&nbsp;%&nbsp;^&nbsp;&amp;&nbsp;*&nbsp;(&nbsp;)</span></pre>
             <%--Submit--%>
-                <br /><br />
+                <%--<br /><br />--%>
                <asp:Button ID="btnSubmit" runat="server" Text="Submit" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnSubmit_Click"/>
                 &nbsp;
                 

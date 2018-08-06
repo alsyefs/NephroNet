@@ -114,7 +114,24 @@ namespace NephroNet.Accounts.Admin
             //Email the topic creator about the topic being deleted:
             sendEmailNotification();
             closePage();
+            //ViewTopic viewTopic = new ViewTopic();
+            //viewTopic.refreshPage();
+            //Page.Response.Redirect(Page.Request.Url.ToString(), true);
+            //Refresh messages in the topic:
+            //ScriptManager.RegisterStartupScript(Page, typeof(Page), "OpenWindow", "RefreshParent();", true);
+            //string topicId = getTopicId(messageId);
+            //Response.Redirect("ViewTopic.aspx?id="+topicId);
         }
+        //protected string getTopicId(string messageId)
+        //{
+        //    string topicId = "";
+        //    connect.Open();
+        //    SqlCommand cmd = connect.CreateCommand();
+        //    cmd.CommandText = "select topicId from Entries where entryId = '"+messageId+"' ";
+        //    topicId = cmd.ExecuteScalar().ToString();
+        //    connect.Close();
+        //    return topicId;
+        //}
         protected void sendEmailNotification()
         {
             connect.Open();

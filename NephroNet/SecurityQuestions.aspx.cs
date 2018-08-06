@@ -167,7 +167,7 @@ namespace NephroNet
             cmd.CommandText = "select question_text from questions where questionID = '" + questionId + "' ";
             question = cmd.ExecuteScalar().ToString();
             //Get the questionId for the question text:
-            cmd.CommandText = "select questionId from Questions where question_text like '" + question + "' ";
+            cmd.CommandText = "select questionId from Questions where question_text like '" + question.Replace("'", "''") + "' ";
             string tempQuestionId = cmd.ExecuteScalar().ToString();
             g_final_question = Convert.ToInt32(tempQuestionId);
             connect.Close();

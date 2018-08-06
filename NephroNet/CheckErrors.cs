@@ -194,6 +194,18 @@ namespace NephroNet
             }
             return correct;
         }
+        //Validate patient ID:
+        public bool validPatientId(string patientId, out string result)
+        {
+            bool correct = true;
+            result = "";
+            if (string.IsNullOrEmpty(patientId))
+            {
+                correct = false;
+                result = "Invalid input: Please type the patient ID.";
+            }
+            return correct;
+        }
         //Validate question
         public bool validQuestion(string question, out string result)
         {
@@ -236,12 +248,7 @@ namespace NephroNet
             else if (!passwordRequirements(password))
             {
                 correct = false;
-                result = "Invalid input: The new password must match the password requirements:\n" +
-                    "1. At least 8 characters long.\n" +
-                    "2. Contains at least 1 upper-case letter.\n" +
-                    "3. Contains at least 1 lower-case letter\n" +
-                    "4. Contains at least 1 digit (0-9)\n" +
-                    "5. Contains 1 of the following special characters ; , . ! @ # $ % ^ & * ( ) ";
+                result = "Invalid input: Please follow the password requirements.";                
             }
             return correct;
         }

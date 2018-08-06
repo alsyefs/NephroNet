@@ -7,7 +7,7 @@
         <h2><%: Title %></h2>
         <div class="panel panel-default">
             <div class="panel-body">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <asp:Label ID="lblTitle" runat="server" Text="Title"></asp:Label>
                 &nbsp;
                 <asp:TextBox ID="txtTitle" runat="server"></asp:TextBox>
@@ -50,6 +50,16 @@
                 <asp:FileUpload ID="FileUpload1" runat="server" Width="385px" AllowMultiple="true" class="btn btn-primary" />
                 &nbsp;
                 <asp:Label ID="lblImageError" runat="server" Text="Image" Visible="false" ForeColor="red"></asp:Label>
+                <br /><asp:Label ID="lblFileNames" runat="server" Text="file names" Visible="false"></asp:Label>
+                <%--<asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer> 
+                <asp:UpdatePanel ID="upFileNames" UpdateMode="Conditional" runat="server">
+                            <ContentTemplate>
+                                <asp:Label ID="lblFileNames" runat="server" Text="file names" Visible="false"></asp:Label>
+                            </ContentTemplate>
+                            <Triggers>
+                                <asp:AsyncPostBackTrigger  ControlID="Timer1" EventName="Tick" />
+                            </Triggers>
+                </asp:UpdatePanel>--%>
                 <%--Submit--%><br />
                 <br />
                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnSubmit_Click" />

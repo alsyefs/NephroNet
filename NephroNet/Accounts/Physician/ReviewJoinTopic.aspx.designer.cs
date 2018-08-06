@@ -13,15 +13,6 @@ namespace NephroNet.Accounts.Physician {
     public partial class ReviewJoinTopic {
         
         /// <summary>
-        /// lblRequesterInfo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblRequesterInfo;
-        
-        /// <summary>
         /// lblTopicInformation control.
         /// </summary>
         /// <remarks>
@@ -29,6 +20,15 @@ namespace NephroNet.Accounts.Physician {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblTopicInformation;
+        
+        /// <summary>
+        /// lblRequesterInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblRequesterInfo;
         
         /// <summary>
         /// btnApprove control.

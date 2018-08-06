@@ -30,11 +30,33 @@ namespace NephroNet
                 lblResult.ForeColor = System.Drawing.Color.Green;
                 lblResult.Visible = true;
                 lblResult.Text = "Your application has been successfully submitted!";
+                ClearTextBoxes(Page);
             }
             else
                 lblResult.Visible = false;
         }
-
+        protected void ClearTextBoxes(Control p1)
+        {
+            foreach (Control ctrl in p1.Controls)
+            {
+                if (ctrl is TextBox)
+                {
+                    TextBox t = ctrl as TextBox;
+                    if (t != null)
+                        t.Text = String.Empty;
+                }
+                else
+                {
+                    if (ctrl.Controls.Count > 0)
+                        ClearTextBoxes(ctrl);
+                    else
+                    {
+                        drpStates.ClearSelection();
+                        drpRole.ClearSelection();
+                    }
+                }
+            }
+        }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
             //Go home:
@@ -149,6 +171,23 @@ namespace NephroNet
                 lblRoleError.Text = roleError;
                 drpRole.Focus();
             }
+            if (txtPatientId.Visible == true)
+            {
+                string patientId = "";
+                if (
+                    //error.ContainsSpecialChars(txtLastname.Text, out lastnameError) || 
+                    !error.validPatientId(txtPatientId.Text, out patientId))
+                {
+                    correct = false;
+                    lblPatientIdError.Visible = true;
+                    lblPatientIdError.Text = patientId;
+                    txtPatientId.Focus();
+                }
+            }
+            else
+            {
+                lblPatientIdError.Visible = false;
+            }
             return correct;
         }
 
@@ -167,14 +206,28 @@ namespace NephroNet
             txtLastname.Text = txtLastname.Text.Replace("'", "''");
             txtEmail.Text = txtEmail.Text.Replace("'", "''");
             txtPhone.Text = txtPhone.Text.Replace("'", "''");
+            txtPatientId.Text = txtPatientId.Text.Replace("'", "''");
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "insert into Registrations(register_firstname, register_lastname, register_email, register_city, register_state, register_zip, register_address, register_roleId, register_phone)" +
+            cmd.CommandText = "insert into Registrations(register_firstname, register_lastname, register_email, register_city, register_state, register_zip, register_address, register_roleId, register_phone, register_patientId)" +
                 " values ('" + txtFirstname.Text+"', '"+txtLastname.Text+"', '"+txtEmail.Text+"', '"+txtCity.Text+"', '"+drpStates.SelectedItem.ToString()+"'," +
-                " '"+txtZip.Text+"', '"+txtAddress.Text+"', '"+drpRole.SelectedIndex+"','"+txtPhone.Text+"') ";
+                " '"+txtZip.Text+"', '"+txtAddress.Text+"', '"+drpRole.SelectedIndex+"','"+txtPhone.Text+"', '"+txtPatientId.Text+"') ";
             cmd.ExecuteScalar();
             connect.Close();
         }
 
-
+        protected void drpRole_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(drpRole.SelectedIndex == 3)
+            {
+                lblPatientId.Visible = true;
+                txtPatientId.Visible = true;
+            }
+            else
+            {
+                lblPatientId.Visible = false;
+                txtPatientId.Visible = false;
+                lblPatientIdError.Visible = false;
+            }
+        }
     }
 }

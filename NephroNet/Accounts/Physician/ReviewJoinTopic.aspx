@@ -8,9 +8,10 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Content start:--%>
-                <asp:Label ID="lblRequesterInfo" runat="server" Text="Label"></asp:Label>
-                <br />
+                
+                <%--<br />--%>
                 <asp:Label ID="lblTopicInformation" runat="server" Text="Label"></asp:Label>
+                <asp:Label ID="lblRequesterInfo" runat="server" Text="Label"></asp:Label>
                 <%--Approve--%>
                 <br />
                 <br />

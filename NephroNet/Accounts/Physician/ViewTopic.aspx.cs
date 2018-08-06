@@ -45,6 +45,10 @@ namespace NephroNet.Accounts.Physician
             showInformation(pageNum);
             checkIfTerminated();
         }
+        protected void Timer1_Tick(object sender, EventArgs e)
+        {
+
+        }
         protected bool isTopicApproved()
         {
             bool approved = true;

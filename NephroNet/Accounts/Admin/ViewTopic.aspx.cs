@@ -545,6 +545,12 @@ namespace NephroNet.Accounts.Admin
             }
             return correct;
         }
+
+        protected void Timer1_Tick(object sender, EventArgs e)
+        {
+            
+        }
+
         protected void hideErrorLabels()
         {
             lblImageError.Visible = false;

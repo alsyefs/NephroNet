@@ -36,7 +36,7 @@ namespace NephroNet
             //Check if the user viewing the message is the creator, or if the current user viewing is an admin:
             int int_roleId = Convert.ToInt32(roleId);
             if (entry_creatorId.Equals(userId) || int_roleId == 1)
-                //deleteCommand = "&nbsp;<a href=\"DeleteEntry.aspx?entryId=" + entryId + "\">Remove Entry " + i + "</a><br />";
+                //deleteCommand = "&nbsp;<asp:Button ID="btnRemove" runat="server" Text="Remove Entry " + i" OnClick="btnRemove_Click" onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "') onchange='__doPostBack('<%=panelAttachments.UniqueID %>',''); return false;\"> + "</button><br/>";
                 deleteCommand = "&nbsp;<button id='remove_button' type='button' onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "')\">Remove Entry " + i + "</button><br/>";
 			string background_color = "";
 			if (i % 2 == 0)

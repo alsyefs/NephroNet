@@ -57,7 +57,7 @@ namespace NephroNet.Accounts.Admin
                 cmd.CommandText = "select user_lastname from users where userId = '" + requesterUserId + "' ";
                 requesterName = requesterName + " " + cmd.ExecuteScalar().ToString();
                 //Get short profile:
-                lblRequesterInfo.Text = "Requester: " + requesterName + "<br />";
+                lblRequesterInfo.Text = "________________________________________________________<br/>Requester: " + requesterName + "<br />";
                 lblRequesterInfo.ForeColor = System.Drawing.Color.Black;
                 btnApprove.Visible = true;
             }
@@ -106,23 +106,23 @@ namespace NephroNet.Accounts.Admin
                 //Get "Yes" or "No" for topic_hasImage:
                 cmd.CommandText = "select topic_hasImage from [Topics] where [topicId] = '" + topicId + "' ";
                 int topic_hasImage = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get topic_isDeleted ?:
                 cmd.CommandText = "select topic_isDeleted from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get topic_isApproved ?:
                 cmd.CommandText = "select topic_isApproved from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isApproved = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get topic_isDenied ?:
                 cmd.CommandText = "select topic_isDenied from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isDenied = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get topic_isTerminated ?:
                 cmd.CommandText = "select topic_isTerminated from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isTerminated = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get tags:
                 string tagNames = "";
                 cmd.CommandText = "select count(*) from TagsForTopics where topicId = '" + topicId + "' ";
@@ -160,13 +160,37 @@ namespace NephroNet.Accounts.Admin
                         imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br /><br />";
                     }
                 }
-                lblTopicInformation.Text = 
-                    "Type: " + topic_type + "<br />" +
-                    "Title: " + topic_title + "<br />" +
-                    "Time: " + Layouts.getTimeFormat(topic_time) + "<br />" +
-                    "Description: \"" + topic_description + "\"<br />" +
-                    //"Tags: \"" + tagNames + "\"<br />" +
-                    imagesHTML;
+                lblTopicInformation.Text =
+                    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title: &nbsp;" + topic_title + "<br />" +
+                    "Created by: &nbsp;" + creator + "<br />" +
+                    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time: &nbsp;" + Layouts.getTimeFormat(topic_time) + "<br />";
+                //list of members                
+                cmd.CommandText = "select count(*) from UsersForTopics where topicId = '" + topicId + "' and isApproved = 1";
+                int totalMembers = Convert.ToInt32(cmd.ExecuteScalar());
+                string members = "";
+                if (totalMembers > 0)
+                    members = "________________________________________________________<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List of current members: <br />";
+                for (int i = 1; i <= totalMembers; i++)
+                {
+                    cmd.CommandText = "select [userId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY usersForTopicsId ASC), * FROM [UsersForTopics] where topicId = '" + topicId + "' and isApproved = 1) as t where rowNum = '" + i + "'";
+                    string tempUserId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select [joined_time] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY usersForTopicsId ASC), * FROM [UsersForTopics] where topicId = '" + topicId + "' and isApproved = 1) as t where rowNum = '" + i + "'";
+                    string joined_time = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_firstname from Users where userId = '" + tempUserId + "' ";
+                    string temp_name = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_lastname from Users where userId = '" + tempUserId + "' ";
+                    temp_name = temp_name + " " + cmd.ExecuteScalar().ToString();
+                    if (!string.IsNullOrWhiteSpace(joined_time))
+                        joined_time = Layouts.getTimeFormat(joined_time);
+                    members += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(" + temp_name + ") Joined on: " + joined_time + "<br/>";
+                }
+                lblTopicInformation.Text += members;
+                //Short profile of requester                
+
+
+                //"Description: \"" + topic_description + "\"<br />" +
+                //"Tags: \"" + tagNames + "\"<br />" +
+                //imagesHTML;
                 lblTopicInformation.Visible = true;
                 //Copy values to globals:
                 g_topic_isApproved = int_topic_isApproved; g_topic_isDenied = int_topic_isDenied;
@@ -191,7 +215,6 @@ namespace NephroNet.Accounts.Admin
                 clearSession();
             
         }
-
         protected void btnDeny_Click(object sender, EventArgs e)
         {
             connect.Open();
@@ -242,7 +265,6 @@ namespace NephroNet.Accounts.Admin
             //Hide "Approve" and "Deny" buttons:
             hideApproveDeny();
         }
-
         protected void btnApprove_Click(object sender, EventArgs e)
         {
             connect.Open();
@@ -250,7 +272,7 @@ namespace NephroNet.Accounts.Admin
             //Hide the success message:
             lblMessage.Visible = false;
             //Set isApproved = 1: (1 in bit = true)
-            cmd.CommandText = "update UsersForTopics set isApproved = 1 where UsersForTopicsId = '" + requestId + "' ";
+            cmd.CommandText = "update UsersForTopics set isApproved = 1, joined_time = '"+DateTime.Now+"'  where UsersForTopicsId = '" + requestId + "' ";
             cmd.ExecuteScalar();
             //Get the topic's creator:
             cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";

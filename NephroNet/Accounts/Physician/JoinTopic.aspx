@@ -2,7 +2,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container">
         <br />
-        <h2><%: Title %></h2>
+        <%--<h2><%: Title %></h2>--%>
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Content start--%>

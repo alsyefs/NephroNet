@@ -16,7 +16,7 @@ namespace NephroNet.Accounts.Admin
         string username, roleId, loginId, token;
         string registerId = "";
         //Globals for "Users" table:
-        string g_firstName, g_lastName, g_email, g_city, g_state, g_zip, g_address, g_phone;
+        string g_firstName, g_lastName, g_email, g_city, g_state, g_zip, g_address, g_phone, g_patientId;
         //Globals for "Logins" table:
         int g_roleId;
         protected void Page_Load(object sender, EventArgs e)
@@ -74,6 +74,9 @@ namespace NephroNet.Accounts.Admin
                 //Get phone:
                 cmd.CommandText = "select register_phone from [Registrations] where [registerId] = '" + registerId + "' ";
                 string phone = cmd.ExecuteScalar().ToString();
+                //Get patient ID:
+                cmd.CommandText = "select register_patientId from [Registrations] where [registerId] = '" + registerId + "' ";
+                string patientId = cmd.ExecuteScalar().ToString();
                 //Create an informative message containing all information for the selected user:
                 lblUserInformation.Text = "Name: " + firstName + " " + lastName +"<br />"+
                     "Email: " + email + "<br />"+
@@ -81,10 +84,15 @@ namespace NephroNet.Accounts.Admin
                     "City: " + city + ", State: " + state + "<br />" +
                     "Zip code: " + zip + "<br />" +
                     "Phone#: " + phone + "<br />" +
-                    "Role: " + role;
+                    "Role: " + role + "<br />";
+                if (!string.IsNullOrWhiteSpace(patientId))
+                {
+                    lblUserInformation.Text += "Patient ID: " + patientId + "<br />";
+                }
                 lblUserInformation.Visible = true;
                 //Copy values to globals:
-                g_firstName = firstName; g_lastName = lastName; g_email = email; g_city = city; g_state = state; g_zip = zip; g_address = address; g_phone=phone;g_roleId = int_roleId;
+                g_firstName = firstName; g_lastName = lastName; g_email = email; g_city = city; g_state = state;
+                g_zip = zip; g_address = address; g_phone=phone;g_roleId = int_roleId; g_patientId = patientId;
             }
             else
             {
@@ -178,8 +186,8 @@ namespace NephroNet.Accounts.Admin
             cmd.CommandText = "select loginId from Logins where login_username like '"+newUsername+"' ";
             string newLoginId = cmd.ExecuteScalar().ToString();
             //Store the user's information into the "Users" table:
-            cmd.CommandText = "insert into Users (user_firstname, user_lastname, user_email, user_city, user_state, user_zip, user_address, user_phone, loginId) values " +
-                "('"+g_firstName+"', '"+g_lastName+"', '"+g_email+"', '"+g_city+"', '"+g_state+"', '"+g_zip+"', '"+g_address+"', '"+g_phone+"', '"+newLoginId+"') ";
+            cmd.CommandText = "insert into Users (user_firstname, user_lastname, user_email, user_city, user_state, user_zip, user_address, user_phone, loginId, user_patientId) values " +
+                "('"+g_firstName+"', '"+g_lastName+"', '"+g_email+"', '"+g_city+"', '"+g_state+"', '"+g_zip+"', '"+g_address+"', '"+g_phone+"', '"+newLoginId+"', '"+g_patientId+"') ";
             cmd.ExecuteScalar();
 
             connect.Close();

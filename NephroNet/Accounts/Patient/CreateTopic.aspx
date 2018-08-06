@@ -7,7 +7,7 @@
         <h2><%: Title %></h2>
         <div class="panel panel-default">
             <div class="panel-body">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <asp:Label ID="lblTitle" runat="server" Text="Title"></asp:Label>
                 &nbsp;
                 <asp:TextBox ID="txtTitle" runat="server"></asp:TextBox>

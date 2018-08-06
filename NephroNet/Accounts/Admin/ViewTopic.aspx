@@ -4,13 +4,26 @@
     <%--Body start--%>
     <div class="container">
         <br />
-        <h2><%: Title %></h2>
+        <%--<h2><%: Title %></h2>--%>
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Content start--%>
                 <asp:Label ID="lblHeader" runat="server" Text="Header" Font-Bold="True"></asp:Label>
                 <br />
-                <asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>
+                <%--Messages start--%>
+                <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer> 
+                <asp:UpdatePanel ID="upMessages" UpdateMode="Conditional" runat="server">
+                            <ContentTemplate>
+                                <%--<asp:Button ID="btnTest" runat="server" Text="Test" OnClick="btnTest_Click" />--%>
+                                <asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>
+                            </ContentTemplate>
+                            <Triggers>
+                                <%--<asp:AsyncPostBackTrigger  ControlID="AutoID" EventName="Click"/>--%>
+                                <asp:AsyncPostBackTrigger  ControlID="Timer1" EventName="Tick" />
+                            </Triggers>
+                </asp:UpdatePanel>
+                <%--Messages end--%>
+                <%--<asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>--%>
                 <br />
                 <asp:Label ID="lblEntry" runat="server" Text="Message"></asp:Label>
                 &nbsp;
@@ -46,7 +59,7 @@
                 <%--Content end--%>
                 <%--Popup message--%>
                 <script type="text/javascript">
-                    function OpenPopup(site) {popup(site);}
+                    function OpenPopup(site) { popup(site); }
                     // copied from http://www.dotnetfunda.com/codes/code419-code-to-open-popup-window-in-center-position-.aspx
                     function popup(url) {
                         var width = 500;
@@ -66,7 +79,9 @@
                         if (window.focus) { newwin.focus() }
                         return false;
                     }
-                </script>               
+                </script>
+
+                
             </div>
         </div>
     </div>

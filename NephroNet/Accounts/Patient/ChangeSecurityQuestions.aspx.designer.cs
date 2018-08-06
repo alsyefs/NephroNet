@@ -13,6 +13,15 @@ namespace NephroNet.Accounts.Patient {
     public partial class ChangeSecurityQuestions {
         
         /// <summary>
+        /// upQuestions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upQuestions;
+        
+        /// <summary>
         /// lblQ1 control.
         /// </summary>
         /// <remarks>
@@ -22,13 +31,13 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Label lblQ1;
         
         /// <summary>
-        /// txtQ1 control.
+        /// drpQ1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtQ1;
+        protected global::System.Web.UI.WebControls.DropDownList drpQ1;
         
         /// <summary>
         /// lblQ1Error control.
@@ -76,13 +85,13 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Label lblQ2;
         
         /// <summary>
-        /// txtQ2 control.
+        /// drpQ2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtQ2;
+        protected global::System.Web.UI.WebControls.DropDownList drpQ2;
         
         /// <summary>
         /// lblQ2Error control.
@@ -130,13 +139,13 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Label lblQ3;
         
         /// <summary>
-        /// txtQ3 control.
+        /// drpQ3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtQ3;
+        protected global::System.Web.UI.WebControls.DropDownList drpQ3;
         
         /// <summary>
         /// lblQ3Error control.
