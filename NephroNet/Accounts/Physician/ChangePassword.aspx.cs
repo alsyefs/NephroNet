@@ -33,7 +33,13 @@ namespace NephroNet.Accounts.Physician
             {
                 store();
                 showSuccessfulMessage();
+                clearInputs();
             }
+        }
+        protected void clearInputs()
+        {
+            txtP1.Text = "";
+            txtP2.Text = "";
         }
         protected void showSuccessfulMessage()
         {

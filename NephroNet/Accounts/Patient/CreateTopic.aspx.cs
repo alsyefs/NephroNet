@@ -61,8 +61,16 @@ namespace NephroNet.Accounts.Patient
             if (correct)
             {
                 addNewEntry();
+                clearInputs();
                 sendEmail();
             }
+        }
+        protected void clearInputs()
+        {
+            txtTitle.Text = "";
+            txtTags.Text = "";
+            txtDescription.Text = "";
+            FileUpload1.Attributes.Clear();
         }
         protected void sendEmail()
         {

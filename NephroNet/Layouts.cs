@@ -38,12 +38,22 @@ namespace NephroNet
             if (entry_creatorId.Equals(userId) || int_roleId == 1)
                 //deleteCommand = "&nbsp;<asp:Button ID="btnRemove" runat="server" Text="Remove Entry " + i" OnClick="btnRemove_Click" onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "') onchange='__doPostBack('<%=panelAttachments.UniqueID %>',''); return false;\"> + "</button><br/>";
                 deleteCommand = "&nbsp;<button id='remove_button' type='button' onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "')\">Remove Entry " + i + "</button><br/>";
-			string background_color = "";
-			if (i % 2 == 0)
-				background_color = "style = \"background: rgb(255, 255, 255);background: rgba(203, 203, 152, 0.6);\"";
-			//else
-			//	background_color = "style = \"background-color:#F7F7DE; width: 100%; border: 2px solid black; border-radius: 5px;\"";
-			string message = "<div id=\"message\" " + background_color + " ><div id=\"messageHead\">&nbsp;Message #" + i + " - added by " + 
+			string background_color = "";			
+            if(i % 8 == 2)
+                background_color = "style = \"background: rgb(255, 255, 255);background: rgba(203, 203, 152, 0.6);\""; //Custom color
+            else if(i % 8 == 3)
+                background_color = "style = \"background: rgb(255, 255, 255);background: rgba(118, 201, 201, 0.6);\""; //Light turquoise
+            else if (i % 8 == 4)
+                background_color = "style = \"background: rgb(255, 255, 255);background: rgba(118, 134, 201, 0.6);\""; //Light blue
+            else if (i % 8 == 5)
+                background_color = "style = \"background: rgb(255, 255, 255);background: rgba(170, 118, 201, 0.6);\""; //Light purple
+            else if (i % 8 == 6)
+                background_color = "style = \"background: rgb(255, 255, 255);background: rgba(201, 118, 118, 0.6);\""; //Light red
+            else if (i % 8 == 7)
+                background_color = "style = \"background: rgb(255, 255, 255);background: rgba(118, 201, 140, 0.6);\""; //Light green
+            else if (i % 8 == 0)
+                background_color = "style = \"background: rgb(255, 255, 255);background: rgba(209, 207, 131, 0.6);\""; //Light yellow
+            string message = "<div id=\"message\" " + background_color + " ><div id=\"messageHead\">&nbsp;Message #" + i + " - added by " + 
                 "<a href=\"profile.aspx?id=" + entry_creatorId + "\"> "    +creator_name + "</a>"+ 
                 " on " + getTimeFormat(entry_time) + "</div> " +
                     "<div id=\"messageDescription\"><p><br/>" + entry_text + "</p><br /> " +
@@ -80,6 +90,16 @@ namespace NephroNet
 			format = month + " " + day + ", " + year + " " + hours + ":" + minutes + ":" + seconds + " " + dayOrNight;
 			return format;
 		}
-
+        public static string phoneFormat(string phone_input)
+        {
+            //The input will arrive as XXXXXXXXXX and
+            //the format output must be (XXX) XXX-XXXX with the space!
+            string phone_output = "";
+            string area_code = phone_input.Substring(0, 3);
+            string three_digits = phone_input.Substring(3, 3);
+            string four_digits = phone_input.Substring(6, 4);
+            phone_output = "(" + area_code + ") " + three_digits + "-" + four_digits;
+            return phone_output;
+        }
 	}
 }

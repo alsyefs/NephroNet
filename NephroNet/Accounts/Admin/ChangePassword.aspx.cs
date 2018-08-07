@@ -31,7 +31,13 @@ namespace NephroNet.Accounts.Admin
             {
                 store();
                 showSuccessfulMessage();
+                clearInputs();
             }
+        }
+        protected void clearInputs()
+        {
+            txtP1.Text = "";
+            txtP2.Text = "";
         }
         protected void showSuccessfulMessage()
         {

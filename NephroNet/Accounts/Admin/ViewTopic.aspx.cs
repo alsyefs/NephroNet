@@ -367,8 +367,15 @@ namespace NephroNet.Accounts.Admin
             if (correct)
             {
                 addNewEntry();
+                clearInputs();
                 sendEmail();
             }
+        }
+        protected void clearInputs()
+        {
+            txtEntry.Text = "";
+            txtEntry.Text = "";
+            FileUpload1.Attributes.Clear();
         }
         protected void sendEmail()
         {

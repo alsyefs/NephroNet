@@ -30,12 +30,12 @@ namespace NephroNet
                 lblResult.ForeColor = System.Drawing.Color.Green;
                 lblResult.Visible = true;
                 lblResult.Text = "Your application has been successfully submitted!";
-                ClearTextBoxes(Page);
+                clearInputs(Page);
             }
             else
                 lblResult.Visible = false;
         }
-        protected void ClearTextBoxes(Control p1)
+        protected void clearInputs(Control p1)
         {
             foreach (Control ctrl in p1.Controls)
             {
@@ -48,7 +48,7 @@ namespace NephroNet
                 else
                 {
                     if (ctrl.Controls.Count > 0)
-                        ClearTextBoxes(ctrl);
+                        clearInputs(ctrl);
                     else
                     {
                         drpStates.ClearSelection();

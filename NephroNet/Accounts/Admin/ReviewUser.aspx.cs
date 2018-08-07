@@ -83,7 +83,7 @@ namespace NephroNet.Accounts.Admin
                     "Address: " + address + "<br />" +
                     "City: " + city + ", State: " + state + "<br />" +
                     "Zip code: " + zip + "<br />" +
-                    "Phone#: " + phone + "<br />" +
+                    "Phone#: " + Layouts.phoneFormat(phone) + "<br />" +
                     "Role: " + role + "<br />";
                 if (!string.IsNullOrWhiteSpace(patientId))
                 {

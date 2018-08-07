@@ -80,8 +80,16 @@ namespace NephroNet.Accounts.Admin
             if (correct)
             {
                 addNewEntry();
+                clearInputs();
                 sendEmail();
             }
+        }
+        protected void clearInputs()
+        {
+            txtTitle.Text = "";
+            txtTags.Text = "";
+            txtDescription.Text = "";
+            FileUpload1.Attributes.Clear();
         }
         protected void allowUserAccessTopicAndStoreTags(string topicId)
         {

@@ -173,12 +173,12 @@ namespace NephroNet
             else if (phone.Length < 10)
             {
                 correct = false;
-                result = "Invalid input: the phone number must be at least 10 digits.";
+                result = "Invalid input: the phone number must be 10 digits.";
             }
-            else if (phone.Length > 13)
+            else if (phone.Length > 10)
             {
                 correct = false;
-                result = "Invalid input: the phone number must be less than 13 digits.";
+                result = "Invalid input: the phone number must be 10 digits.";
             }
             return correct;
         }
