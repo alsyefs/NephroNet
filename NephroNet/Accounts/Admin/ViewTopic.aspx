@@ -10,19 +10,17 @@
                 <%--Content start--%>
                 <asp:Label ID="lblHeader" runat="server" Text="Header" Font-Bold="True"></asp:Label>
                 <br />
-                <%--Messages start--%>
+                <%--Ajax start--%>
                 <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer> 
                 <asp:UpdatePanel ID="upMessages" UpdateMode="Conditional" runat="server">
                             <ContentTemplate>
-                                <%--<asp:Button ID="btnTest" runat="server" Text="Test" OnClick="btnTest_Click" />--%>
                                 <asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>
                             </ContentTemplate>
                             <Triggers>
-                                <%--<asp:AsyncPostBackTrigger  ControlID="AutoID" EventName="Click"/>--%>
                                 <asp:AsyncPostBackTrigger  ControlID="Timer1" EventName="Tick" />
                             </Triggers>
                 </asp:UpdatePanel>
-                <%--Messages end--%>
+                <%--Ajax end--%>
                 <%--<asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>--%>
                 <br />
                 <asp:Label ID="lblEntry" runat="server" Text="Message"></asp:Label>
@@ -39,8 +37,9 @@
                 <br />
                 <br />
 
-
-                <asp:FileUpload ID="FileUpload1" runat="server" Width="385px" AllowMultiple="true" class="btn btn-primary" />
+                
+                <asp:FileUpload ID="FileUpload1" runat="server" Width="385px" AllowMultiple="true" onchange="onInputChange(event)" class="btn btn-primary" />
+                <div id='fileNames'></div>
                 &nbsp;
                 <asp:Label ID="lblImageError" runat="server" Text="Image" Visible="false" ForeColor="red"></asp:Label>
                 <%--Submit--%><br />
@@ -80,7 +79,16 @@
                         return false;
                     }
                 </script>
-
+                <script type="text/javascript">
+                    function onInputChange(e) {
+                        //alert('Just clicked upload!');
+                        var res = "";
+                        for (var i = 0; i < $('#<%= FileUpload1.ClientID %>').get(0).files.length; i++) {
+                            res += $('#<%= FileUpload1.ClientID %>').get(0).files[i].name + "<br />";
+                        }
+                        $('#fileNames').html(res);
+                    }
+                </script>
                 
             </div>
         </div>

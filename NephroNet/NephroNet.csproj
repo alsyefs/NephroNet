@@ -146,7 +146,9 @@
     <Content Include="Accounts\Admin\CreateTopic.aspx" />
     <Content Include="Accounts\Admin\Home.aspx" />
     <Content Include="Accounts\Admin\JoinTopic.aspx" />
+    <Content Include="Accounts\Admin\MyTopics.aspx" />
     <Content Include="Accounts\Admin\Notifications.aspx" />
+    <Content Include="Accounts\Admin\Profile.aspx" />
     <Content Include="Accounts\Admin\RemoveEntry.aspx" />
     <Content Include="Accounts\Admin\RemoveTopic.aspx" />
     <Content Include="Accounts\Admin\ReviewJoinTopic.aspx" />
@@ -163,7 +165,9 @@
     <Content Include="Accounts\Patient\CreateTopic.aspx" />
     <Content Include="Accounts\Patient\Home.aspx" />
     <Content Include="Accounts\Patient\JoinTopic.aspx" />
+    <Content Include="Accounts\Patient\MyTopics.aspx" />
     <Content Include="Accounts\Patient\Notifications.aspx" />
+    <Content Include="Accounts\Patient\Profile.aspx" />
     <Content Include="Accounts\Patient\RemoveEntry.aspx" />
     <Content Include="Accounts\Patient\RemoveTopic.aspx" />
     <Content Include="Accounts\Patient\ReviewJoinTopic.aspx" />
@@ -177,7 +181,9 @@
     <Content Include="Accounts\Physician\CreateTopic.aspx" />
     <Content Include="Accounts\Physician\Home.aspx" />
     <Content Include="Accounts\Physician\JoinTopic.aspx" />
+    <Content Include="Accounts\Physician\MyTopics.aspx" />
     <Content Include="Accounts\Physician\Notifications.aspx" />
+    <Content Include="Accounts\Physician\Profile.aspx" />
     <Content Include="Accounts\Physician\RemoveEntry.aspx" />
     <Content Include="Accounts\Physician\RemoveTopic.aspx" />
     <Content Include="Accounts\Physician\ReviewJoinTopic.aspx" />
@@ -366,12 +372,26 @@
     <Compile Include="Accounts\Admin\JoinTopic.aspx.designer.cs">
       <DependentUpon>JoinTopic.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Admin\MyTopics.aspx.cs">
+      <DependentUpon>MyTopics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\MyTopics.aspx.designer.cs">
+      <DependentUpon>MyTopics.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Admin\Notifications.aspx.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Accounts\Admin\Notifications.aspx.designer.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Admin\RemoveEntry.aspx.cs">
       <DependentUpon>RemoveEntry.aspx</DependentUpon>
@@ -486,12 +506,26 @@
     <Compile Include="Accounts\Patient\JoinTopic.aspx.designer.cs">
       <DependentUpon>JoinTopic.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Patient\MyTopics.aspx.cs">
+      <DependentUpon>MyTopics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\MyTopics.aspx.designer.cs">
+      <DependentUpon>MyTopics.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Patient\Notifications.aspx.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Accounts\Patient\Notifications.aspx.designer.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Patient\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Patient\RemoveEntry.aspx.cs">
       <DependentUpon>RemoveEntry.aspx</DependentUpon>
@@ -585,12 +619,26 @@
     <Compile Include="Accounts\Physician\JoinTopic.aspx.designer.cs">
       <DependentUpon>JoinTopic.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Physician\MyTopics.aspx.cs">
+      <DependentUpon>MyTopics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\MyTopics.aspx.designer.cs">
+      <DependentUpon>MyTopics.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Physician\Notifications.aspx.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Accounts\Physician\Notifications.aspx.designer.cs">
       <DependentUpon>Notifications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Physician\RemoveEntry.aspx.cs">
       <DependentUpon>RemoveEntry.aspx</DependentUpon>

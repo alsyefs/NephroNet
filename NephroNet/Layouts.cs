@@ -20,7 +20,7 @@ namespace NephroNet
                 string header = "<div id=\"header\">" +
             "<div id=\"messageHead\">" +
             "&nbsp;\"" + topic_title + "\" " +
-            "Created by <a href=\"profile.aspx?id=\">" + creator + " </a>" +
+            "Created by <a href=\"Profile.aspx?id="+ topic_creatorId + "\">" + creator + " </a>" +
             "as a " + topic_type.ToLower() + " topic on " + getTimeFormat(topic_time) + "</div>" +
             "<div id=\"messageDescription\"><br/>" + topic_description + "<br /><br/>" +
 			imagesHTML + "</div>" +
@@ -54,7 +54,7 @@ namespace NephroNet
             else if (i % 8 == 0)
                 background_color = "style = \"background: rgb(255, 255, 255);background: rgba(209, 207, 131, 0.6);\""; //Light yellow
             string message = "<div id=\"message\" " + background_color + " ><div id=\"messageHead\">&nbsp;Message #" + i + " - added by " + 
-                "<a href=\"profile.aspx?id=" + entry_creatorId + "\"> "    +creator_name + "</a>"+ 
+                "<a href=\"Profile.aspx?id=" + entry_creatorId + "\"> "    +creator_name + "</a>"+ 
                 " on " + getTimeFormat(entry_time) + "</div> " +
                     "<div id=\"messageDescription\"><p><br/>" + entry_text + "</p><br /> " +
 						imagesHtml +

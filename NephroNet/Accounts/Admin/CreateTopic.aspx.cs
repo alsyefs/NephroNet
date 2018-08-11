@@ -28,7 +28,13 @@ namespace NephroNet.Accounts.Admin
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            
+            //if (IsPostBack && FileUpload1.PostedFile != null)
+            //{
+            //    if (FileUpload1.PostedFile.FileName.Length > 0)
+            //    {
+            //        showFileNames();
+            //    }
+            //}
         }
         protected void clearSession()
         {
@@ -51,27 +57,6 @@ namespace NephroNet.Accounts.Admin
             roleId = (string)(Session["roleId"]);
             loginId = (string)(Session["loginId"]);
             token = (string)(Session["token"]);
-        }
-        protected void Timer1_Tick(object sender, EventArgs e)
-        {
-            showFileNames();
-        }
-        protected void showFileNames()
-        {
-            if (FileUpload1.HasFile)
-            {
-                foreach (HttpPostedFile uploadedFile in FileUpload1.PostedFiles)
-                {
-                    //uploadedFile.SaveAs(System.IO.Path.Combine(Server.MapPath("~/Images/"), uploadedFile.FileName));
-                    //listofuploadedfiles.Text += String.Format("{0}<br />", uploadedFile.FileName);
-                    lblFileNames.Text += String.Format("{0}<br />", uploadedFile.FileName);
-                    lblFileNames.Visible = true;
-                }
-            }
-            else
-            {
-                lblFileNames.Visible = false;
-            }
         }
         protected void btnSubmit_Click(object sender, EventArgs e)
         {

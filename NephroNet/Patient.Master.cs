@@ -26,7 +26,11 @@ namespace NephroNet
             bool correctSession = sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            lblAlerts.Text = "(" + countTotalAlerts() + ")";
+            lblAlerts.Text = "Alerts (" + countTotalAlerts() + ")";
+        }
+        protected void Timer1_Tick(object sender, EventArgs e)
+        {
+
         }
         protected void clearSession()
         {

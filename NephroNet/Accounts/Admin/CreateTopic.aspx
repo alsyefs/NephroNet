@@ -47,12 +47,13 @@
                 <br />
 
 
-                <asp:FileUpload ID="FileUpload1" runat="server" Width="385px" AllowMultiple="true" class="btn btn-primary" />
+                <asp:FileUpload ID="FileUpload1" runat="server" Width="385px" AllowMultiple="true" onchange="onInputChange(event)" class="btn btn-primary" />
+                <div id='fileNames'></div>
                 &nbsp;
                 <asp:Label ID="lblImageError" runat="server" Text="Image" Visible="false" ForeColor="red"></asp:Label>
-                <br /><asp:Label ID="lblFileNames" runat="server" Text="file names" Visible="false"></asp:Label>
-                <%--<asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer> 
-                <asp:UpdatePanel ID="upFileNames" UpdateMode="Conditional" runat="server">
+                <%--<br /><asp:Label ID="lblFileNames" runat="server" Text="file names" Visible="true"></asp:Label>--%>
+                <%--<asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer> --%>
+                <%--<asp:UpdatePanel ID="upFileNames" UpdateMode="Conditional" runat="server">
                             <ContentTemplate>
                                 <asp:Label ID="lblFileNames" runat="server" Text="file names" Visible="false"></asp:Label>
                             </ContentTemplate>
@@ -60,7 +61,8 @@
                                 <asp:AsyncPostBackTrigger  ControlID="Timer1" EventName="Tick" />
                             </Triggers>
                 </asp:UpdatePanel>--%>
-                <%--Submit--%><br />
+                <%--Submit--%>
+                <br />
                 <br />
                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnSubmit_Click" />
                 &nbsp;
@@ -73,6 +75,17 @@
                 <br />
                 <br />
                 <asp:Label ID="lblError" runat="server" ForeColor="Red" Text="Label" Visible="False"></asp:Label>
+                <script type="text/javascript">
+                    function onInputChange(e) {
+                        //alert('Just clicked upload!');
+                        var res = "";
+                        for (var i = 0; i < $('#<%= FileUpload1.ClientID %>').get(0).files.length; i++) {
+                            res += $('#<%= FileUpload1.ClientID %>').get(0).files[i].name + "<br />";
+                        }
+                        $('#fileNames').html(res);
+                    }
+                </script>
+
             </div>
         </div>
     </div>

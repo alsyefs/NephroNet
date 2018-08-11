@@ -112,10 +112,9 @@ namespace NephroNet.Accounts.Patient
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
                 dt.Rows.Add(id, Layouts.getTimeFormat(time), title, type, creator);
             }
-            connect.Close();
             grdTopics.DataSource = dt;
             grdTopics.DataBind();
-            //grdTopics.AutoGenerateColumns = false;
+            //grdTopics.AutoGenerateColumns = true;
             //Hide the header called "ID":
             grdTopics.HeaderRow.Cells[1].Visible = false;
             //Hide IDs column and content which are located in column index 1:
@@ -123,7 +122,23 @@ namespace NephroNet.Accounts.Patient
             {
                 grdTopics.Rows[i].Cells[1].Visible = false;
             }
-
+            for (int row = 0; row < grdTopics.Rows.Count; row++)
+            {
+                id = grdTopics.Rows[row].Cells[1].Text;
+                //Get creator's ID:
+                cmd.CommandText = "select [topic_createdBy] FROM [Topics] where topicId = " + id + " ";
+                string creatorId = cmd.ExecuteScalar().ToString();
+                //Get creator's name:
+                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
+                creator = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
+                creator = creator + " " + cmd.ExecuteScalar().ToString();
+                HyperLink creatorLink = new HyperLink();
+                creatorLink.Text = creator + " ";
+                creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
+                grdTopics.Rows[row].Cells[5].Controls.Add(creatorLink);
+            }
+            connect.Close();
         }
         protected int getTotalApprovedTopics()
         {

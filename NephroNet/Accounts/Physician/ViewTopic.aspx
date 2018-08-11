@@ -38,7 +38,17 @@
                 <br />
 
 
-                <asp:FileUpload ID="FileUpload1" runat="server" Width="385px" AllowMultiple="true" class="btn btn-primary" />
+                <asp:FileUpload ID="FileUpload1" runat="server" Width="385px" AllowMultiple="true" onchange="onInputChange(event)" class="btn btn-primary" />
+                <div id='fileNames'></div>
+                <script type="text/javascript">
+                    function onInputChange(e) {
+                        var res = "";
+                        for (var i = 0; i < $('#<%= FileUpload1.ClientID %>').get(0).files.length; i++) {
+                            res += $('#<%= FileUpload1.ClientID %>').get(0).files[i].name + "<br />";
+                        }
+                        $('#fileNames').html(res);
+                    }
+                </script>
                 &nbsp;
                 <asp:Label ID="lblImageError" runat="server" Text="Image" Visible="false" ForeColor="red"></asp:Label>
                 <%--Submit--%><br />
