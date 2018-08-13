@@ -331,6 +331,7 @@ namespace NephroNet.Accounts.Patient
             int terminated = Convert.ToInt32(cmd.ExecuteScalar());
             if (terminated == 1)
             {
+                lblEntry.Visible = false;
                 txtEntry.Visible = false;
                 btnSubmit.Visible = false;
                 FileUpload1.Visible = false;

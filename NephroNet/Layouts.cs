@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -10,14 +11,19 @@ namespace NephroNet
 	{
 		public static string postHeader(string creator, string topic_type, string topic_title, string topic_time, 
             string topic_description, string imagesHTML, string roleId, string userId, string topicId, string topic_creatorId)
-		{            
-			//string background_color = "style = \"background-color:#CECECE; width: 100%; border-bottom: 6px solid black; border: 2px solid black; border-radius: 5px;\"";
+		{
+            string terminateCommand = "";
             string deleteCommand = "";
             //Check if the user viewing the topic is the creator, or if the current user viewing is an admin:
             int int_roleId = Convert.ToInt32(roleId);
             if (topic_creatorId.Equals(userId) || int_roleId == 1)
-                deleteCommand = "&nbsp;<button id='remove_button'type='button' onmousedown=\"OpenPopup('RemoveTopic.aspx?id=" + topicId + "')\">Remove Topic</button><br/>";
-                string header = "<div id=\"header\">" +
+                deleteCommand = "&nbsp;<button id='remove_button'type='button' onmousedown=\"OpenPopup('RemoveTopic.aspx?id=" + topicId + "')\">Remove Topic</button>";
+            if(int_roleId == 1)
+                terminateCommand = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id='terminate_button'type='button' onmousedown=\"OpenPopup('TerminateTopic.aspx?id=" + topicId + "')\">Terminate Topic</button>";
+            bool isTerminated = checkTerminated(topicId);
+            if (isTerminated)
+                terminateCommand = "";
+            string header = "<div id=\"header\">" +
             "<div id=\"messageHead\">" +
             "&nbsp;\"" + topic_title + "\" " +
             "Created by <a href=\"Profile.aspx?id="+ topic_creatorId + "\">" + creator + " </a>" +
@@ -25,10 +31,28 @@ namespace NephroNet
             "<div id=\"messageDescription\"><br/>" + topic_description + "<br /><br/>" +
 			imagesHTML + "</div>" +
             deleteCommand+
-			"</div>";
+            terminateCommand+
+            "</div>";
 			return header;
 		}
-
+        static protected bool checkTerminated(string topicId)
+        {
+            bool terminated = false;
+            Configuration config = new Configuration();
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select topic_isTerminated from topics where topicId = '"+topicId+"' ";
+            int topic_isTerminated = Convert.ToInt32(cmd.ExecuteScalar());
+            if (topic_isTerminated == 1)
+                terminated = true;
+            cmd.CommandText = "select topic_type from topics where topicId = '" + topicId + "' ";
+            string topic_type = cmd.ExecuteScalar().ToString();
+            if (topic_type.Equals("Dissemination"))
+                terminated = true;
+            connect.Close();
+            return terminated;
+        }
 		public static string postMessage(int i, string creator_name, string entry_time, string entry_text, string imagesHtml, 
 			string entry_creatorId, string topic_creatorId, string userId, string entryId, string roleId)
 		{

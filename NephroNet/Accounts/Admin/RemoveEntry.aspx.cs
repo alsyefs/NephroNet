@@ -32,34 +32,37 @@ namespace NephroNet.Accounts.Admin
             //check if id contains an id that does not exist in DB:
             else if (errors.ContainsSpecialChars(messageId))
                 correct = false;
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            //Count the existance of the message:
-            cmd.CommandText = "select count(*) from Entries where entryId = '" + messageId + "' ";
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            if (count > 0)//if count > 0, then the message ID exists in DB.
+            if (correct)
             {
-                //Get creator ID:
-                cmd.CommandText = "select userId from Entries where entryId = '" + messageId + "' ";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get the current user's ID who is trying to access the message:
-                cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
-                string userId = cmd.ExecuteScalar().ToString();
-                //Get the deletion's status:
-                cmd.CommandText = "select entry_isDeleted from Entries where entryId = '" + messageId + "' ";
-                int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //Count the existance of the message:
+                cmd.CommandText = "select count(*) from Entries where entryId = '" + messageId + "' ";
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                if (count > 0)//if count > 0, then the message ID exists in DB.
+                {
+                    //Get creator ID:
+                    cmd.CommandText = "select userId from Entries where entryId = '" + messageId + "' ";
+                    string creatorId = cmd.ExecuteScalar().ToString();
+                    //Get the current user's ID who is trying to access the message:
+                    cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+                    string userId = cmd.ExecuteScalar().ToString();
+                    //Get the deletion's status:
+                    cmd.CommandText = "select entry_isDeleted from Entries where entryId = '" + messageId + "' ";
+                    int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
 
-                //check if id belongs to a different user:
-                //Admins can delete anything!
-                //if (!userId.Equals(creatorId))
-                //    correct = false;
-                //else
-                if (isDeleted == 1)
-                    correct = false;
+                    //check if id belongs to a different user:
+                    //Admins can delete anything!
+                    //if (!userId.Equals(creatorId))
+                    //    correct = false;
+                    //else
+                    if (isDeleted == 1)
+                        correct = false;
+                }
+                else
+                    correct = false; // means that the topic ID does not exists in DB.
+                connect.Close();
             }
-            else
-                correct = false; // means that the topic ID does not exists in DB.
-            connect.Close();
             return correct;
         }
         protected void initialPageAccess()
@@ -72,7 +75,6 @@ namespace NephroNet.Accounts.Admin
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            //lblAlerts.Text = "(" + session.countTotalAlerts() + ")";
         }
         protected void clearSession()
         {
@@ -105,33 +107,20 @@ namespace NephroNet.Accounts.Admin
         }
         protected void btnRemove_Click(object sender, EventArgs e)
         {
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            //update the DB and set isDeleted = true:
-            cmd.CommandText = "update Entries set entry_isDeleted = 1 where entryId = '" + messageId + "' ";
-            cmd.ExecuteScalar();
-            connect.Close();
-            //Email the topic creator about the topic being deleted:
-            sendEmailNotification();
+            bool messageIdExists = isMessageCorrect();
+            if (messageIdExists)
+            {
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //update the DB and set isDeleted = true:
+                cmd.CommandText = "update Entries set entry_isDeleted = 1 where entryId = '" + messageId + "' ";
+                cmd.ExecuteScalar();
+                connect.Close();
+                //Email the topic creator about the topic being deleted:
+                sendEmailNotification();
+            }
             closePage();
-            //ViewTopic viewTopic = new ViewTopic();
-            //viewTopic.refreshPage();
-            //Page.Response.Redirect(Page.Request.Url.ToString(), true);
-            //Refresh messages in the topic:
-            //ScriptManager.RegisterStartupScript(Page, typeof(Page), "OpenWindow", "RefreshParent();", true);
-            //string topicId = getTopicId(messageId);
-            //Response.Redirect("ViewTopic.aspx?id="+topicId);
         }
-        //protected string getTopicId(string messageId)
-        //{
-        //    string topicId = "";
-        //    connect.Open();
-        //    SqlCommand cmd = connect.CreateCommand();
-        //    cmd.CommandText = "select topicId from Entries where entryId = '"+messageId+"' ";
-        //    topicId = cmd.ExecuteScalar().ToString();
-        //    connect.Close();
-        //    return topicId;
-        //}
         protected void sendEmailNotification()
         {
             connect.Open();

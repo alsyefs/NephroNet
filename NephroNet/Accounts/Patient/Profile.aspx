@@ -8,7 +8,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Content start--%>
-
+                <asp:Label ID="lblShortProfileInformation" runat="server" Text=" "></asp:Label>
                 <%--Content end--%>
             </div>
         </div>

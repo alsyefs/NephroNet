@@ -32,29 +32,32 @@ namespace NephroNet.Accounts.Patient
             //check if id contains an id that does not exist in DB:
             else if (errors.ContainsSpecialChars(topicId))
                 correct = false;
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            //Count the existance of the topic:
-            cmd.CommandText = "select count(*) from Topics where topicId = '" + topicId + "' ";
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            if (count > 0)//if count > 0, then the topic ID exists in DB.
+            if (correct)
             {
-                cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
-                string userId = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + topicId + "' ";
-                int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
-                
-                //check if id belongs to a different user:
-                if (!userId.Equals(creatorId))
-                    correct = false;
-                else if (isDeleted == 1)
-                    correct = false;
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //Count the existance of the topic:
+                cmd.CommandText = "select count(*) from Topics where topicId = '" + topicId + "' ";
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                if (count > 0)//if count > 0, then the topic ID exists in DB.
+                {
+                    cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
+                    string creatorId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+                    string userId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + topicId + "' ";
+                    int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    //check if id belongs to a different user:
+                    if (!userId.Equals(creatorId))
+                        correct = false;
+                    else if (isDeleted == 1)
+                        correct = false;
+                }
+                else
+                    correct = false; // means that the topic ID does not exists in DB.
+                connect.Close();
             }
-            else
-                correct = false; // means that the topic ID does not exists in DB.
-            connect.Close();
             return correct;
         }        
         protected void initialPageAccess()

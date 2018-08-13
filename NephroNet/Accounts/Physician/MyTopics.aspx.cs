@@ -93,21 +93,25 @@ namespace NephroNet.Accounts.Physician
                 //Get the topic ID:
                 cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY usersForTopicsId ASC), * FROM [UsersForTopics] where isApproved = 1 and userId = '" + userId + "' ) as t where rowNum = '" + i + "'";
                 id = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_time] from topics where topicId = '" + id + "' ";
-                time = cmd.ExecuteScalar().ToString();
-                //Get title:
-                cmd.CommandText = "select [topic_title] from topics where topicId = '" + id + "' ";
-                title = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_type] from topics where topicId = '" + id + "' ";
-                type = cmd.ExecuteScalar().ToString();
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] from topics where topicId = '" + id + "' ";
-                string creatorId = cmd.ExecuteScalar().ToString();
-
-                //dt.Rows.Add(id, title, Layouts.getTimeFormat(time), participantLink);
-                dt.Rows.Add(id, title, Layouts.getTimeFormat(time));
+                cmd.CommandText = "select topic_isTerminated from topics where topicId = '" + id + "' ";
+                int isTerminated = Convert.ToInt32(cmd.ExecuteScalar());
+                if (isTerminated == 0)// 0 = false. Meaning that the topic is not terminated; therefore, show it in the list of my topics:
+                {
+                    //Get type:
+                    cmd.CommandText = "select [topic_time] from topics where topicId = '" + id + "' ";
+                    time = cmd.ExecuteScalar().ToString();
+                    //Get title:
+                    cmd.CommandText = "select [topic_title] from topics where topicId = '" + id + "' ";
+                    title = cmd.ExecuteScalar().ToString();
+                    //Get type:
+                    cmd.CommandText = "select [topic_type] from topics where topicId = '" + id + "' ";
+                    type = cmd.ExecuteScalar().ToString();
+                    //Get creator's ID:
+                    cmd.CommandText = "select [topic_createdBy] from topics where topicId = '" + id + "' ";
+                    string creatorId = cmd.ExecuteScalar().ToString();
+                    //dt.Rows.Add(id, title, Layouts.getTimeFormat(time), participantLink);
+                    dt.Rows.Add(id, title, Layouts.getTimeFormat(time));
+                }
             }
 
             grdTopics.DataSource = dt;

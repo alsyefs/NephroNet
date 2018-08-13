@@ -155,6 +155,7 @@
     <Content Include="Accounts\Admin\ReviewMessage.aspx" />
     <Content Include="Accounts\Admin\ReviewTopic.aspx" />
     <Content Include="Accounts\Admin\ReviewUser.aspx" />
+    <Content Include="Accounts\Admin\TerminateTopic.aspx" />
     <Content Include="Accounts\Admin\ViewTopic.aspx" />
     <Content Include="Accounts\Patient\About.aspx" />
     <Content Include="Accounts\Patient\Account.aspx" />
@@ -435,6 +436,13 @@
     <Compile Include="Accounts\Admin\ReviewUser.aspx.designer.cs">
       <DependentUpon>ReviewUser.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Admin\TerminateTopic.aspx.cs">
+      <DependentUpon>TerminateTopic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\TerminateTopic.aspx.designer.cs">
+      <DependentUpon>TerminateTopic.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Admin\ViewTopic.aspx.cs">
       <DependentUpon>ViewTopic.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -442,6 +450,7 @@
     <Compile Include="Accounts\Admin\ViewTopic.aspx.designer.cs">
       <DependentUpon>ViewTopic.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\CompleteProfile.cs" />
     <Compile Include="Accounts\Patient\About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -668,6 +677,7 @@
     <Compile Include="Accounts\Physician\ViewTopic.aspx.designer.cs">
       <DependentUpon>ViewTopic.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\ShortProfile.cs" />
     <Compile Include="Physician.Master.cs">
       <DependentUpon>Physician.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
