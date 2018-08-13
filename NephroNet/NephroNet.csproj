@@ -146,6 +146,7 @@
     <Content Include="Accounts\Admin\CreateTopic.aspx" />
     <Content Include="Accounts\Admin\Home.aspx" />
     <Content Include="Accounts\Admin\JoinTopic.aspx" />
+    <Content Include="Accounts\Admin\MyProfile.aspx" />
     <Content Include="Accounts\Admin\MyTopics.aspx" />
     <Content Include="Accounts\Admin\Notifications.aspx" />
     <Content Include="Accounts\Admin\Profile.aspx" />
@@ -372,6 +373,13 @@
     </Compile>
     <Compile Include="Accounts\Admin\JoinTopic.aspx.designer.cs">
       <DependentUpon>JoinTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\MyProfile.aspx.cs">
+      <DependentUpon>MyProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\MyProfile.aspx.designer.cs">
+      <DependentUpon>MyProfile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Admin\MyTopics.aspx.cs">
       <DependentUpon>MyTopics.aspx</DependentUpon>

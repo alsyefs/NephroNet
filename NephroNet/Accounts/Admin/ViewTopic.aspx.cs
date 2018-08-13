@@ -19,7 +19,7 @@ namespace NephroNet.Accounts.Admin
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);
         string username, roleId, loginId, token;
-        string topicId = "";
+        string topicId = "";int g_entries = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
             Configuration config = new Configuration();
@@ -256,6 +256,7 @@ namespace NephroNet.Accounts.Admin
             //Count entries for this topic that are approved, not denied, and not deleted:
             cmd.CommandText = "select count(*) from Entries where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0 ";
             int totalEntries = Convert.ToInt32(cmd.ExecuteScalar());
+            g_entries = totalEntries;
             for (int i = 1; i <= totalEntries; i++)
             {
                 //Get entry ID:
@@ -555,7 +556,14 @@ namespace NephroNet.Accounts.Admin
 
         protected void Timer1_Tick(object sender, EventArgs e)
         {
-            
+            //connect.Open();
+            //SqlCommand cmd = connect.CreateCommand();
+            ////Count entries for this topic that are approved, not denied, and not deleted:
+            //cmd.CommandText = "select count(*) from Entries where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0 ";
+            //int totalEntries = Convert.ToInt32(cmd.ExecuteScalar());
+            //if (totalEntries != g_entries)
+            //    upMessages.Update();
+            //connect.Close();
         }
 
         protected void hideErrorLabels()

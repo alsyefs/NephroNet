@@ -12,14 +12,19 @@
                 <br />
                 <%--Ajax start--%>
                 <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer> 
-                <asp:UpdatePanel ID="upMessages" UpdateMode="Conditional" runat="server">
+                <asp:UpdatePanel ID="upMessages" UpdateMode="Conditional" runat="server" >
                             <ContentTemplate>
-                                <asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>
+                                <asp:Label ID="lblContents" runat="server" Text="Contents" ></asp:Label>
                             </ContentTemplate>
                             <Triggers>
-                                <asp:AsyncPostBackTrigger  ControlID="Timer1" EventName="Tick" />
+                                <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />
                             </Triggers>
                 </asp:UpdatePanel>
+                <%--<asp:UpdatePanel ID="upMessages1" UpdateMode="Conditional" runat="server" >
+                            <ContentTemplate>
+                                <asp:Label ID="lblContents" runat="server" Text="Contents" ></asp:Label>
+                            </ContentTemplate>
+                </asp:UpdatePanel>--%>
                 <%--Ajax end--%>
                 <%--<asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>--%>
                 <br />

@@ -9,13 +9,33 @@ namespace NephroNet
     public class Configuration
     {
         //The below is Saleh's personal connection string:
-        //static string connectionString = "data source=R14\\SALEH;initial catalog=NephroNetDB;MultipleActiveResultSets=True;user id=sa; password=Saleh.Alsyefi1988 ";
+        static string connectionString = "data source=R14\\SALEH;initial catalog=NephroNetDB;MultipleActiveResultSets=True;user id=sa; password=Saleh.Alsyefi1988 ";
         //The server's connection string:
-        static string connectionString = "data source=Murcap02;initial catalog=NephroNetDB;MultipleActiveResultSets=True; user id=sa; password=Saleh.Alsyefi1988";
+        //static string connectionString = "data source=Murcap02;initial catalog=NephroNetDB;MultipleActiveResultSets=True; user id=sa; password=Saleh.Alsyefi1988";
         static string dbId = setDBID();
         static string dbPassword = setDBPassword();
+        //The below is to be used if the connection string is needed to be extracted from the Web.config file:
+        //public System.Configuration.ConnectionStringSettings staticConnectionString()
+        //{
+        //    System.Configuration.Configuration rootWebConfig =
+        //        System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/NephroNet");
+        //    System.Configuration.ConnectionStringSettings connString = new System.Configuration.ConnectionStringSettings();
+        //    if (rootWebConfig.ConnectionStrings.ConnectionStrings.Count > 0)
+        //    {
+        //        connString =
+        //            rootWebConfig.ConnectionStrings.ConnectionStrings["NephroNetDBConnection"];
+        //        if (connString != null)
+        //            Console.WriteLine("NephroNetDBConnection connection string = \"{0}\"",
+        //                connString.ConnectionString);
+        //        else
+        //            Console.WriteLine("No NephroNetDBConnection connection string");
+        //    }
+        //    return connString;
+        //}
+        //
         public string getConnectionString()
         {
+            //System.Configuration.ConnectionStringSettings theString = staticConnectionString();
             SqlConnection connect = new SqlConnection(connectionString);
             return connectionString;            
         }
