@@ -130,9 +130,9 @@ namespace NephroNet.Accounts.Physician
             drpQ1.SelectedValue = g_question_text_1;
             drpQ2.SelectedValue = g_question_text_2;
             drpQ3.SelectedValue = g_question_text_3;
-            txtA1.Text = g_answer_1;
-            txtA2.Text = g_answer_2;
-            txtA3.Text = g_answer_3;
+            txtA1.Text = Encryption.decrypt(g_answer_1);
+            txtA2.Text = Encryption.decrypt(g_answer_2);
+            txtA3.Text = Encryption.decrypt(g_answer_3);
         }
         protected void clearSession()
         {
@@ -208,12 +208,16 @@ namespace NephroNet.Accounts.Physician
             string q2Id = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "select questionId from questions where question_text like '" + q3 + "' ";
             string q3Id = cmd.ExecuteScalar().ToString();
+            //Encrypt new answers:
+            string a1_encrypted = Encryption.encrypt(txtA1.Text);
+            string a2_encrypted = Encryption.encrypt(txtA2.Text);
+            string a3_encrypted = Encryption.encrypt(txtA3.Text);
             //Update the questions and their answers:
-            cmd.CommandText = "update SecurityQuestions set questionId = '" + q1Id + "' , securityQuestion_answer = '" + txtA1.Text + "' where securityQuestionId = '" + g_securityQuestionId_1 + "' ";
+            cmd.CommandText = "update SecurityQuestions set questionId = '" + q1Id + "' , securityQuestion_answer = '" + a1_encrypted + "' where securityQuestionId = '" + g_securityQuestionId_1 + "' ";
             cmd.ExecuteScalar();
-            cmd.CommandText = "update SecurityQuestions set questionId = '" + q2Id + "' , securityQuestion_answer = '" + txtA2.Text + "' where securityQuestionId = '" + g_securityQuestionId_2 + "' ";
+            cmd.CommandText = "update SecurityQuestions set questionId = '" + q2Id + "' , securityQuestion_answer = '" + a2_encrypted + "' where securityQuestionId = '" + g_securityQuestionId_2 + "' ";
             cmd.ExecuteScalar();
-            cmd.CommandText = "update SecurityQuestions set questionId = '" + q3Id + "' , securityQuestion_answer = '" + txtA3.Text + "' where securityQuestionId = '" + g_securityQuestionId_3 + "' ";
+            cmd.CommandText = "update SecurityQuestions set questionId = '" + q3Id + "' , securityQuestion_answer = '" + a3_encrypted + "' where securityQuestionId = '" + g_securityQuestionId_3 + "' ";
             cmd.ExecuteScalar();
             connect.Close();
         }

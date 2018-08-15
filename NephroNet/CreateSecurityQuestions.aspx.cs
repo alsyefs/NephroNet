@@ -193,15 +193,19 @@ namespace NephroNet
             string q2Id = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "select questionId from questions where question_text like '" + q3 + "' ";
             string q3Id = cmd.ExecuteScalar().ToString();
+            //Encrypt new answers:
+            string a1_encrypted = Encryption.encrypt(txtA1.Text);
+            string a2_encrypted = Encryption.encrypt(txtA2.Text);
+            string a3_encrypted = Encryption.encrypt(txtA3.Text);
             //Insert answers with their questions' IDs:
             cmd.CommandText = "insert into SecurityQuestions (loginId, questionId, securityQuestion_answer) values " +
-                "('" + temp_loginId + "', '" + q1Id + "', '" + txtA1.Text + "')";
+                "('" + temp_loginId + "', '" + q1Id + "', '" + a1_encrypted + "')";
             cmd.ExecuteScalar();
             cmd.CommandText = "insert into SecurityQuestions (loginId, questionId, securityQuestion_answer) values " +
-                "('" + temp_loginId + "', '" + q2Id + "', '" + txtA2.Text + "')";
+                "('" + temp_loginId + "', '" + q2Id + "', '" + a2_encrypted + "')";
             cmd.ExecuteScalar();
             cmd.CommandText = "insert into SecurityQuestions (loginId, questionId, securityQuestion_answer) values " +
-                "('" + temp_loginId + "', '" + q3Id + "', '" + txtA3.Text + "')";
+                "('" + temp_loginId + "', '" + q3Id + "', '" + a3_encrypted + "')";
             cmd.ExecuteScalar();
             connect.Close();
         }

@@ -156,7 +156,9 @@
     <Content Include="Accounts\Admin\ReviewMessage.aspx" />
     <Content Include="Accounts\Admin\ReviewTopic.aspx" />
     <Content Include="Accounts\Admin\ReviewUser.aspx" />
+    <Content Include="Accounts\Admin\TerminateAccount.aspx" />
     <Content Include="Accounts\Admin\TerminateTopic.aspx" />
+    <Content Include="Accounts\Admin\UnlockAccount.aspx" />
     <Content Include="Accounts\Admin\ViewTopic.aspx" />
     <Content Include="Accounts\Patient\About.aspx" />
     <Content Include="Accounts\Patient\Account.aspx" />
@@ -444,12 +446,26 @@
     <Compile Include="Accounts\Admin\ReviewUser.aspx.designer.cs">
       <DependentUpon>ReviewUser.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Admin\TerminateAccount.aspx.cs">
+      <DependentUpon>TerminateAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\TerminateAccount.aspx.designer.cs">
+      <DependentUpon>TerminateAccount.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Admin\TerminateTopic.aspx.cs">
       <DependentUpon>TerminateTopic.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Accounts\Admin\TerminateTopic.aspx.designer.cs">
       <DependentUpon>TerminateTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\UnlockAccount.aspx.cs">
+      <DependentUpon>UnlockAccount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\UnlockAccount.aspx.designer.cs">
+      <DependentUpon>UnlockAccount.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Admin\ViewTopic.aspx.cs">
       <DependentUpon>ViewTopic.aspx</DependentUpon>

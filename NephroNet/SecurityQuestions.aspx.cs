@@ -306,7 +306,10 @@ namespace NephroNet
             Boolean correct = true;
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from SecurityQuestions where loginId like '" + id + "' and questionID = '" + question + "' and securityQuestion_answer like '" + answer + "' ";
+            answer = answer.ToLower();
+            //Encrypt new answers:
+            string a_encrypted = Encryption.encrypt(answer);
+            cmd.CommandText = "select count(*) from SecurityQuestions where loginId like '" + id + "' and questionID = '" + question + "' and securityQuestion_answer like '" + a_encrypted + "' ";
             int count = Convert.ToInt32(cmd.ExecuteScalar());
             if (count == 0)
                 correct = false;

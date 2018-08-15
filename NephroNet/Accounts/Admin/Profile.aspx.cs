@@ -30,6 +30,10 @@ namespace NephroNet.Accounts.Admin
             //Get the current user's ID who is trying to access the profile:
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string current_userId = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select loginId from users where userId = '"+profileId+"' ";
+            string account_loginId = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select login_isActive from Logins where loginId = '"+account_loginId+"' ";
+            int isActive = Convert.ToInt32(cmd.ExecuteScalar());
             connect.Close();
             ShortProfile shortProfile = new ShortProfile(profileId, current_userId);
             string name = shortProfile.name;
@@ -37,6 +41,12 @@ namespace NephroNet.Accounts.Admin
             //...
             //Display the information:
             lblShortProfileInformation.Text = name;
+            string terminateCommand = "<br/><button id='terminate_button'type='button' onmousedown=\"OpenPopup('TerminateAccount.aspx?id=" + profileId + "')\">Terminate Account</button>";
+            string unlockCommand = "<br/><button id='unlock_button'type='button' onmousedown=\"OpenPopup('UnlockAccount.aspx?id=" + profileId + "')\">Unlock Account</button>";
+            if(isActive == 1 && account_loginId != loginId)
+                lblShortProfileInformation.Text += terminateCommand;
+            else if(isActive == 0 && account_loginId != loginId)
+                lblShortProfileInformation.Text += unlockCommand;
         }
         protected bool isUserCorrect()
         {

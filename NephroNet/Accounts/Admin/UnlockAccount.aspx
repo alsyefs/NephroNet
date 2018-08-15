@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Terminate Topic" Language="C#" MasterPageFile="~/Admin.Master" AutoEventWireup="true" CodeBehind="TerminateTopic.aspx.cs" Inherits="NephroNet.Accounts.Admin.TerminateTopic" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin.Master" AutoEventWireup="true" CodeBehind="UnlockAccount.aspx.cs" Inherits="NephroNet.Accounts.Admin.UnlockAccount" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%--Page body start:--%>
@@ -8,10 +8,10 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Show message information:--%>
-                <asp:Label ID="lblMessageInformation" runat="server" Text="Are you sure you want to terminate the selected topic?"></asp:Label>
+                <asp:Label ID="lblMessageInformation" runat="server" Text="Are you sure you want to unlock the selected account?"></asp:Label>
                 <br />
                 <br />
-                <asp:Button ID="btnTerminate" runat="server" Text="Terminate" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnTerminate_Click" />
+                <asp:Button ID="btnUnlock" runat="server" Text="Unlock" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnUnlock_Click" />
                 <%--Cancel, or Go Back button--%>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <asp:Button ID="btnCancel" runat="server" Text="Cancel" BackColor="red" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClientClick="javascript:window.close();" />

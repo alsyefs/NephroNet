@@ -16,46 +16,34 @@ namespace NephroNet
         SqlConnection connect = new SqlConnection(connString);        
         public Encryption()
         {
-            connString = getConnection(); 
-            PasswordHash = setPasswordHash();
-            SaltKey = setSaltKey();
-            VIKey = setVIKey();
+            connString = getConnection();
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select TOP 1 key_vIKey from Keys";
+            VIKey = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select TOP 1 key_saltKey from Keys";
+            SaltKey = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select TOP 1 key_passwordHash from Keys";
+            PasswordHash = cmd.ExecuteScalar().ToString();
+            connect.Close();
+        }
+        protected void setValues()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select TOP 1 key_vIKey from Keys";
+            VIKey = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select TOP 1 key_saltKey from Keys";
+            SaltKey = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select TOP 1 key_passwordHash from Keys";
+            PasswordHash = cmd.ExecuteScalar().ToString();
+            connect.Close();
         }
         public static string getConnection()
         {
             Configuration config = new Configuration();
             string conn = config.getConnectionString();            
             return conn;
-        }
-        protected string setVIKey()
-        {
-            string str_vIKey = "";
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select TOP 1 key_vIKey from Keys";
-            str_vIKey = cmd.ExecuteScalar().ToString();
-            connect.Close();
-            return str_vIKey;
-        }
-        protected string setSaltKey()
-        {
-            string str_saltKey = "";
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select TOP 1 key_saltKey from Keys";
-            str_saltKey = cmd.ExecuteScalar().ToString();
-            connect.Close();
-            return str_saltKey;
-        }
-        protected string setPasswordHash()
-        {
-            string str_passwordHash = "";
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select TOP 1 key_passwordHash from Keys";
-            str_passwordHash = cmd.ExecuteScalar().ToString();
-            connect.Close();
-            return str_passwordHash;
         }
         public static string hash(string clearText)
         {
@@ -91,6 +79,8 @@ namespace NephroNet
         //------------------------ENCRYPTION METHOD------------------------------
         public static string encrypt(string plainText)
         {
+            Encryption encryption = new Encryption();
+            plainText = plainText.ToLower();
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
 
             byte[] keyBytes = new Rfc2898DeriveBytes(PasswordHash, Encoding.ASCII.GetBytes(SaltKey)).GetBytes(256 / 8);
@@ -115,6 +105,7 @@ namespace NephroNet
         //------------------------DECRYPTION METHOD------------------------------
         public static string decrypt(string encryptedText)
         {
+            Encryption encryption = new Encryption();
             try
             {
                 byte[] cipherTextBytes = Convert.FromBase64String(encryptedText);

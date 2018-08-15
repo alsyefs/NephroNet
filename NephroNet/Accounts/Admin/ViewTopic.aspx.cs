@@ -556,6 +556,7 @@ namespace NephroNet.Accounts.Admin
 
         protected void Timer1_Tick(object sender, EventArgs e)
         {
+            lblContents.Dispose();
             //connect.Open();
             //SqlCommand cmd = connect.CreateCommand();
             ////Count entries for this topic that are approved, not denied, and not deleted:
