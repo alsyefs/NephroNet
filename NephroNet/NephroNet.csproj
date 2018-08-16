@@ -156,6 +156,7 @@
     <Content Include="Accounts\Admin\ReviewMessage.aspx" />
     <Content Include="Accounts\Admin\ReviewTopic.aspx" />
     <Content Include="Accounts\Admin\ReviewUser.aspx" />
+    <Content Include="Accounts\Admin\Search.aspx" />
     <Content Include="Accounts\Admin\TerminateAccount.aspx" />
     <Content Include="Accounts\Admin\TerminateTopic.aspx" />
     <Content Include="Accounts\Admin\UnlockAccount.aspx" />
@@ -445,6 +446,13 @@
     </Compile>
     <Compile Include="Accounts\Admin\ReviewUser.aspx.designer.cs">
       <DependentUpon>ReviewUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Admin\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Admin\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Admin\TerminateAccount.aspx.cs">
       <DependentUpon>TerminateAccount.aspx</DependentUpon>
