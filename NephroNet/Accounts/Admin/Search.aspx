@@ -26,7 +26,7 @@
                 <asp:Label ID="lblResultsMessage" runat="server" Text="There is nothing to display!" Visible="false" ForeColor="Red" Font-Size="Medium" Font-Bold="true"></asp:Label>
                 <%--Tables of results start--%>
                 <div id="table">
-                    <asp:GridView ID="grdResults" runat="server" Width="100%" HorizontalAlign="Center" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical" PageSize="1" AllowPaging="True" OnPageIndexChanging="grdResults_PageIndexChanging">
+                    <asp:GridView ID="grdResults" runat="server" Width="100%" HorizontalAlign="Center" BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Vertical" PageSize="20" AllowPaging="True" OnPageIndexChanging="grdResults_PageIndexChanging">
                         <AlternatingRowStyle BackColor="White" />
                         <FooterStyle BackColor="#CCCC99" />
                         <HeaderStyle BackColor="#6B696B" Font-Bold="True" ForeColor="White" />

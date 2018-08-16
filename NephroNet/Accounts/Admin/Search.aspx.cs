@@ -183,6 +183,8 @@ namespace NephroNet.Accounts.Admin
         {
             grdResults.PageIndex = e.NewPageIndex;
             grdResults.DataBind();
+            if (drpSearch.SelectedIndex == 1)//1 = search for topic titles
+                rebindTopics();
             //Hide the header called "ID":
             //grdResults.HeaderRow.Cells[1].Visible = false;
             //Hide IDs column and content which are located in column index 1:
@@ -190,6 +192,39 @@ namespace NephroNet.Accounts.Admin
             //{
             //    grdResults.Rows[i].Cells[1].Visible = false;
             //}
+        }
+        protected void rebindTopics()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            string id = "", title = "", creator = "";
+            for (int row = 0; row < grdResults.Rows.Count; row++)
+            {
+                int i = (row + 1) + (grdResults.PageIndex * grdResults.PageSize);
+                //Get the topic ID:
+                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                id = cmd.ExecuteScalar().ToString();
+                //Get title:
+                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                title = cmd.ExecuteScalar().ToString();
+                //Get creator's ID:
+                cmd.CommandText = "select [topic_createdBy] FROM [Topics] where topicId = " + id + " ";
+                string creatorId = cmd.ExecuteScalar().ToString();
+                //Get creator's name:
+                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
+                creator = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
+                creator = creator + " " + cmd.ExecuteScalar().ToString();
+                HyperLink creatorLink = new HyperLink();
+                creatorLink.Text = creator + " ";
+                creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
+                grdResults.Rows[row].Cells[3].Controls.Add(creatorLink);
+                HyperLink topicLink = new HyperLink();
+                topicLink.Text = title + " ";
+                topicLink.NavigateUrl = "ViewTopic.aspx?id=" + id;
+                grdResults.Rows[row].Cells[0].Controls.Add(topicLink);
+            }
+            connect.Close();
         }
         protected void createTopicsTable(int count)
         {

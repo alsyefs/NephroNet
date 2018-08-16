@@ -165,7 +165,43 @@ namespace NephroNet.Accounts.Physician
             {
                 grdTopics.Rows[i].Cells[1].Visible = false;
             }
+            reBindValues();
         }
+        protected void reBindValues()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            string id = "";
+            for (int row = 0; row < grdTopics.Rows.Count; row++)
+            {
+                id = grdTopics.Rows[row].Cells[1].Text;
+                //Get total approved participants for a topic:                
+                cmd.CommandText = "select count(*) from UsersForTopics where topicId = '" + id + "' and isApproved = '1' ";
+                int totalApprovedParticipants = Convert.ToInt32(cmd.ExecuteScalar());
+                for (int j = 1; j <= totalApprovedParticipants; j++)
+                {
+                    HyperLink participantLink = new HyperLink();
+                    cmd.CommandText = "select [userId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY UsersForTopicsId ASC), * FROM [UsersForTopics] where topicId = '" + id + "' and isApproved = '1') as t where rowNum = '" + j + "'";
+                    string participantId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_firstname from Users where userId = '" + participantId + "' ";
+                    string participant_name = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_lastname from Users where userId = '" + participantId + "' ";
+                    participant_name = participant_name + " " + cmd.ExecuteScalar().ToString();
+                    participantLink.Text = participant_name + " ";
+                    participantLink.NavigateUrl = "Profile.aspx?id=" + participantId;
+                    grdTopics.Rows[row].Cells[4].Controls.Add(participantLink);
+                    if (totalApprovedParticipants > 1)
+                    {
+                        HyperLink temp = new HyperLink();
+                        temp.Text = "<br/>";
+                        grdTopics.Rows[row].Cells[4].Controls.Add(temp);
+                    }
+                }
+                if (totalApprovedParticipants == 0)
+                    grdTopics.Rows[row].Cells[4].Text = "There are no participants";
 
+            }
+            connect.Close();
+        }
     }
 }
