@@ -69,9 +69,11 @@ namespace NephroNet.Accounts.Admin
                 if (count == 0)
                 {
                     lblResultsMessage.Visible = true;
+                    grdResults.Visible = false;
                 }
                 else
                 {
+                    grdResults.Visible = true;
                     lblResultsMessage.Visible = false;
                     //call a method to create a table for the selected criteria:
                     if (drpSearch.SelectedIndex == 1)//Searching for topic titles
@@ -100,9 +102,11 @@ namespace NephroNet.Accounts.Admin
                 if (count == 0)
                 {
                     lblResultsMessage.Visible = true;
+                    grdResults.Visible = false;
                 }
                 else
                 {
+                    grdResults.Visible = true;
                     lblResultsMessage.Visible = false;
                     //call a method to create a table for the selected criteria:
                     if (drpSearch.SelectedIndex == 1)//Searching for topic titles
