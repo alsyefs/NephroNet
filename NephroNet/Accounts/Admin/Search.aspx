@@ -8,16 +8,17 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Content start--%>
-                <asp:DropDownList ID="drpSearch" runat="server" OnSelectedIndexChanged="drpSearch_SelectedIndexChanged">
+                <asp:DropDownList ID="drpSearch" runat="server" OnSelectedIndexChanged="drpSearch_SelectedIndexChanged" >
                     <asp:ListItem>Select search criteria</asp:ListItem>
-                    <asp:ListItem>Search for a topic title</asp:ListItem>
-                    <asp:ListItem>Search for a user fullname</asp:ListItem>
-                    <asp:ListItem>Search for a message text</asp:ListItem>
-                    <asp:ListItem>Search for everything</asp:ListItem>
+                    <asp:ListItem>Search topics by keywords in topic titles</asp:ListItem>
+                    <asp:ListItem>Search topics by keywords in users fullnames</asp:ListItem>
+                    <asp:ListItem>Search topics by keywords in messages text</asp:ListItem>
+                    <asp:ListItem>Search topics by within a time period</asp:ListItem>
+                    <asp:ListItem>Search topics by using any keywords</asp:ListItem>
                 </asp:DropDownList>
                 <asp:TextBox ID="txtSearch" runat="server" OnTextChanged="txtSearch_TextChanged"></asp:TextBox>
                 &nbsp;&nbsp;
-                <asp:Button ID="btnSearch" runat="server" Text="Button" OnClick="btnSearch_Click" />
+                <asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click" Width="10%" BackColor="green"/>
                 <br />
                 <%--Message to be displayed if there is nothing to show:--%>
                 <asp:Label ID="lblErrorMessage" runat="server" Text="" Visible="false" ForeColor="Red" Font-Size="Medium" Font-Bold="true"></asp:Label>

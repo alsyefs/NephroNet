@@ -75,13 +75,15 @@ namespace NephroNet.Accounts.Admin
                     lblResultsMessage.Visible = false;
                     //call a method to create a table for the selected criteria:
                     if (drpSearch.SelectedIndex == 1)//Searching for topic titles
-                        createTopicsTable(count);
+                        createTopicsTable();
                     else if (drpSearch.SelectedIndex == 2)//Searching for users' names
-                        createUsersTable(count);
+                        createUsersTable();
                     else if (drpSearch.SelectedIndex == 3)//Searching for messages
-                        createMessagesTable(count);
-                    else if (drpSearch.SelectedIndex == 4)//Searching for everything; topics, users, and messages
-                        createEverythingTable(count);
+                        createMessagesTable();
+                    else if (drpSearch.SelectedIndex == 4)//Searching for topics within a time period
+                        createTimePeriodTable();
+                    else if (drpSearch.SelectedIndex == 5)//Searching for everything; topics, users, and messages
+                        createEverythingTable();
                 }
             }
             hideEverything();
@@ -104,13 +106,15 @@ namespace NephroNet.Accounts.Admin
                     lblResultsMessage.Visible = false;
                     //call a method to create a table for the selected criteria:
                     if (drpSearch.SelectedIndex == 1)//Searching for topic titles
-                        createTopicsTable(count);
+                        createTopicsTable();
                     else if (drpSearch.SelectedIndex == 2)//Searching for users' names
-                        createUsersTable(count);
+                        createUsersTable();
                     else if (drpSearch.SelectedIndex == 3)//Searching for messages
-                        createMessagesTable(count);
-                    else if (drpSearch.SelectedIndex == 4)//Searching for everything; topics, users, and messages
-                        createEverythingTable(count);
+                        createMessagesTable();
+                    else if (drpSearch.SelectedIndex == 4)//Searching for topics within a time period
+                        createTimePeriodTable();
+                    else if (drpSearch.SelectedIndex == 5)//Searching for everything; topics, users, and messages
+                        createEverythingTable();
                 }
             }
         }
@@ -120,27 +124,49 @@ namespace NephroNet.Accounts.Admin
             string searchString = txtSearch.Text.Replace("'", "''");
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            if(drpSearch.SelectedIndex == 1)//Searching for topic titles
-            {
-                cmd.CommandText = "select count(*) from topics where topic_title like '%"+ searchString + "%' and topic_isDeleted = 0 and topic_isDenied = 0 and topic_isApproved = 1 ";
-                count = Convert.ToInt32(cmd.ExecuteScalar());
-            }
-            else if(drpSearch.SelectedIndex == 2)//Searching for users' names
-            {
-                cmd.CommandText = "select count(*) from users where WHERE (user_firstname+ ' ' +user_lastname) like '%"+ searchString + "%' ";
-                count = Convert.ToInt32(cmd.ExecuteScalar());
-            }
-            else if (drpSearch.SelectedIndex == 3)//Searching for messages
-            {
-                cmd.CommandText = "select * from entries where entry_text like '%" + searchString + "%' ";
-                count = Convert.ToInt32(cmd.ExecuteScalar());
-            }
-            else if (drpSearch.SelectedIndex == 4)//Searching for everything; topics, users, and messages
+            if (drpSearch.SelectedIndex == 1)//Searching topics by topic titles
             {
                 cmd.CommandText = "select count(*) from topics where topic_title like '%" + searchString + "%' and topic_isDeleted = 0 and topic_isDenied = 0 and topic_isApproved = 1 ";
                 count = Convert.ToInt32(cmd.ExecuteScalar());
-                cmd.CommandText = "select count(*) from users where WHERE (user_firstname+ ' ' +user_lastname) like '%" + searchString + "%' ";
-                count += Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            else if (drpSearch.SelectedIndex == 2)//Searching topics by users' fullnames
+            {
+                cmd.CommandText = "select count(*) from users where (user_firstname+ ' ' +user_lastname) like '%" + searchString + "%' ";
+                int totalUsers = Convert.ToInt32(cmd.ExecuteScalar());
+                for (int i = 1; i <= totalUsers; i++)
+                {
+                    cmd.CommandText = "select [userId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY userId ASC), * FROM [Users] where (user_firstname+ ' ' +user_lastname) like '%" + searchString + "%' ) as t where rowNum = '" + i + "'";
+                    string temp_userId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select count(*) from topics where topic_createdBy = '" + temp_userId + "' ";
+                    int totalTopicsForTempUser = Convert.ToInt32(cmd.ExecuteScalar());
+                    count += totalTopicsForTempUser;
+                }
+            }
+            else if (drpSearch.SelectedIndex == 3)//Searching topics by messages
+            {
+                cmd.CommandText = "select * from entries where entry_text like '%" + searchString + "%' and entry_isDeleted = 0 and entry_isApproved = 1 and entry_isDenied = 0 ";
+                count = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            else if (drpSearch.SelectedIndex == 4)//Search within a time period
+            {
+                string start_time = "", end_time = "";
+                cmd.CommandText = "select count(*) from topics where topic_time > '"+start_time+"' and topic_time < '"+end_time+"' and topic_isDeleted = 0 and topic_isDenied = 0 and topic_isApproved = 1 ";
+                count = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            else if (drpSearch.SelectedIndex == 5)//Searching topics by everything; topics, users, and messages
+            {
+                cmd.CommandText = "select count(*) from topics where topic_title like '%" + searchString + "%' and topic_isDeleted = 0 and topic_isDenied = 0 and topic_isApproved = 1 ";
+                count = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.CommandText = "select count(*) from users where (user_firstname+ ' ' +user_lastname) like '%" + searchString + "%' ";
+                int totalUsers = Convert.ToInt32(cmd.ExecuteScalar());
+                for (int i = 1; i <= totalUsers; i++)
+                {
+                    cmd.CommandText = "select [userId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY userId ASC), * FROM [Users] where (user_firstname+ ' ' +user_lastname) like '%" + searchString + "%' ) as t where rowNum = '" + i + "'";
+                    string temp_userId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select count(*) from topics where topic_createdBy = '" + temp_userId + "' ";
+                    int totalTopicsForTempUser = Convert.ToInt32(cmd.ExecuteScalar());
+                    count += totalTopicsForTempUser;
+                }
                 cmd.CommandText = "select * from entries where entry_text like '%" + searchString + "%' ";
                 count += Convert.ToInt32(cmd.ExecuteScalar());
             }
@@ -160,7 +186,7 @@ namespace NephroNet.Accounts.Admin
             //if input has one quotation, replace it with a double quotaion to avoid SQL errors:
             txtSearch.Text = txtSearch.Text.Replace("'", "''");
             //check if no criteria was selected:
-            if(drpSearch.SelectedIndex == 0)
+            if (drpSearch.SelectedIndex == 0)
             {
                 correct = false;
                 lblErrorMessage.Text += "Please select a search criteria.<br/>";
@@ -183,29 +209,22 @@ namespace NephroNet.Accounts.Admin
         {
             grdResults.PageIndex = e.NewPageIndex;
             grdResults.DataBind();
-            if (drpSearch.SelectedIndex == 1)//1 = search for topic titles
-                rebindTopics();
-            //Hide the header called "ID":
-            //grdResults.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            //for (int i = 0; i < grdResults.Rows.Count; i++)
-            //{
-            //    grdResults.Rows[i].Cells[1].Visible = false;
-            //}
+            rebindValues();
         }
         protected void rebindTopics()
         {
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             string id = "", title = "", creator = "";
+            string searchString = txtSearch.Text.Replace("'", "''");
             for (int row = 0; row < grdResults.Rows.Count; row++)
             {
                 int i = (row + 1) + (grdResults.PageIndex * grdResults.PageSize);
                 //Get the topic ID:
-                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_title like '%" + searchString + "%' and topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
                 id = cmd.ExecuteScalar().ToString();
                 //Get title:
-                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                cmd.CommandText = "select [topic_title] from topics where topicId = '" + id + "' ";
                 title = cmd.ExecuteScalar().ToString();
                 //Get creator's ID:
                 cmd.CommandText = "select [topic_createdBy] FROM [Topics] where topicId = " + id + " ";
@@ -226,73 +245,68 @@ namespace NephroNet.Accounts.Admin
             }
             connect.Close();
         }
-        protected void createTopicsTable(int count)
+        protected void createTopicsTable()
         {
             DataTable dt = new DataTable();
-            //dt.Columns.Add("ID", typeof(string));
             dt.Columns.Add("Title", typeof(string));
             dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
             string id = "", title = "", type = "", creator = "", time = "";
+            string searchString = txtSearch.Text.Replace("'", "''");
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from topics where topic_title like '%" + searchString + "%' and topic_isDeleted = 0 and topic_isDenied = 0 and topic_isApproved = 1 ";
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
             for (int i = 1; i <= count; i++)
             {
                 //Get the topic ID:
-                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_title like '%" + searchString + "%' and topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
                 id = cmd.ExecuteScalar().ToString();
                 //Get type:
-                cmd.CommandText = "select [topic_time] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                cmd.CommandText = "select [topic_time] from Topics where topicId = '" + id + "' ";
                 time = cmd.ExecuteScalar().ToString();
                 //Get title:
-                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                cmd.CommandText = "select [topic_title] from Topics where topicId = '" + id + "' ";
                 title = cmd.ExecuteScalar().ToString();
                 //Get type:
-                cmd.CommandText = "select [topic_type] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                cmd.CommandText = "select [topic_type] from Topics where topicId = '" + id + "' ";
                 type = cmd.ExecuteScalar().ToString();
                 //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
+                cmd.CommandText = "select [topic_createdBy] from Topics where topicId = '" + id + "' ";
                 string creatorId = cmd.ExecuteScalar().ToString();
                 //Get creator's name:
                 cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
                 creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
-                //dt.Rows.Add(id, Layouts.getTimeFormat(time), title, type, creator);
                 dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator);
             }
+            connect.Close();
             grdResults.DataSource = dt;
             grdResults.DataBind();
-            //grdTopics.AutoGenerateColumns = true;
-            //Hide the header called "ID":
-            //grdResults.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            //for (int i = 0; i < grdResults.Rows.Count; i++)
-            //{
-            //    grdResults.Rows[i].Cells[1].Visible = false;
-            //}
+            rebindValues();
+        }
+        protected void rebindValues()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            string id = "", title = "", creator = "";
+            string searchString = txtSearch.Text.Replace("'", "''");
             for (int row = 0; row < grdResults.Rows.Count; row++)
             {
-                int i = (row + 1);
-                //Get the topic ID:
-                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                id = cmd.ExecuteScalar().ToString();
-                //Get title:
-                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                title = cmd.ExecuteScalar().ToString();
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] FROM [Topics] where topicId = " + id + " ";
+                //Set the creator's link
+                creator = grdResults.Rows[row].Cells[3].Text;
+                cmd.CommandText = "select userId from Users where (user_firstname +' '+ user_lastname) like '"+ creator + "' ";
                 string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
                 HyperLink creatorLink = new HyperLink();
                 creatorLink.Text = creator + " ";
                 creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
                 grdResults.Rows[row].Cells[3].Controls.Add(creatorLink);
+                //Set the title's link
+                title = grdResults.Rows[row].Cells[0].Text;
+                cmd.CommandText = "select topicId from topics where topic_title like '"+title+"' ";
+                id = cmd.ExecuteScalar().ToString();
                 HyperLink topicLink = new HyperLink();
                 topicLink.Text = title + " ";
                 topicLink.NavigateUrl = "ViewTopic.aspx?id=" + id;
@@ -300,194 +314,108 @@ namespace NephroNet.Accounts.Admin
             }
             connect.Close();
         }
-        protected void createUsersTable(int count)
+        protected void createUsersTable()
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(string));
-            dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
             string id = "", title = "", type = "", creator = "", time = "";
+            string searchString = txtSearch.Text.Replace("'", "''");
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            for (int i = 1; i <= count; i++)
+            cmd.CommandText = "select count(*) from users where (user_firstname+ ' ' +user_lastname) like '%" + searchString + "%' ";
+            int totalUsers = Convert.ToInt32(cmd.ExecuteScalar());
+            for (int i = 1; i <= totalUsers; i++)
             {
-                //Get the topic ID:
-                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                id = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_time] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                time = cmd.ExecuteScalar().ToString();
-                //Get title:
-                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                title = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_type] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                type = cmd.ExecuteScalar().ToString();
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(id, Layouts.getTimeFormat(time), title, type, creator);
-            }
-            grdResults.DataSource = dt;
-            grdResults.DataBind();
-            //grdTopics.AutoGenerateColumns = true;
-            //Hide the header called "ID":
-            grdResults.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdResults.Rows.Count; i++)
-            {
-                grdResults.Rows[i].Cells[1].Visible = false;
-            }
-            for (int row = 0; row < grdResults.Rows.Count; row++)
-            {
-                id = grdResults.Rows[row].Cells[1].Text;
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] FROM [Topics] where topicId = " + id + " ";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
-                HyperLink creatorLink = new HyperLink();
-                creatorLink.Text = creator + " ";
-                creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
-                grdResults.Rows[row].Cells[5].Controls.Add(creatorLink);
+                cmd.CommandText = "select [userId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY userId ASC), * FROM [Users] where (user_firstname+ ' ' +user_lastname) like '%" + searchString + "%' ) as t where rowNum = '" + i + "'";
+                string temp_userId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select count(*) from topics where topic_createdBy = '" + temp_userId + "' and topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0";
+                int totalTopicsForTempUser = Convert.ToInt32(cmd.ExecuteScalar());
+                for (int j = 1; j <= totalTopicsForTempUser; j++)
+                {
+                    //Get the topic ID:
+                    cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_createdBy = '" + temp_userId + "' and topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + j + "'";
+                    id = cmd.ExecuteScalar().ToString();
+                    //Get type:
+                    cmd.CommandText = "select [topic_time] from Topics where topicId = '" + id + "' ";
+                    time = cmd.ExecuteScalar().ToString();
+                    //Get title:
+                    cmd.CommandText = "select [topic_title] from Topics where topicId = '" + id + "' ";
+                    title = cmd.ExecuteScalar().ToString();
+                    //Get type:
+                    cmd.CommandText = "select [topic_type] from Topics where topicId = '" + id + "' ";
+                    type = cmd.ExecuteScalar().ToString();
+                    //Get creator's ID:
+                    cmd.CommandText = "select [topic_createdBy] from Topics where topicId = '" + id + "' ";
+                    string creatorId = cmd.ExecuteScalar().ToString();
+                    //Get creator's name:
+                    cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
+                    creator = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
+                    creator = creator + " " + cmd.ExecuteScalar().ToString();
+                    dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator);
+                }
             }
             connect.Close();
+            grdResults.DataSource = dt;
+            grdResults.DataBind();
+            rebindValues();
         }
-        protected void createMessagesTable(int count)
+        protected void createMessagesTable()
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(string));
-            dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
             string id = "", title = "", type = "", creator = "", time = "";
+            string searchString = txtSearch.Text.Replace("'", "''");
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select count(*) from entries where entry_text like '%" + searchString + "%' and entry_isDeleted = 0 and entry_isApproved = 1 and entry_isDenied = 0 ";
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
             for (int i = 1; i <= count; i++)
             {
                 //Get the topic ID:
-                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                id = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_time] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                time = cmd.ExecuteScalar().ToString();
-                //Get title:
-                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                title = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_type] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                type = cmd.ExecuteScalar().ToString();
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(id, Layouts.getTimeFormat(time), title, type, creator);
-            }
-            grdResults.DataSource = dt;
-            grdResults.DataBind();
-            //grdTopics.AutoGenerateColumns = true;
-            //Hide the header called "ID":
-            grdResults.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdResults.Rows.Count; i++)
-            {
-                grdResults.Rows[i].Cells[1].Visible = false;
-            }
-            for (int row = 0; row < grdResults.Rows.Count; row++)
-            {
-                id = grdResults.Rows[row].Cells[1].Text;
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] FROM [Topics] where topicId = " + id + " ";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
-                HyperLink creatorLink = new HyperLink();
-                creatorLink.Text = creator + " ";
-                creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
-                grdResults.Rows[row].Cells[5].Controls.Add(creatorLink);
+                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Entries] where entry_text like '%" + searchString + "%' and entry_isDeleted = 0 and entry_isApproved = 1 and entry_isDenied = 0) as t where rowNum = '" + i + "'";
+                string new_id = cmd.ExecuteScalar().ToString();
+                if (!new_id.Equals(id))
+                {
+                    id = new_id;
+                    //Get type:
+                    cmd.CommandText = "select [topic_time] from Topics where topicId = '" + id + "' ";
+                    time = cmd.ExecuteScalar().ToString();
+                    //Get title:
+                    cmd.CommandText = "select [topic_title] from Topics where topicId = '" + id + "' ";
+                    title = cmd.ExecuteScalar().ToString();
+                    //Get type:
+                    cmd.CommandText = "select [topic_type] from Topics where topicId = '" + id + "' ";
+                    type = cmd.ExecuteScalar().ToString();
+                    //Get creator's ID:
+                    cmd.CommandText = "select [topic_createdBy] from Topics where topicId = '" + id + "' ";
+                    string creatorId = cmd.ExecuteScalar().ToString();
+                    //Get creator's name:
+                    cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
+                    creator = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
+                    creator = creator + " " + cmd.ExecuteScalar().ToString();
+                    dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator);
+                }
             }
             connect.Close();
+            grdResults.DataSource = dt;
+            grdResults.DataBind();
+            rebindValues();
         }
-        protected void createEverythingTable(int count)
+        protected void createTimePeriodTable()
         {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(string));
-            dt.Columns.Add("Time", typeof(string));
-            dt.Columns.Add("Title", typeof(string));
-            dt.Columns.Add("Type", typeof(string));
-            dt.Columns.Add("Creator", typeof(string));
-            string id = "", title = "", type = "", creator = "", time = "";
-            connect.Open();
-            SqlCommand cmd = connect.CreateCommand();
-            for (int i = 1; i <= count; i++)
-            {
-                //Get the topic ID:
-                cmd.CommandText = "select [topicId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                id = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_time] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                time = cmd.ExecuteScalar().ToString();
-                //Get title:
-                cmd.CommandText = "select [topic_title] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                title = cmd.ExecuteScalar().ToString();
-                //Get type:
-                cmd.CommandText = "select [topic_type] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                type = cmd.ExecuteScalar().ToString();
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY topicId ASC), * FROM [Topics] where topic_isApproved = 1 and topic_isDenied = 0 and topic_isDeleted = 0) as t where rowNum = '" + i + "'";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(id, Layouts.getTimeFormat(time), title, type, creator);
-            }
-            grdResults.DataSource = dt;
-            grdResults.DataBind();
-            //grdTopics.AutoGenerateColumns = true;
-            //Hide the header called "ID":
-            grdResults.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdResults.Rows.Count; i++)
-            {
-                grdResults.Rows[i].Cells[1].Visible = false;
-            }
-            for (int row = 0; row < grdResults.Rows.Count; row++)
-            {
-                id = grdResults.Rows[row].Cells[1].Text;
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] FROM [Topics] where topicId = " + id + " ";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
-                HyperLink creatorLink = new HyperLink();
-                creatorLink.Text = creator + " ";
-                creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
-                grdResults.Rows[row].Cells[5].Controls.Add(creatorLink);
-            }
-            connect.Close();
+
+        }
+        protected void createEverythingTable()
+        {
+            
         }
     }
 }
