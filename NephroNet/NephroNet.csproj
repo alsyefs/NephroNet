@@ -176,6 +176,7 @@
     <Content Include="Accounts\Patient\RemoveEntry.aspx" />
     <Content Include="Accounts\Patient\RemoveTopic.aspx" />
     <Content Include="Accounts\Patient\ReviewJoinTopic.aspx" />
+    <Content Include="Accounts\Patient\Search.aspx" />
     <Content Include="Accounts\Patient\ViewTopic.aspx" />
     <Content Include="Accounts\Physician\About.aspx" />
     <Content Include="Accounts\Physician\Account.aspx" />
@@ -192,6 +193,7 @@
     <Content Include="Accounts\Physician\RemoveEntry.aspx" />
     <Content Include="Accounts\Physician\RemoveTopic.aspx" />
     <Content Include="Accounts\Physician\ReviewJoinTopic.aspx" />
+    <Content Include="Accounts\Physician\Search.aspx" />
     <Content Include="Accounts\Physician\ViewTopic.aspx" />
     <Content Include="ChangePassword.aspx" />
     <Content Include="Contact.aspx" />
@@ -589,6 +591,13 @@
     <Compile Include="Accounts\Patient\ReviewJoinTopic.aspx.designer.cs">
       <DependentUpon>ReviewJoinTopic.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Patient\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Patient\ViewTopic.aspx.cs">
       <DependentUpon>ViewTopic.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -701,6 +710,13 @@
     </Compile>
     <Compile Include="Accounts\Physician\ReviewJoinTopic.aspx.designer.cs">
       <DependentUpon>ReviewJoinTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Physician\ViewTopic.aspx.cs">
       <DependentUpon>ViewTopic.aspx</DependentUpon>

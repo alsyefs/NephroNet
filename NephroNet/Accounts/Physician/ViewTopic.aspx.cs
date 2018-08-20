@@ -19,6 +19,7 @@ namespace NephroNet.Accounts.Physician
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);
         string username, roleId, loginId, token;
+        static string previousPage = "";
         string topicId = "";
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -44,6 +45,8 @@ namespace NephroNet.Accounts.Physician
                 unauthorized();
             showInformation(pageNum);
             checkIfTerminated();
+            if (!IsPostBack)
+                previousPage = Request.UrlReferrer.ToString();
         }
         protected void Timer1_Tick(object sender, EventArgs e)
         {
@@ -545,7 +548,7 @@ namespace NephroNet.Accounts.Physician
         protected void goBack()
         {
             addSession();
-            Response.Redirect("Home");
+            Response.Redirect(previousPage);
         }
     }
 }

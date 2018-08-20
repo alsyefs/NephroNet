@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Search" Language="C#" MasterPageFile="~/Admin.Master" AutoEventWireup="true" CodeBehind="Search.aspx.cs" Inherits="NephroNet.Accounts.Admin.Search" %>
+﻿<%@ Page Title="Search" Language="C#" MasterPageFile="~/Patient.Master" AutoEventWireup="true" CodeBehind="Search.aspx.cs" Inherits="NephroNet.Accounts.Patient.Search" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%--Body start--%>

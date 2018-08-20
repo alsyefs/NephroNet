@@ -20,6 +20,7 @@ namespace NephroNet.Accounts.Admin
         SqlConnection connect = new SqlConnection(conn);
         string username, roleId, loginId, token;
         string topicId = "";int g_entries = 0;
+        static string previousPage = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             Configuration config = new Configuration();
@@ -30,7 +31,6 @@ namespace NephroNet.Accounts.Admin
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            
             topicId = Request.QueryString["id"];
             CheckErrors check = new CheckErrors();
             if (!check.isDigit(topicId))
@@ -45,6 +45,8 @@ namespace NephroNet.Accounts.Admin
             showInformation(pageNum);
             checkIfTerminated();
             checkIfDeleted();
+            if(!IsPostBack)
+                previousPage = Request.UrlReferrer.ToString();
         }
         protected bool isTopicApproved()
         {
@@ -579,7 +581,8 @@ namespace NephroNet.Accounts.Admin
         protected void goBack()
         {
             addSession();
-            Response.Redirect("Home");
+            //Response.Redirect("Home");
+            Response.Redirect(previousPage);
         }
     }
 }

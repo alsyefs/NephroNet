@@ -12,6 +12,7 @@ namespace NephroNet.Accounts.Admin
     {
         string username = "", roleId = "", loginId = "", token = "";
         Configuration config = new Configuration();
+        static string previousPage = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             getSession();
@@ -21,7 +22,8 @@ namespace NephroNet.Accounts.Admin
                 bool correctSession = session.sessionIsCorrect(username, roleId, token);
                 if (!correctSession)
                     clearSession();
-            }
+                previousPage = Request.UrlReferrer.ToString();
+            }            
         }
         
         protected void btnSubmit_Click(object sender, EventArgs e)
@@ -96,7 +98,13 @@ namespace NephroNet.Accounts.Admin
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Account");
+            //Response.Redirect("Account");
+            goBack();
+        }
+        protected void goBack()
+        {
+            addSession();
+            Response.Redirect(previousPage);
         }
         protected void clearSession()
         {

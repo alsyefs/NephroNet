@@ -13,6 +13,7 @@ namespace NephroNet.Accounts.Physician
         string username = "", roleId = "", loginId = "", token = "";
         Configuration config = new Configuration();
         static string conn = "";
+        static string previousPage = "";
         SqlConnection connect = new SqlConnection(conn);
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -24,6 +25,8 @@ namespace NephroNet.Accounts.Physician
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
+            if (!IsPostBack)
+                previousPage = Request.UrlReferrer.ToString();
         }
         
         protected void btnSubmit_Click(object sender, EventArgs e)
@@ -98,7 +101,12 @@ namespace NephroNet.Accounts.Physician
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Account");
+            goBack();
+        }
+        protected void goBack()
+        {
+            addSession();
+            Response.Redirect(previousPage);
         }
         protected void clearSession()
         {

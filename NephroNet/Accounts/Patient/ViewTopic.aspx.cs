@@ -17,6 +17,7 @@ namespace NephroNet.Accounts.Patient
     public partial class ViewTopic : System.Web.UI.Page
     {
         static string conn = "";
+        static string previousPage = "";
         SqlConnection connect = new SqlConnection(conn);
         string username, roleId, loginId, token;
         string topicId = "";
@@ -44,6 +45,8 @@ namespace NephroNet.Accounts.Patient
                 unauthorized();
             showInformation(pageNum);
             checkIfTerminated();
+            if(!IsPostBack)
+                previousPage = Request.UrlReferrer.ToString();
         }
         protected void Timer1_Tick(object sender, EventArgs e)
         {
@@ -545,7 +548,7 @@ namespace NephroNet.Accounts.Patient
         protected void goBack()
         {
             addSession();
-            Response.Redirect("Home");
+            Response.Redirect(previousPage);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace NephroNet.Accounts.Patient
     public partial class ChangeSecurityQuestions : System.Web.UI.Page
     {
         string username = "", roleId = "", loginId = "", token = "";
+        static string previousPage = "";
         Configuration config = new Configuration();
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);
@@ -65,7 +66,13 @@ namespace NephroNet.Accounts.Patient
         }
         protected void btnCancel_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Account");
+            //Response.Redirect("Account");
+            goBack();
+        }
+        protected void goBack()
+        {
+            addSession();
+            Response.Redirect(previousPage);
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -81,6 +88,7 @@ namespace NephroNet.Accounts.Patient
             {
                 fillDropLists();
                 focusOnStoredQuestions();
+                previousPage = Request.UrlReferrer.ToString();
             }
         }
         protected void focusOnStoredQuestions()
