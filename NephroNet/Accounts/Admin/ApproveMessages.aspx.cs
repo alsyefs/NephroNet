@@ -63,14 +63,18 @@ namespace NephroNet.Accounts.Admin
             connect.Close();
             grdMessages.DataSource = dt;
             grdMessages.DataBind();
-            //Hide the header called "ID":
-            grdMessages.HeaderRow.Cells[1].Visible = false;
-            grdMessages.HeaderRow.Cells[2].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdMessages.Rows.Count; i++)
+            if (grdMessages.Rows.Count > 0)
             {
-                grdMessages.Rows[i].Cells[1].Visible = false;
-                grdMessages.Rows[i].Cells[2].Visible = false;
+                //Hide the header called "ID":
+                grdMessages.HeaderRow.Cells[1].Visible = false;
+                grdMessages.HeaderRow.Cells[2].Visible = false;
+                //Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdMessages.Rows.Count; i++)
+                {
+                    grdMessages.Rows[i].Cells[1].Visible = false;
+                    grdMessages.Rows[i].Cells[2].Visible = false;
+                }
+                rebindValues();
             }
         }
         protected int getTotalNewMessages()
@@ -116,18 +120,40 @@ namespace NephroNet.Accounts.Admin
             loginId = (string)(Session["loginId"]);
             token = (string)(Session["token"]);
         }
+        protected void rebindValues()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            string creator = "";
+            for (int row = 0; row < grdMessages.Rows.Count; row++)
+            {
+                //Set the creator's link
+                creator = grdMessages.Rows[row].Cells[3].Text;
+                cmd.CommandText = "select userId from Users where (user_firstname +' '+ user_lastname) like '" + creator + "' ";
+                string creatorId = cmd.ExecuteScalar().ToString();
+                HyperLink creatorLink = new HyperLink();
+                creatorLink.Text = creator + " ";
+                creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
+                grdMessages.Rows[row].Cells[3].Controls.Add(creatorLink);
+            }
+            connect.Close();
+        }
         protected void grdMessages_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             grdMessages.PageIndex = e.NewPageIndex;
             grdMessages.DataBind();
-            //Hide the header called "ID":
-            grdMessages.HeaderRow.Cells[1].Visible = false;
-            grdMessages.HeaderRow.Cells[2].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdMessages.Rows.Count; i++)
+            if (grdMessages.Rows.Count > 0)
             {
-                grdMessages.Rows[i].Cells[1].Visible = false;
-                grdMessages.Rows[i].Cells[2].Visible = false;
+                //Hide the header called "ID":
+                grdMessages.HeaderRow.Cells[1].Visible = false;
+                grdMessages.HeaderRow.Cells[2].Visible = false;
+                //Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdMessages.Rows.Count; i++)
+                {
+                    grdMessages.Rows[i].Cells[1].Visible = false;
+                    grdMessages.Rows[i].Cells[2].Visible = false;
+                }
+                rebindValues();
             }
         }
     }

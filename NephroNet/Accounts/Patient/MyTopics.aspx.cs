@@ -80,7 +80,7 @@ namespace NephroNet.Accounts.Patient
             DataTable dt = new DataTable();
             dt.Columns.Add("ID", typeof(string));
             dt.Columns.Add("Title", typeof(string));
-            dt.Columns.Add("Time", typeof(string));
+            dt.Columns.Add("Time Created", typeof(string));
             dt.Columns.Add("Current Participants", typeof(string));
             string id = "", title = "", type = "", time = "";
             connect.Open();

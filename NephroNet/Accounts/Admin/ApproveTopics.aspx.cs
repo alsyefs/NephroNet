@@ -66,13 +66,35 @@ namespace NephroNet.Accounts.Admin
         {
             grdTopics.PageIndex = e.NewPageIndex;
             grdTopics.DataBind();
-            //Hide the header called "ID":
-            grdTopics.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdTopics.Rows.Count; i++)
+            if (grdTopics.Rows.Count > 0)
             {
-                grdTopics.Rows[i].Cells[1].Visible = false;
+                //Hide the header called "ID":
+                grdTopics.HeaderRow.Cells[1].Visible = false;
+                //Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdTopics.Rows.Count; i++)
+                {
+                    grdTopics.Rows[i].Cells[1].Visible = false;
+                }
+                rebindValues();
             }
+        }
+        protected void rebindValues()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            string creator = "";
+            for (int row = 0; row < grdTopics.Rows.Count; row++)
+            {
+                //Set the creator's link
+                creator = grdTopics.Rows[row].Cells[4].Text;
+                cmd.CommandText = "select userId from Users where (user_firstname +' '+ user_lastname) like '" + creator + "' ";
+                string creatorId = cmd.ExecuteScalar().ToString();
+                HyperLink creatorLink = new HyperLink();
+                creatorLink.Text = creator + " ";
+                creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
+                grdTopics.Rows[row].Cells[4].Controls.Add(creatorLink);
+            }
+            connect.Close();
         }
         protected void createTable(int count)
         {
@@ -109,12 +131,16 @@ namespace NephroNet.Accounts.Admin
             connect.Close();
             grdTopics.DataSource = dt;
             grdTopics.DataBind();
-            //Hide the header called "ID":
-            grdTopics.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdTopics.Rows.Count; i++)
+            if (count > 0)
             {
-                grdTopics.Rows[i].Cells[1].Visible = false;
+                //Hide the header called "ID":
+                grdTopics.HeaderRow.Cells[1].Visible = false;
+                //Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdTopics.Rows.Count; i++)
+                {
+                    grdTopics.Rows[i].Cells[1].Visible = false;
+                }
+                rebindValues();
             }
         }
         protected int getTotalNewTopics()

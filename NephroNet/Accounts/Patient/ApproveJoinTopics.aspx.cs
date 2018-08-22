@@ -58,15 +58,36 @@ namespace NephroNet.Accounts.Patient
         {
             grdTopics.PageIndex = e.NewPageIndex;
             grdTopics.DataBind();
-            //Hide the header called "ID":
-            grdTopics.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdTopics.Rows.Count; i++)
+            if (grdTopics.Rows.Count > 0)
             {
-                grdTopics.Rows[i].Cells[1].Visible = false;
+                //Hide the header called "ID":
+                grdTopics.HeaderRow.Cells[1].Visible = false;
+                //Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdTopics.Rows.Count; i++)
+                {
+                    grdTopics.Rows[i].Cells[1].Visible = false;
+                }
+                rebindValues();
             }
         }
-        
+        protected void rebindValues()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            string creator = "";
+            for (int row = 0; row < grdTopics.Rows.Count; row++)
+            {
+                //Set the creator's link
+                creator = grdTopics.Rows[row].Cells[3].Text;
+                cmd.CommandText = "select userId from Users where (user_firstname +' '+ user_lastname) like '" + creator + "' ";
+                string creatorId = cmd.ExecuteScalar().ToString();
+                HyperLink creatorLink = new HyperLink();
+                creatorLink.Text = creator + " ";
+                creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
+                grdTopics.Rows[row].Cells[3].Controls.Add(creatorLink);
+            }
+            connect.Close();
+        }
         protected void getTotalTopicsForUser()
         {
             DataTable dt = new DataTable();
@@ -83,6 +104,7 @@ namespace NephroNet.Accounts.Patient
             //Count the approved, not-deleted, not-denied, and not-terminated topics for this user:
             cmd.CommandText = "select count(*) from topics where topic_createdBy = '" + userId + "' and topic_isApproved = 1 and topic_isDeleted = 0 and topic_isDenied = 0 and topic_isTerminated = 0 ";
             int topicsForThisUser = Convert.ToInt32(cmd.ExecuteScalar());
+            int requestsPerTopic = 0;
             if (topicsForThisUser > 0)
             {
                 int topicsToReview = 0;
@@ -94,7 +116,7 @@ namespace NephroNet.Accounts.Patient
                     string topicId = cmd.ExecuteScalar().ToString();
                     //Count total requests to join that topic where users have not been approved yet:
                     cmd.CommandText = "select count(*) from [UsersForTopics] where topicId = '" + topicId + "' and isApproved = 0 ";
-                    int requestsPerTopic = Convert.ToInt32(cmd.ExecuteScalar());
+                    requestsPerTopic = Convert.ToInt32(cmd.ExecuteScalar());
                     //topicsToReview = topicsToReview + Convert.ToInt32(cmd.ExecuteScalar());
                     //Loop through the users requesting to join that specific topic:
                     for (int j = 1; j <= requestsPerTopic; j++)
@@ -139,12 +161,16 @@ namespace NephroNet.Accounts.Patient
             connect.Close();
             grdTopics.DataSource = dt;
             grdTopics.DataBind();
-            //Hide the header called "ID":
-            grdTopics.HeaderRow.Cells[1].Visible = false;
-            ////Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdTopics.Rows.Count; i++)
+            if (requestsPerTopic > 0)
             {
-                grdTopics.Rows[i].Cells[1].Visible = false;
+                rebindValues();
+                //Hide the header called "ID":
+                grdTopics.HeaderRow.Cells[1].Visible = false;
+                ////Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdTopics.Rows.Count; i++)
+                {
+                    grdTopics.Rows[i].Cells[1].Visible = false;
+                }
             }
         }
     }

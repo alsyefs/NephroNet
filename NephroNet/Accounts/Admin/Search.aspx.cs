@@ -233,6 +233,8 @@ namespace NephroNet.Accounts.Admin
         {
             txtSearch.Text = "";
             grdResults.Dispose();
+            grdResults.DataSource = null;
+            grdResults.Visible = false;
             if (drpSearch.SelectedIndex == 4)//searching with a time period
                 showCalendars();
             else
@@ -253,13 +255,13 @@ namespace NephroNet.Accounts.Admin
             for (int row = 0; row < grdResults.Rows.Count; row++)
             {
                 //Set the creator's link
-                creator = grdResults.Rows[row].Cells[3].Text;
+                creator = grdResults.Rows[row].Cells[4].Text;
                 cmd.CommandText = "select userId from Users where (user_firstname +' '+ user_lastname) like '" + creator + "' ";
                 string creatorId = cmd.ExecuteScalar().ToString();
                 HyperLink creatorLink = new HyperLink();
                 creatorLink.Text = creator + " ";
                 creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
-                grdResults.Rows[row].Cells[3].Controls.Add(creatorLink);
+                grdResults.Rows[row].Cells[4].Controls.Add(creatorLink);
                 //Set the title's link
                 title = grdResults.Rows[row].Cells[0].Text;
                 cmd.CommandText = "select topicId from topics where topic_title like '" + title + "' ";
@@ -275,10 +277,10 @@ namespace NephroNet.Accounts.Admin
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("Found in", typeof(string));
             dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Type", typeof(string));
-            dt.Columns.Add("Creator", typeof(string));
-            dt.Columns.Add("Found in", typeof(string));
+            dt.Columns.Add("Creator", typeof(string));            
             string id = "", title = "", type = "", creator = "", time = "";
             string searchString = txtSearch.Text.Replace("'", "''");
             connect.Open();
@@ -307,21 +309,22 @@ namespace NephroNet.Accounts.Admin
                 creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator, "Title");
+                dt.Rows.Add(title, "Title", Layouts.getTimeFormat(time), type, creator);
             }
             connect.Close();
             grdResults.DataSource = dt;
             grdResults.DataBind();
+            grdResults.Visible = true;
             rebindValues();
         }
         protected void createUsersTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("Found in", typeof(string));
             dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
-            dt.Columns.Add("Found in", typeof(string));
             string id = "", title = "", type = "", creator = "", time = "";
             string searchString = txtSearch.Text.Replace("'", "''");
             connect.Open();
@@ -356,22 +359,23 @@ namespace NephroNet.Accounts.Admin
                     creator = cmd.ExecuteScalar().ToString();
                     cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                     creator = creator + " " + cmd.ExecuteScalar().ToString();
-                    dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator, "Creator name");
+                    dt.Rows.Add(title, "Creator name", Layouts.getTimeFormat(time), type, creator);
                 }
             }
             connect.Close();
             grdResults.DataSource = dt;
             grdResults.DataBind();
+            grdResults.Visible = true;
             rebindValues();
         }
         protected void createMessagesTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("Found in", typeof(string));
             dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
-            dt.Columns.Add("Found in", typeof(string));
             string id = "", title = "", type = "", creator = "", time = "";
             string searchString = txtSearch.Text.Replace("'", "''");
             connect.Open();
@@ -403,22 +407,23 @@ namespace NephroNet.Accounts.Admin
                     creator = cmd.ExecuteScalar().ToString();
                     cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                     creator = creator + " " + cmd.ExecuteScalar().ToString();
-                    dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator, "Message text");
+                    dt.Rows.Add(title, "Message text", Layouts.getTimeFormat(time), type, creator);
                 }
             }
             connect.Close();
             grdResults.DataSource = dt;
             grdResults.DataBind();
+            grdResults.Visible = true;
             rebindValues();
         }
         protected void createTimePeriodTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("Found in", typeof(string));
             dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
-            dt.Columns.Add("Found in", typeof(string));
             string id = "", title = "", type = "", creator = "", time = "";
             string searchString = txtSearch.Text.Replace("'", "''");
             int count = 0;
@@ -452,21 +457,22 @@ namespace NephroNet.Accounts.Admin
                 creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator, "Time period");
+                dt.Rows.Add(title, "Time period", Layouts.getTimeFormat(time), type, creator);
             }
             connect.Close();
             grdResults.DataSource = dt;
             grdResults.DataBind();
+            grdResults.Visible = true;
             rebindValues();
         }
         protected void createEverythingTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Title", typeof(string));
+            dt.Columns.Add("Found in", typeof(string));
             dt.Columns.Add("Time", typeof(string));
             dt.Columns.Add("Type", typeof(string));
             dt.Columns.Add("Creator", typeof(string));
-            dt.Columns.Add("Found in", typeof(string));
             string id = "", title = "", type = "", creator = "", time = "";
             string searchString = txtSearch.Text.Replace("'", "''");
             connect.Open();
@@ -496,7 +502,7 @@ namespace NephroNet.Accounts.Admin
                 creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator, "Title");
+                dt.Rows.Add(title, "Title", Layouts.getTimeFormat(time), type, creator);
             }
             //Search by creator
             cmd.CommandText = "select count(*) from users where (user_firstname+ ' ' +user_lastname) like '%" + searchString + "%' ";
@@ -529,7 +535,7 @@ namespace NephroNet.Accounts.Admin
                     creator = cmd.ExecuteScalar().ToString();
                     cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                     creator = creator + " " + cmd.ExecuteScalar().ToString();
-                    dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator, "Creator name");
+                    dt.Rows.Add(title, "Creator name", Layouts.getTimeFormat(time), type, creator);
                 }
             }
             //Search by message text
@@ -560,12 +566,13 @@ namespace NephroNet.Accounts.Admin
                     creator = cmd.ExecuteScalar().ToString();
                     cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                     creator = creator + " " + cmd.ExecuteScalar().ToString();
-                    dt.Rows.Add(title, Layouts.getTimeFormat(time), type, creator, "Message text");
+                    dt.Rows.Add(title, "Message text", Layouts.getTimeFormat(time), type, creator);
                 }
             }
             connect.Close();
             grdResults.DataSource = dt;
             grdResults.DataBind();
+            grdResults.Visible = true;
             rebindValues();
         }
     }

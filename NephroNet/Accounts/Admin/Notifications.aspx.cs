@@ -111,6 +111,7 @@ namespace NephroNet.Accounts.Admin
             if (topicsForThisUser > 0)
             {
                 int topicsToReview = 0;
+                int requestsPerTopic = 0;
                 ////Get Topic IDs for this user:
                 for (int i = 1; i <= topicsForThisUser; i++ )
                 {
@@ -119,7 +120,7 @@ namespace NephroNet.Accounts.Admin
                     string topicId = cmd.ExecuteScalar().ToString();
                     //Count total requests to join that topic where users have not been approved yet:
                     cmd.CommandText = "select count(*) from [UsersForTopics] where topicId = '" + topicId + "' and isApproved = 0 ";
-                    int requestsPerTopic = Convert.ToInt32(cmd.ExecuteScalar());
+                    requestsPerTopic = Convert.ToInt32(cmd.ExecuteScalar());
                     //topicsToReview = topicsToReview + Convert.ToInt32(cmd.ExecuteScalar());
                     //Loop through the users requesting to join that specific topic:
                     for (int j = 1; j <= requestsPerTopic; j++)

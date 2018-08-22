@@ -29,24 +29,19 @@ namespace NephroNet.Accounts.Physician
             {
                 lblMessage.Visible = true;
             }
-            reBindValues();
+            //reBindValues();
         }
-        protected void reBindValues()
+        protected void rebindValues()
         {
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            string id = "", creator = "";
+            string creator = "";
             for (int row = 0; row < grdTopics.Rows.Count; row++)
             {
-                id = grdTopics.Rows[row].Cells[1].Text;
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] FROM [Topics] where topicId = " + id + " ";
+                //Set the creator's link
+                creator = grdTopics.Rows[row].Cells[5].Text;
+                cmd.CommandText = "select userId from Users where (user_firstname +' '+ user_lastname) like '" + creator + "' ";
                 string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
                 HyperLink creatorLink = new HyperLink();
                 creatorLink.Text = creator + " ";
                 creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
@@ -92,12 +87,16 @@ namespace NephroNet.Accounts.Physician
         {
             grdTopics.PageIndex = e.NewPageIndex;
             grdTopics.DataBind();
-            //Hide the header called "ID":
-            grdTopics.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdTopics.Rows.Count; i++)
+            if (grdTopics.Rows.Count > 0)
             {
-                grdTopics.Rows[i].Cells[1].Visible = false;
+                //Hide the header called "ID":
+                grdTopics.HeaderRow.Cells[1].Visible = false;
+                //Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdTopics.Rows.Count; i++)
+                {
+                    grdTopics.Rows[i].Cells[1].Visible = false;
+                }
+                rebindValues();
             }
         }
         protected void createTable(int count)
@@ -135,33 +134,21 @@ namespace NephroNet.Accounts.Physician
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
                 dt.Rows.Add(id, Layouts.getTimeFormat(time), title, type, creator);
             }
+            connect.Close();
             grdTopics.DataSource = dt;
             grdTopics.DataBind();
             //grdTopics.AutoGenerateColumns = true;
-            //Hide the header called "ID":
-            grdTopics.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdTopics.Rows.Count; i++)
+            if (grdTopics.Rows.Count > 0)
             {
-                grdTopics.Rows[i].Cells[1].Visible = false;
+                //Hide the header called "ID":
+                grdTopics.HeaderRow.Cells[1].Visible = false;
+                //Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdTopics.Rows.Count; i++)
+                {
+                    grdTopics.Rows[i].Cells[1].Visible = false;
+                }
+                rebindValues();
             }
-            for (int row = 0; row < grdTopics.Rows.Count; row++)
-            {
-                id = grdTopics.Rows[row].Cells[1].Text;
-                //Get creator's ID:
-                cmd.CommandText = "select [topic_createdBy] FROM [Topics] where topicId = " + id + " ";
-                string creatorId = cmd.ExecuteScalar().ToString();
-                //Get creator's name:
-                cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                creator = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                creator = creator + " " + cmd.ExecuteScalar().ToString();
-                HyperLink creatorLink = new HyperLink();
-                creatorLink.Text = creator + " ";
-                creatorLink.NavigateUrl = "Profile.aspx?id=" + creatorId;
-                grdTopics.Rows[row].Cells[5].Controls.Add(creatorLink);
-            }
-            connect.Close();
         }
         protected int getTotalApprovedTopics()
         {

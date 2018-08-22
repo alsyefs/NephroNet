@@ -38,6 +38,7 @@ namespace NephroNet.Accounts.Admin
             connect.Close();
             return count;
         }
+        
         protected void createTable(int count)
         {
             DataTable dt = new DataTable();
@@ -77,12 +78,15 @@ namespace NephroNet.Accounts.Admin
             connect.Close();
             grdUsers.DataSource = dt;
             grdUsers.DataBind();
-            //Hide the header called "ID":
-            grdUsers.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdUsers.Rows.Count; i++)
+            if (grdUsers.Rows.Count > 0)
             {
-                grdUsers.Rows[i].Cells[1].Visible = false;
+                //Hide the header called "ID":
+                grdUsers.HeaderRow.Cells[1].Visible = false;
+                //Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdUsers.Rows.Count; i++)
+                {
+                    grdUsers.Rows[i].Cells[1].Visible = false;
+                }
             }
         }
         protected void initialPageAccess()
@@ -123,12 +127,15 @@ namespace NephroNet.Accounts.Admin
         {
             grdUsers.PageIndex = e.NewPageIndex;
             grdUsers.DataBind();
-            //Hide the header called "ID":
-            grdUsers.HeaderRow.Cells[1].Visible = false;
-            //Hide IDs column and content which are located in column index 1:
-            for (int i = 0; i < grdUsers.Rows.Count; i++)
+            if (grdUsers.Rows.Count > 0)
             {
-                grdUsers.Rows[i].Cells[1].Visible = false;
+                //Hide the header called "ID":
+                grdUsers.HeaderRow.Cells[1].Visible = false;
+                //Hide IDs column and content which are located in column index 1:
+                for (int i = 0; i < grdUsers.Rows.Count; i++)
+                {
+                    grdUsers.Rows[i].Cells[1].Visible = false;
+                }                
             }
         }
 
