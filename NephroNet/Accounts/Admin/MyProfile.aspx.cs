@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -64,12 +65,58 @@ namespace NephroNet.Accounts.Admin
             string userId = cmd.ExecuteScalar().ToString();
             CompleteProfile completeProfile = new CompleteProfile(userId, userId);
             ShortProfile shortProfile = new ShortProfile(userId, userId);
-            string name = shortProfile.name;
-            string email = shortProfile.email;
-
-            info = "Name: " + name + "<br />" +
-                        "Email: " + email + "<br />";
-                        //"Time: " + Layouts.getTimeFormat(time) + "<br />" +
+            string shortProfileId = shortProfile.Id;
+            string name = shortProfile.Name;
+            string race = shortProfile.Race;
+            string gender = shortProfile.Gender;
+            string birthdate = shortProfile.Birthdate;
+            string nationality = shortProfile.Nationality;
+            int shortProfile_roleId = shortProfile.RoleId;
+            ArrayList blockedUsers = shortProfile.BlockedUsers;
+            ArrayList currentHealthConditions = shortProfile.CurrentHealthConditions;
+            ArrayList currentTreatments = shortProfile.CurrentTreatments;
+            string role_name = shortProfile.RoleName;
+            string spaces = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            //loop through blocked users:
+            string str_blockedUsers = "";
+            if (blockedUsers.Count > 0)
+            {
+                str_blockedUsers = "Blocked users: <br/>";
+                for (int i = 0; i < blockedUsers.Count; i++)
+                {
+                    str_blockedUsers += spaces + blockedUsers[i] + "<br/>";
+                }
+            }
+            //loop through current health conditions:
+            string str_currentHealthConditions = "";
+            if (currentHealthConditions.Count > 0)
+            {
+                str_currentHealthConditions = "Current health conditions : <br/>";
+                for (int i = 0; i < currentHealthConditions.Count; i++)
+                {
+                    str_currentHealthConditions += spaces + currentHealthConditions[i] + "<br/>";
+                }
+            }
+            //loop through current Treatments:
+            string str_currentTreatments = "";
+            if (currentTreatments.Count > 0)
+            {
+                str_currentTreatments = "Current Treatments : <br/>";
+                for (int i = 0; i < currentTreatments.Count; i++)
+                {
+                    str_currentTreatments += spaces + currentTreatments[i] + "<br/>";
+                }
+            }
+            info =
+                "Name: " + name + "<br />" +
+                "Race: " + race + "<br />" +
+                "Gender: " + gender + "<br />" +
+                "Birthdate: " + birthdate + "<br />" +
+                "Nationality: " + nationality + "<br />" +
+                "Role: " + role_name + "<br />" +
+                str_blockedUsers +
+                str_currentHealthConditions +
+                str_currentTreatments;
             connect.Close();
             return info;
         }

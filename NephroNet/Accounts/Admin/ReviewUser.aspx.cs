@@ -189,7 +189,13 @@ namespace NephroNet.Accounts.Admin
             cmd.CommandText = "insert into Users (user_firstname, user_lastname, user_email, user_city, user_state, user_zip, user_address, user_phone, loginId, user_patientId) values " +
                 "('"+g_firstName+"', '"+g_lastName+"', '"+g_email+"', '"+g_city+"', '"+g_state+"', '"+g_zip+"', '"+g_address+"', '"+g_phone+"', '"+newLoginId+"', '"+g_patientId+"') ";
             cmd.ExecuteScalar();
-
+            //Get the user ID of the user who was just added:
+            cmd.CommandText = "select userId from users where loginId = '"+newLoginId+"' ";
+            string temp_userId = cmd.ExecuteScalar().ToString();
+            //Store the user's information into the "ShortProfiles" table:
+            cmd.CommandText = "insert into ShortProfiles (userId,shortProfile_firstname, shortProfile_lastname, shortProfile_roleId) values " +
+                "('" + temp_userId + "', '" + g_firstName + "', '" + g_lastName + "', '" + g_roleId + "') ";
+            cmd.ExecuteScalar();
             connect.Close();
             //Create an email message to be sent:
             string emailMessage = "Hello "+g_firstName + " " + g_lastName + ",\n\n"+

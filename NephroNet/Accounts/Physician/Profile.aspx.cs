@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -23,6 +24,58 @@ namespace NephroNet.Accounts.Physician
                 goHome();
             showInformation();
         }
+        protected string getInformation()
+        {
+            string info = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+            string userId = cmd.ExecuteScalar().ToString();
+            CompleteProfile completeProfile = new CompleteProfile(userId, userId);
+            ShortProfile shortProfile = new ShortProfile(userId, userId);
+            string shortProfileId = shortProfile.Id;
+            string name = shortProfile.Name;
+            string race = shortProfile.Race;
+            string gender = shortProfile.Gender;
+            string birthdate = shortProfile.Birthdate;
+            string nationality = shortProfile.Nationality;
+            int shortProfile_roleId = shortProfile.RoleId;
+            ArrayList currentHealthConditions = shortProfile.CurrentHealthConditions;
+            ArrayList currentTreatments = shortProfile.CurrentTreatments;
+            string role_name = shortProfile.RoleName;
+            string spaces = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            //loop through current health conditions:
+            string str_currentHealthConditions = "";
+            if (currentHealthConditions.Count > 0)
+            {
+                str_currentHealthConditions = "Current health conditions : <br/>";
+                for (int i = 0; i < currentHealthConditions.Count; i++)
+                {
+                    str_currentHealthConditions += spaces + currentHealthConditions[i] + "<br/>";
+                }
+            }
+            //loop through current Treatments:
+            string str_currentTreatments = "";
+            if (currentTreatments.Count > 0)
+            {
+                str_currentTreatments = "Current Treatments : <br/>";
+                for (int i = 0; i < currentTreatments.Count; i++)
+                {
+                    str_currentTreatments += spaces + currentTreatments[i] + "<br/>";
+                }
+            }
+            info =
+                "Name: " + name + "<br />" +
+                "Race: " + race + "<br />" +
+                "Gender: " + gender + "<br />" +
+                "Birthdate: " + birthdate + "<br />" +
+                "Nationality: " + nationality + "<br />" +
+                "Role: " + role_name + "<br />" +
+                str_currentHealthConditions +
+                str_currentTreatments;
+            connect.Close();
+            return info;
+        }
         protected void showInformation()
         {
             connect.Open();
@@ -31,12 +84,8 @@ namespace NephroNet.Accounts.Physician
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string current_userId = cmd.ExecuteScalar().ToString();
             connect.Close();
-            ShortProfile shortProfile = new ShortProfile(profileId, current_userId);
-            string name = shortProfile.name;
-            //do the same for the rest of information...
-            //...
             //Display the information:
-            lblShortProfileInformation.Text = name;
+            lblShortProfileInformation.Text = getInformation();
         }
         protected bool isUserCorrect()
         {
