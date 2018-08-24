@@ -50,8 +50,13 @@ textarea {
     width: 40%;
     display:compact;
 }
-
-
+/*This iframe is for youtube embedded videos*/
+iframe {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+}
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     .jumbotron {
