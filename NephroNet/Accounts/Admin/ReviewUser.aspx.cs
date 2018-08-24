@@ -196,6 +196,19 @@ namespace NephroNet.Accounts.Admin
             cmd.CommandText = "insert into ShortProfiles (userId,shortProfile_firstname, shortProfile_lastname, shortProfile_roleId) values " +
                 "('" + temp_userId + "', '" + g_firstName + "', '" + g_lastName + "', '" + g_roleId + "') ";
             cmd.ExecuteScalar();
+            //Store the user's ID into the "CompleteProfiles" table:
+            cmd.CommandText = "insert into CompleteProfiles (userId, completeProfile_city, completeProfile_state, completeProfile_zip, completeProfile_address) values " +
+                "('" + temp_userId + "', '" + g_city + "', '" + g_state + "', '" + g_zip + "', '"+ g_address + "') ";
+            cmd.ExecuteScalar();
+            //Get the complete profile ID:
+            cmd.CommandText = "select completeProfileId from CompleteProfiles where userId = '"+temp_userId+"' ";
+            string completeProfileId = cmd.ExecuteScalar().ToString();
+            //Store the email in Emails table:
+            cmd.CommandText = "insert into Emails (completeProfileId, email_emailAddress) values ('"+completeProfileId+"', '"+g_email+"') ";
+            cmd.ExecuteScalar();
+            //Store the phone number in PhoneNumbers table:
+            cmd.CommandText = "insert into PhoneNumbers (completeProfileId, phonenumber_phone) values ('" + completeProfileId + "', '" + g_phone + "') ";
+            cmd.ExecuteScalar();
             connect.Close();
             //Create an email message to be sent:
             string emailMessage = "Hello "+g_firstName + " " + g_lastName + ",\n\n"+

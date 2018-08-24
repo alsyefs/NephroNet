@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -15,9 +16,28 @@ namespace NephroNet
         {            
             //check input
             //if input = true, send it to database code to store it
+            if(!IsPostBack)
+            {
+                drpCountries.DataSource = getCountries();
+                drpCountries.DataBind();
+            }
 
         }
-        
+        public static List<string> getCountries()
+        {
+            List<string> countriesList = new List<string>();
+            CultureInfo[] cultureInfo = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+            foreach (CultureInfo culture in cultureInfo)
+            {
+                RegionInfo regionInfo = new RegionInfo(culture.LCID);
+                if (!(countriesList.Contains(regionInfo.EnglishName)))
+                {
+                    countriesList.Add(regionInfo.EnglishName);
+                }
+            }
+            countriesList.Sort();
+            return countriesList;
+        }
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             bool correctInput = checkInput();
@@ -57,6 +77,7 @@ namespace NephroNet
                 }
             }
         }
+        
         protected void btnCancel_Click(object sender, EventArgs e)
         {
             //Go home:

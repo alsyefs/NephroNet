@@ -13,12 +13,21 @@ namespace NephroNet.Accounts.Admin {
     public partial class MyProfile {
         
         /// <summary>
-        /// lblInfo control.
+        /// lblShortProfileInfo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblInfo;
+        protected global::System.Web.UI.WebControls.Label lblShortProfileInfo;
+        
+        /// <summary>
+        /// lblCompleteProfileInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCompleteProfileInfo;
     }
 }

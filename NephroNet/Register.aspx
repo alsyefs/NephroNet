@@ -122,6 +122,16 @@
     <asp:TextBox ID="txtAddress" runat="server" Font-Size="Medium"></asp:TextBox>
                 &nbsp;
     <asp:Label ID="lblAddressError" runat="server" Text="Address error" ForeColor="Red" Visible="False" Font-Size="Medium"></asp:Label>
+                <%--Country--%>
+                <%--<br />
+                <br />--%>
+                &nbsp;&nbsp;
+    <asp:Label ID="lblCountry" runat="server" Text="Country" Font-Size="Medium" Visible ="false"></asp:Label>
+                &nbsp;&nbsp;
+    <asp:DropDownList ID="drpCountries" runat="server" Width="145px" Font-Size="Medium" Visible ="false">
+        </asp:DropDownList>
+                &nbsp;
+    <asp:Label ID="lblCountryError" runat="server" Text="Phone error" ForeColor="Red" Visible="False" Font-Size="Medium"></asp:Label>
                 <%--Phone--%>
                 <br />
                 <br />
@@ -146,21 +156,23 @@
                 &nbsp;
     <asp:Label ID="lblRoleError" runat="server" Text="Role error" ForeColor="Red" Visible="False" Font-Size="Medium"></asp:Label>
                 <%--Patient ID:--%>
-                <br /><br />
+                <br />
+                <br />
                 <%--Patient ID start--%>
                 <asp:UpdatePanel ID="upPatientId" UpdateMode="Conditional" runat="server">
-                            <ContentTemplate>
-                                <asp:Label ID="lblPatientId" runat="server" Text="Patient ID" Font-Size="Medium" Visible="False"></asp:Label>
-                &nbsp; <asp:TextBox ID="txtPatientId" runat="server" Font-Size="Medium" Visible="False"></asp:TextBox>
-                &nbsp;<asp:Label ID="lblPatientIdError" runat="server" Text="Patient ID error" ForeColor="Red" Visible="False" Font-Size="Medium"></asp:Label>
-                            </ContentTemplate>
-                            <Triggers>
-                                <asp:AsyncPostBackTrigger  ControlID="drpRole" EventName="SelectedIndexChanged" />
-                            </Triggers>
+                    <ContentTemplate>
+                        <asp:Label ID="lblPatientId" runat="server" Text="Patient ID" Font-Size="Medium" Visible="False"></asp:Label>
+                        &nbsp;
+                        <asp:TextBox ID="txtPatientId" runat="server" Font-Size="Medium" Visible="False"></asp:TextBox>
+                        &nbsp;<asp:Label ID="lblPatientIdError" runat="server" Text="Patient ID error" ForeColor="Red" Visible="False" Font-Size="Medium"></asp:Label>
+                    </ContentTemplate>
+                    <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="drpRole" EventName="SelectedIndexChanged" />
+                    </Triggers>
                 </asp:UpdatePanel>
-                <%--Patient ID end--%>                
+                <%--Patient ID end--%>
 
-                <%--Submit button--%>                
+                <%--Submit button--%>
                 <br />
                 <br />
                 <br />

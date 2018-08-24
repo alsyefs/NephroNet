@@ -31,8 +31,7 @@ namespace NephroNet.Accounts.Physician
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string userId = cmd.ExecuteScalar().ToString();
-            CompleteProfile completeProfile = new CompleteProfile(userId, userId);
-            ShortProfile shortProfile = new ShortProfile(userId, userId);
+            ShortProfile shortProfile = new ShortProfile(profileId, userId);
             string shortProfileId = shortProfile.Id;
             string name = shortProfile.Name;
             string race = shortProfile.Race;

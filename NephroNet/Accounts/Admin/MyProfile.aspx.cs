@@ -54,16 +54,74 @@ namespace NephroNet.Accounts.Admin
         }
         protected void showInformation()
         {
-            lblInfo.Text = getInformation();
+            lblShortProfileInfo.Text = getShortProfileInformation();
+            lblCompleteProfileInfo.Text = getCompleteProfileInformation();
         }
-        protected string getInformation()
+        protected string getCompleteProfileInformation()
         {
             string info = "";
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string userId = cmd.ExecuteScalar().ToString();
-            CompleteProfile completeProfile = new CompleteProfile(userId, userId);
+            CompleteProfile completeProfile = new CompleteProfile(userId);
+            string completeProfileId = completeProfile.Id;
+            string onDialysis = completeProfile.OnDialysis;
+            string kidneyDisease = completeProfile.KidneyDisease;
+            string issueDate = completeProfile.IssueStartDate;
+            string bloodType = completeProfile.BloodType;
+            string address = completeProfile.Address + "<br/>" + completeProfile.City + ", " + completeProfile.State + " " + completeProfile.Zip + "<br/>";
+            
+            List<Insurance> insurances = new List<Insurance>();
+            insurances = completeProfile.Insurances;
+            //insurances.Select(c => c.ID.ToList());
+            string str_insurances = "";
+            string insurance_address, insurance_city, insurance_companyName, insurance_completeProfileId, 
+                insurance_country, insurance_email, insurance_groupId, insurance_id, insurance_memberId, insurance_phone1, insurance_phone2, insurance_state, insurance_zip;
+            foreach(Insurance ins in insurances)
+            {
+                insurance_address = ins.Address;
+                insurance_city = ins.City;
+                insurance_companyName = ins.CompanyName;
+                insurance_completeProfileId=  ins.CompleteProfileId;
+                insurance_country = ins.Country;
+                insurance_email = ins.Email;
+                insurance_groupId = ins.GroupId;
+                insurance_id =  ins.ID;
+                insurance_memberId = ins.MemberId;
+                insurance_phone1 = ins.Phone1;
+                insurance_phone2 = ins.Phone2;
+                insurance_state =  ins.State;
+                insurance_zip =  ins.Zip;
+                str_insurances += "Insurances: <br/>" +
+                    "Insurance ID: " + insurance_id + "<br/>" +
+                    "Member ID: " + insurance_memberId + "<br/>" +
+                    "Group ID: " + insurance_groupId + "<br/>" +
+                    "Insurance name: " + insurance_companyName + "<br/>" +
+                    "Insurance phone1 : " + insurance_phone1 + "<br/>" +
+                    "Insurance phone2: " + insurance_phone2 + "<br/>" +
+                    "Insurance email: " + insurance_email + "<br/>" +
+                    "Insurance address: " + insurance_address + "<br/>" + insurance_city + ", " + insurance_state + " " + insurance_zip + "<br/>" + insurance_country;
+            }
+            
+            info =
+                "<br/>Complete Profile Information: <br/>"+
+                "On dialysis: " + onDialysis + "<br/>" +
+                "Kidney disease stage: " + kidneyDisease + "<br/>" +
+                "Health issue started on: " + issueDate + "<br/>" +
+                "Blood type: " + bloodType + "<br/>" +
+                "Address: " + address + "<br/>" +
+                str_insurances + "<br/>";
+            connect.Close();
+            return info;
+        }
+        protected string getShortProfileInformation()
+        {
+            string info = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+            string userId = cmd.ExecuteScalar().ToString();
             ShortProfile shortProfile = new ShortProfile(userId, userId);
             string shortProfileId = shortProfile.Id;
             string name = shortProfile.Name;

@@ -202,6 +202,33 @@ namespace NephroNet {
         protected global::System.Web.UI.WebControls.Label lblAddressError;
         
         /// <summary>
+        /// lblCountry control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCountry;
+        
+        /// <summary>
+        /// drpCountries control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList drpCountries;
+        
+        /// <summary>
+        /// lblCountryError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCountryError;
+        
+        /// <summary>
         /// lblPhone control.
         /// </summary>
         /// <remarks>
