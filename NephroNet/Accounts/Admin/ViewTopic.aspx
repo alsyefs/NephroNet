@@ -11,13 +11,13 @@
                 <asp:Label ID="lblHeader" runat="server" Text="Header" Font-Bold="True"></asp:Label>
                 <br />
                 <%--Ajax start--%>
-                <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer> 
+                <%--<asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer> --%>
                 <asp:UpdatePanel ID="upMessages" UpdateMode="Conditional" runat="server" >
                             <ContentTemplate>
                                 <asp:Label ID="lblContents" runat="server" Text="Contents" ></asp:Label>
                             </ContentTemplate>
                             <Triggers>
-                                <asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />
+                                <%--<asp:AsyncPostBackTrigger ControlID="Timer1" EventName="Tick" />--%>
                             </Triggers>
                 </asp:UpdatePanel>
                 <%--<asp:UpdatePanel ID="upMessages1" UpdateMode="Conditional" runat="server" >
