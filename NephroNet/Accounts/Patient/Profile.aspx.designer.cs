@@ -13,12 +13,30 @@ namespace NephroNet.Accounts.Patient {
     public partial class Profile {
         
         /// <summary>
-        /// lblShortProfileInformation control.
+        /// View control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblShortProfileInformation;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl View;
+        
+        /// <summary>
+        /// lblRow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblRow;
+        
+        /// <summary>
+        /// lblAdminCommands control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAdminCommands;
     }
 }

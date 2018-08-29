@@ -24,8 +24,10 @@ namespace NephroNet.Accounts
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandText = "select shortProfileId from [ShortProfiles] where userId = '" + in_profileId + "' ";
             string profile_Id = cmd.ExecuteScalar().ToString();
-            cmd.CommandText = "select (shortProfile_firstname + ' ' + shortProfile_lastname) from [ShortProfiles] where userId = '" + in_profileId + "' ";
-            string profile_name = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select shortProfile_firstname from [ShortProfiles] where userId = '" + in_profileId + "' ";
+            string profile_firstname = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select shortProfile_lastname from [ShortProfiles] where userId = '" + in_profileId + "' ";
+            string profile_lastname = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "select shortProfile_race from [ShortProfiles] where userId = '" + in_profileId + "' ";
             string profile_race = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "select shortProfile_gender from [ShortProfiles] where userId = '" + in_profileId + "' ";
@@ -36,6 +38,8 @@ namespace NephroNet.Accounts
             string profile_nationality = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "select shortProfile_roleId from [ShortProfiles] where userId = '" + in_profileId + "' ";
             int profile_roleId = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.CommandText = "select shortProfile_isPrivate from [ShortProfiles] where userId = '" + in_profileId + "' ";
+            int profile_isPrivate = Convert.ToInt32(cmd.ExecuteScalar());
             //Count the number of blocked users:
             cmd.CommandText = "select count(*) from [BlockedUsers] where shortProfileId = '" + profile_Id + "' ";
             int totalBlockedUsers = Convert.ToInt32(cmd.ExecuteScalar());
@@ -74,12 +78,14 @@ namespace NephroNet.Accounts
             connect.Close();
             //Set the name according to the profile name:
             Id = profile_Id;
-            Name = profile_name;
+            FirstName = profile_firstname;
+            LastName = profile_lastname;
             Race = profile_race;
             Gender = profile_gender;
-            Birthdate = Layouts.getBirthdateFormat(profile_birthdate);
+            Birthdate = profile_birthdate;
             Nationality = profile_nationality;
             RoleId = profile_roleId;
+            IsPrivate = profile_isPrivate;
             BlockedUsers = blockedUsers;
             CurrentHealthConditions = currentHealthConditions;
             CurrentTreatments = currentTreatments;
@@ -91,13 +97,14 @@ namespace NephroNet.Accounts
                 RoleName = "Patient";
         }
         protected void setShortProfile(string shortProfileId, string firstname, string lastname, string race, string gender, string birthdate, string nationality,
-            int roleId, string roleName, ArrayList blockedUsers, ArrayList currentHealthConditions, ArrayList currentTreatments)
+            int roleId, int profile_isPrivate, string roleName, ArrayList blockedUsers, ArrayList currentHealthConditions, ArrayList currentTreatments)
         {
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             //Update Short Profile table:
             cmd.CommandText = "update ShortProfiles set shortProfile_firstname = '"+firstname+"', shortProfile_lastname = '"+lastname+"', " +
-                "shortProfile_race = '" + race+ "', shortProfile_gender = '"+gender+"', shortProfile_birthdate = '"+birthdate+"', shortProfile_nationality = '"+nationality+"' " +
+                "shortProfile_race = '" + race+ "', shortProfile_gender = '"+gender+"', shortProfile_birthdate = '"+birthdate+"', " +
+                "shortProfile_nationality = '"+nationality+"' , shortProfile_isPrivate = '"+profile_isPrivate+"' " +
                 "where shortProfileId = '" + shortProfileId + "' ";
             cmd.ExecuteScalar();
             //Update the Blocked Users table:
@@ -135,24 +142,28 @@ namespace NephroNet.Accounts
             }
             connect.Close();
             Id = shortProfileId;
-            Name = firstname + " " + lastname;
+            FirstName = firstname;
+            LastName = lastname;
             Race = race;
             Gender = gender;
             Birthdate = birthdate;
             Nationality = nationality;
             RoleId = roleId;
+            IsPrivate = profile_isPrivate;
             RoleName = roleName;
             BlockedUsers = blockedUsers;
             CurrentHealthConditions = currentHealthConditions;
             CurrentTreatments = currentTreatments;
         }
         public string Id { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Race { get; set; }
         public string Gender { get; set; }
         public string Birthdate { get; set; }
         public string Nationality { get; set; }
         public int RoleId { get; set; }
+        public int IsPrivate { get; set; }
         public string RoleName { get; set; }
         public ArrayList BlockedUsers { get; set; }
         public ArrayList CurrentHealthConditions { get; set; }

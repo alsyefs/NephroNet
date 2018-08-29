@@ -66,6 +66,7 @@
 
                                 <a class="nav-link dropdown-toggle " data-toggle="dropdown" href="#">Account</a>
                                 <div class="dropdown-menu">
+                                    <a runat="server" class="dropdown-item" href="Accounts/Physician/MyProfile">My Profile</a>
                                     <a runat="server" class="dropdown-item" href="Accounts/Physician/Account">Account Settings</a>
                                     <a runat="server" onmouseover="this.style.backgroundColor='yellow'" onmouseout="this.style.backgroundColor='red'" style="background-color: red" class="dropdown-item" href="~/Logout">Logout</a>
                                 </div>

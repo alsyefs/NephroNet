@@ -1,4 +1,4 @@
-﻿<%@ Page Title="My Profile" Language="C#" MasterPageFile="~/Admin.Master" AutoEventWireup="true" CodeBehind="MyProfile.aspx.cs" Inherits="NephroNet.Accounts.Admin.MyProfile" EnableEventValidation="false" %>
+﻿<%@ Page Title="My Profile" Language="C#" MasterPageFile="~/Physician.Master" AutoEventWireup="true" CodeBehind="MyProfile.aspx.cs" Inherits="NephroNet.Accounts.Physician.MyProfile" EnableEventValidation="false" %>
 <%--<asp:Content ID="Content1" ContentPlaceHolderID="default" runat="server">
 </asp:Content>--%>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -25,7 +25,7 @@
                                         <td>
                                             <asp:Button ID="btnShortProfile" runat="server" Text="Edit Short Profile" BackColor="orange" Font-Bold="True" Font-Size="Medium" Width="50%" OnClick="btnShortProfile_Click" /></td>
                                         <td>
-                                            <asp:Button ID="btnCompleteProfile" runat="server" Text="Edit Complete Profile" BackColor="yellow" Font-Bold="True" Font-Size="Medium" Width="50%" OnClick="btnCompleteProfile_Click" visible="false"/></td>
+                                            <asp:Button ID="btnCompleteProfile" runat="server" Text="Edit Complete Profile" BackColor="yellow" Font-Bold="True" Font-Size="Medium" Width="50%" OnClick="btnCompleteProfile_Click" /></td>
                                     </tr>
                                 </table>
                             </div>

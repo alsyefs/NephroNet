@@ -204,10 +204,10 @@ namespace NephroNet.Accounts.Admin
             cmd.CommandText = "select completeProfileId from CompleteProfiles where userId = '"+temp_userId+"' ";
             string completeProfileId = cmd.ExecuteScalar().ToString();
             //Store the email in Emails table:
-            cmd.CommandText = "insert into Emails (completeProfileId, email_emailAddress) values ('"+completeProfileId+"', '"+g_email+"') ";
+            cmd.CommandText = "insert into Emails (completeProfileId, email_emailAddress, email_isDefault) values ('" + completeProfileId+"', '"+g_email+"', 1) ";
             cmd.ExecuteScalar();
             //Store the phone number in PhoneNumbers table:
-            cmd.CommandText = "insert into PhoneNumbers (completeProfileId, phonenumber_phone) values ('" + completeProfileId + "', '" + g_phone + "') ";
+            cmd.CommandText = "insert into PhoneNumbers (completeProfileId, phonenumber_phone, phonenumber_isDefault) values ('" + completeProfileId + "', '" + g_phone + "', 1) ";
             cmd.ExecuteScalar();
             connect.Close();
             //Create an email message to be sent:

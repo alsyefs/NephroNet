@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 using System.Drawing;
 using System.Globalization;
 
-namespace NephroNet.Accounts.Admin
+namespace NephroNet.Accounts.Patient
 {
     public partial class MyProfile : System.Web.UI.Page
     {
@@ -28,7 +28,7 @@ namespace NephroNet.Accounts.Admin
             conn = config.getConnectionString();
             connect = new SqlConnection(conn);
             getSession();
-            CheckAdminSession session = new CheckAdminSession();
+            CheckPatientSession session = new CheckPatientSession();
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();

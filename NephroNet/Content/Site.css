@@ -137,7 +137,36 @@ iframe {
 #table {
     text-align: center;
 }
-
+.tableEdit {
+    /*width: 100%;*/
+    /*column-span: all;*/
+    table-layout: auto;
+    padding-right: 1px;
+    padding-left: 1px;
+    display: flex;
+    align-items: stretch;
+}
+.firstCell {
+    /*width: 20%;*/
+    /*column-span:all;*/
+    text-align: right;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+.secondCell {
+    width: 50%;
+    /*column-span: all;*/
+    text-align: left;
+    padding-right: 1px;
+    padding-left: 1px;
+}
+.thirdCell {
+    /*width: 20%;*/
+    /*column-span: all;*/
+    text-align: left;
+    padding-left: 1px;
+    padding-right: 1px;
+}
 .dropdown-menu {
     border: 2px solid #dadada;
     border-radius: 5px;

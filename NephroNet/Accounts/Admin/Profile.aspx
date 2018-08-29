@@ -8,7 +8,18 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <%--Content start--%>
-                <asp:Label ID="lblShortProfileInformation" runat="server" Text=" "></asp:Label>
+                 <%--Table start--%>
+                        <div runat="server" id="View">
+                            <div >
+                                <table border="1" style="width: 100%;">
+                                    <asp:Label ID="lblRow" runat="server" Text=" "></asp:Label>
+                                </table>
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                        <%--Table end--%>
+                <asp:Label ID="lblAdminCommands" runat="server" Text=" "></asp:Label>
                 <script type="text/javascript">
                     function OpenPopup(site) { popup(site); }
                     // copied from http://www.dotnetfunda.com/codes/code419-code-to-open-popup-window-in-center-position-.aspx

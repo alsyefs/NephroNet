@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NephroNet.Accounts.Admin {
+namespace NephroNet.Accounts.Patient {
     
     
     public partial class MyProfile {

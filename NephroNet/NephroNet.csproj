@@ -170,6 +170,7 @@
     <Content Include="Accounts\Patient\CreateTopic.aspx" />
     <Content Include="Accounts\Patient\Home.aspx" />
     <Content Include="Accounts\Patient\JoinTopic.aspx" />
+    <Content Include="Accounts\Patient\MyProfile.aspx" />
     <Content Include="Accounts\Patient\MyTopics.aspx" />
     <Content Include="Accounts\Patient\Notifications.aspx" />
     <Content Include="Accounts\Patient\Profile.aspx" />
@@ -187,6 +188,7 @@
     <Content Include="Accounts\Physician\CreateTopic.aspx" />
     <Content Include="Accounts\Physician\Home.aspx" />
     <Content Include="Accounts\Physician\JoinTopic.aspx" />
+    <Content Include="Accounts\Physician\MyProfile.aspx" />
     <Content Include="Accounts\Physician\MyTopics.aspx" />
     <Content Include="Accounts\Physician\Notifications.aspx" />
     <Content Include="Accounts\Physician\Profile.aspx" />
@@ -549,6 +551,13 @@
     <Compile Include="Accounts\Patient\JoinTopic.aspx.designer.cs">
       <DependentUpon>JoinTopic.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounts\Patient\MyProfile.aspx.cs">
+      <DependentUpon>MyProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Patient\MyProfile.aspx.designer.cs">
+      <DependentUpon>MyProfile.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Accounts\Patient\MyTopics.aspx.cs">
       <DependentUpon>MyTopics.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -668,6 +677,13 @@
     </Compile>
     <Compile Include="Accounts\Physician\JoinTopic.aspx.designer.cs">
       <DependentUpon>JoinTopic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounts\Physician\MyProfile.aspx.cs">
+      <DependentUpon>MyProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounts\Physician\MyProfile.aspx.designer.cs">
+      <DependentUpon>MyProfile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Accounts\Physician\MyTopics.aspx.cs">
       <DependentUpon>MyTopics.aspx</DependentUpon>

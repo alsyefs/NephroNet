@@ -11,12 +11,20 @@ namespace NephroNet.Accounts
     {
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);
-        public CompleteProfile(string in_current_userId)
+        public CompleteProfile(string in_current_userId, string in_profileId)
         {
             Configuration config = new Configuration();
             conn = config.getConnectionString();
             connect = new SqlConnection(conn);
-            getCompleteProfile(in_current_userId);
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select loginId from users where userId = '"+in_current_userId+"' ";
+            int current_roleId = Convert.ToInt32(cmd.ExecuteScalar());
+            connect.Close();
+            if(current_roleId == 1) // 1 = Admin
+                getCompleteProfile(in_current_userId);
+            else if(in_current_userId.Equals(in_profileId))//if the user trying to view his/her own complete profile
+                getCompleteProfile(in_current_userId);
         }
         protected void getCompleteProfile(string in_current_userId)
         {
@@ -67,8 +75,8 @@ namespace NephroNet.Accounts
             //Count Emergency Contacts:
             cmd.CommandText = "select count(*) from [EmergencyContacts] where completeProfileId = '" + profile_Id + "' ";
             int totalEmergencyContacts = Convert.ToInt32(cmd.ExecuteScalar());
-            ArrayList emails = new ArrayList();
-            ArrayList phones = new ArrayList();
+            List<EmailObject> emails = new List<EmailObject>();
+            List<Phone> phones = new List<Phone>();
             ArrayList allergies = new ArrayList();
             ArrayList majorDiagnoses = new ArrayList();
             ArrayList pastHealthConditions = new ArrayList();
@@ -79,17 +87,35 @@ namespace NephroNet.Accounts
             //get emails:
             for (int i = 1; i <= totalEmails; i++)
             {
-                cmd.CommandText = "select [email_emailAddress] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY emailId ASC), * " +
+                cmd.CommandText = "select [emailId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY emailId ASC), * " +
                     "FROM [Emails] where completeProfileId = '" + profile_Id + "' ) as t where rowNum = '" + i + "'";
-                string email = cmd.ExecuteScalar().ToString();
+                string emailId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select [email_emailAddress] from Emails where emailId = '"+emailId+"'  ";
+                string emailAddress = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select [email_isDefault] from Emails where emailId = '" + emailId + "'  ";
+                int emailIsDefault = Convert.ToInt32(cmd.ExecuteScalar());
+                //string str_emailIsDefault = cmd.ExecuteScalar().ToString();
+                //int emailIsDefault = 0;
+                //if (!string.IsNullOrWhiteSpace(str_emailIsDefault))
+                //    emailIsDefault = Convert.ToInt32(str_emailIsDefault);
+                EmailObject email = new EmailObject(emailId, emailAddress, emailIsDefault);
                 emails.Add(email);
             }
             //get phones:
             for (int i = 1; i <= totalPhones; i++)
             {
-                cmd.CommandText = "select [phonenumber_phone] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY phonenumberId ASC), * " +
+                cmd.CommandText = "select [phonenumberId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY phonenumberId ASC), * " +
                     "FROM [PhoneNumbers] where completeProfileId = '" + profile_Id + "' ) as t where rowNum = '" + i + "'";
-                string phone = cmd.ExecuteScalar().ToString();
+                string phoneId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select phoneNumber_phone from PhoneNumbers where phoneNumberId = '"+phoneId+"' ";
+                string phoneNumber = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select phoneNumber_isDefault from PhoneNumbers where phoneNumberId = '" + phoneId + "' ";
+                int phoneIsDefault = Convert.ToInt32(cmd.ExecuteScalar());
+                //string str_phoneIsDefault = cmd.ExecuteScalar().ToString();
+                //int phoneIsDefault = 0;
+                //if (!string.IsNullOrWhiteSpace(str_phoneIsDefault))
+                //    phoneIsDefault = Convert.ToInt32(str_phoneIsDefault);
+                Phone phone = new Phone(phoneId, phoneNumber, phoneIsDefault);
                 phones.Add(phone);
             }
             //get allergies:
@@ -223,7 +249,7 @@ namespace NephroNet.Accounts
                 EmergencyContact emergencyContact = new EmergencyContact(emergencyContactId, profile_Id, emergencyContact_firstname, emergencyContact_lastname,
                     emergencyContact_phone1, emergencyContact_phone2, emergencyContact_phone3, emergencyContact_email, emergencyContact_city,
                     emergencyContact_state, emergencyContact_zip, emergencyContact_address, emergencyContact_country);
-                phones.Add(emergencyContact);
+                majorDiagnoses.Add(emergencyContact);
             }
             connect.Close();
             Id = profile_Id;
@@ -254,8 +280,8 @@ namespace NephroNet.Accounts
         public string State { get; set; }
         public string Zip { get; set; }
         public string Address { get; set; }
-        public ArrayList Emails { get; set; }
-        public ArrayList Phones { get; set; }
+        public List<EmailObject> Emails { get; set; }
+        public List<Phone> Phones { get; set; }
         public ArrayList Allergies { get; set; }
         public ArrayList MajorDiagnoses { get; set; }
         public ArrayList PastHealthConditions { get; set; }
@@ -263,6 +289,30 @@ namespace NephroNet.Accounts
         public List<Insurance> Insurances { get; set; }
         public List<PastPatientID> PastPatientIds { get; set; }
         public List<EmergencyContact> EmergencyContacts { get; set; }
+    }
+    public class EmailObject
+    {
+        public EmailObject(string id, string emailAddress, int isDefault)
+        {
+            ID = id;
+            EmailAddress = emailAddress;
+            IsDefault = isDefault;
+        }
+        public string ID { get; set; }
+        public string EmailAddress { get; set; }
+        public int IsDefault { get; set; }
+    }
+    public class Phone
+    {
+        public Phone(string id, string phoneNumber, int isDefault)
+        {
+            ID = id;
+            PhoneNumber = phoneNumber;
+            IsDefault = isDefault;
+        }
+        public string ID { get; set; }
+        public string PhoneNumber { get; set; }
+        public int IsDefault { get; set; }
     }
     public class EmergencyContact
     {
