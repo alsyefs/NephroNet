@@ -57,10 +57,6 @@ namespace NephroNet.Accounts.Admin
         }
         protected void showInformation()
         {
-            getEditShortProfileInformation();
-            getShortProfileInformation();
-            getCompleteProfileInformation();
-            viewProfiles();
             drpNationality.DataSource = getCountries();
             drpNationality.DataBind();
             string headline = "Select your nationality";
@@ -74,6 +70,10 @@ namespace NephroNet.Accounts.Admin
                 //string targetYear = year.ToString();
                 //drpYearList.Items.Add(new ListItem(targetYear));
             }
+            getEditShortProfileInformation();
+            getShortProfileInformation();
+            getCompleteProfileInformation();
+            viewProfiles();
         }
         protected void YearList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -99,6 +99,7 @@ namespace NephroNet.Accounts.Admin
             EditCurrentHealthConditions.Visible = false;
             EditCurrentTreatments.Visible = false;
             lblSaveShortProfileMessage.Visible = false;
+            getEditShortProfileInformation();
         }
         protected void showEditCompleteProfile()
         {
@@ -334,7 +335,11 @@ namespace NephroNet.Accounts.Admin
                 drpGender.SelectedValue = gender;
             string birthdate = shortProfile.Birthdate;
             if (!string.IsNullOrWhiteSpace(birthdate))
+            {
                 calBirthdate.SelectedDate = DateTime.Parse(birthdate);
+                drpYearList.SelectedValue = calBirthdate.SelectedDate.Year.ToString();
+                calBirthdate.VisibleDate = DateTime.Parse(birthdate);
+            }
             string nationality = shortProfile.Nationality;
             if (!string.IsNullOrWhiteSpace(nationality))
                 drpNationality.SelectedValue = nationality;
@@ -429,7 +434,15 @@ namespace NephroNet.Accounts.Admin
                     cmd.CommandText = "select (user_firstname +' ' +user_lastname) from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY userId ASC), * " +
                         "FROM [Users] where (user_firstname +' ' +user_lastname) like '%" + txtSearchBlockedUsers.Text.Replace("'", "''") + "%') as t where rowNum = '" + i + "'";
                     string temp_name = cmd.ExecuteScalar().ToString();
-                    drpBlockUsersSearchResult.Items.Add(temp_name);
+                    //Check if this user is an adimn:
+                    cmd.CommandText = "select loginId from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY userId ASC), * " +
+                        "FROM [Users] where (user_firstname +' ' +user_lastname) like '%" + txtSearchBlockedUsers.Text.Replace("'", "''") + "%') as t where rowNum = '" + i + "'";
+                    string temp_loginId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select roleId from logins where loginId = '" + temp_loginId + "' ";
+                    int temp_roleId = Convert.ToInt32(cmd.ExecuteScalar());
+                    //If not admin, add him/her to the search results:
+                    if (temp_roleId != 1)//1: Admin
+                        drpBlockUsersSearchResult.Items.Add(temp_name);
                 }
                 if (count == 0)
                 {
@@ -688,9 +701,9 @@ namespace NephroNet.Accounts.Admin
             txtTypeTreatment.Text = "";
         }
 
-                        
-                        
-                        
+
+
+
 
         protected void getCompleteProfileInformation()
         {

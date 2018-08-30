@@ -110,12 +110,12 @@ namespace NephroNet.Accounts.Physician
                 row += row_start + col_start + "Nationality: " + col_end + col_start + nationality + col_end + row_end;
             row += row_start + col_start + "Role: " + col_end + col_start + role_name + col_end + row_end;
             //loop through blocked users:
-            if (blockedUsers.Count > 0)
-            {
-                row += row_start + col_start + "Blocked users: " + col_end + col_start + "" + col_end + row_end;
-                for (int i = 0; i < blockedUsers.Count; i++)
-                    row += row_start + col_start + "" + col_end + col_start + (i + 1) + ". " + blockedUsers[i].ToString() + col_end + row_end;
-            }
+            //if (blockedUsers.Count > 0)
+            //{
+            //    row += row_start + col_start + "Blocked users: " + col_end + col_start + "" + col_end + row_end;
+            //    for (int i = 0; i < blockedUsers.Count; i++)
+            //        row += row_start + col_start + "" + col_end + col_start + (i + 1) + ". " + blockedUsers[i].ToString() + col_end + row_end;
+            //}
             //loop through current health conditions:
             if (currentHealthConditions.Count > 0)
             {

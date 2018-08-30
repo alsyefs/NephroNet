@@ -11,9 +11,19 @@
                 <%--<br />--%>
                 <asp:Label ID="lblTopicInformation" runat="server" Text="Label"></asp:Label>
                 <asp:Label ID="lblRequesterInfo" runat="server" Text="Label"></asp:Label>
+                <br />
+                <%--Table start--%>
+                        <div runat="server" id="View">
+                            <div >
+                                <table border="1" style="width: 100%;">
+                                    <asp:Label ID="lblRow" runat="server" Text=" "></asp:Label>
+                                </table>
+                            </div>
+                        </div>
+                        <%--Table end--%>
                 <%--Approve--%>
-                <br />
-                <br />
+                <%--<br />
+                <br />--%>
                 <asp:Button ID="btnApprove" runat="server" Text="Accept" BackColor="Green" Font-Bold="True" Font-Size="Medium" Height="34px" Width="140px" OnClick="btnApprove_Click" />
                 <%--Deny:--%>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

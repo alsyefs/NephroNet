@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -49,17 +50,23 @@ namespace NephroNet.Accounts.Patient
             //Check if the user's account is still active:
             cmd.CommandText = "select login_isActive from Logins where loginid = '" + requesterLoginId + "' ";
             int active = Convert.ToInt32(cmd.ExecuteScalar());
+            connect.Close();
             if (active == 1)//if account is active, active = 1
             {
+                connect.Open();
                 //Get name:
                 cmd.CommandText = "select user_firstname from users where userId = '" + requesterUserId + "' ";
                 string requesterName = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + requesterUserId + "' ";
                 requesterName = requesterName + " " + cmd.ExecuteScalar().ToString();
+                connect.Close();
                 //Get short profile:
-                lblRequesterInfo.Text = "________________________________________________________<br/>Requester: " + requesterName + "<br />";
-                lblRequesterInfo.ForeColor = System.Drawing.Color.Black;
+                lblRequesterInfo.Text = "";
+                //lblRequesterInfo.Text = "________________________________________________________<br/>Requester: " + requesterName + "<br />";
+                //lblRequesterInfo.ForeColor = System.Drawing.Color.Black;
                 btnApprove.Visible = true;
+                //New code:
+                getShortProfileInformation();
             }
             else
             {
@@ -69,7 +76,6 @@ namespace NephroNet.Accounts.Patient
                 //addSession();
                 //Response.Redirect("ApproveJoinTopics");
             }
-            connect.Close();
         }
         protected void showTopicInformation()
         {
@@ -180,6 +186,7 @@ namespace NephroNet.Accounts.Patient
                     string temp_name = cmd.ExecuteScalar().ToString();
                     cmd.CommandText = "select user_lastname from Users where userId = '" + tempUserId + "' ";
                     temp_name = temp_name + " " + cmd.ExecuteScalar().ToString();
+                    temp_name = "<a href=\"Profile?id=" + tempUserId + "\">" + temp_name + "</a>";
                     if (!string.IsNullOrWhiteSpace(joined_time))
                         joined_time = Layouts.getTimeFormat(joined_time);
                     members += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(" + temp_name + ") Joined on: " + joined_time + "<br/>";
@@ -346,6 +353,66 @@ namespace NephroNet.Accounts.Patient
             roleId = (string)(Session["roleId"]);
             loginId = (string)(Session["loginId"]);
             token = (string)(Session["token"]);
+        }
+
+
+        protected void getShortProfileInformation()
+        {
+            lblRow.Text = "";
+            string row = "";
+            string col_start = "<td>", col_end = "</td>", row_start = "<tr>", row_end = "</tr>";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+            string userId = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select userId from UsersForTopics where usersForTopicsId = '" + requestId + "' ";
+            string requesterUserId = cmd.ExecuteScalar().ToString();
+            ShortProfile shortProfile = new ShortProfile(requesterUserId, userId);
+            string shortProfileId = shortProfile.Id;
+            string name = shortProfile.FirstName + " " + shortProfile.LastName;
+            string race = shortProfile.Race;
+            string gender = shortProfile.Gender;
+            string birthdate = shortProfile.Birthdate;
+            string nationality = shortProfile.Nationality;
+            int shortProfile_roleId = shortProfile.RoleId;
+            ArrayList blockedUsers = shortProfile.BlockedUsers;
+            ArrayList currentHealthConditions = shortProfile.CurrentHealthConditions;
+            ArrayList currentTreatments = shortProfile.CurrentTreatments;
+            string role_name = shortProfile.RoleName;
+            row += row_start + col_start + "Requester Short Profile Information: " + col_end + row_end;
+            row += row_start + col_start + "Name: " + col_end + col_start + name + col_end + row_end;
+            if (!string.IsNullOrWhiteSpace(race))
+                row += row_start + col_start + "Race: " + col_end + col_start + race + col_end + row_end;
+            if (!string.IsNullOrWhiteSpace(gender))
+                row += row_start + col_start + "Gender: " + col_end + col_start + gender + col_end + row_end;
+            if (!string.IsNullOrWhiteSpace(birthdate))
+                row += row_start + col_start + "Birthdate: " + col_end + col_start + Layouts.getBirthdateFormat(birthdate) + col_end + row_end;
+            if (!string.IsNullOrWhiteSpace(nationality))
+                row += row_start + col_start + "Nationality: " + col_end + col_start + nationality + col_end + row_end;
+            row += row_start + col_start + "Role: " + col_end + col_start + role_name + col_end + row_end;
+            //loop through blocked users:
+            if (blockedUsers.Count > 0)
+            {
+                row += row_start + col_start + "Blocked users: " + col_end + col_start + "" + col_end + row_end;
+                for (int i = 0; i < blockedUsers.Count; i++)
+                    row += row_start + col_start + "" + col_end + col_start + (i + 1) + ". " + blockedUsers[i].ToString() + col_end + row_end;
+            }
+            //loop through current health conditions:
+            if (currentHealthConditions.Count > 0)
+            {
+                row += row_start + col_start + "Current health conditions: " + col_end + col_start + "" + col_end + row_end;
+                for (int i = 0; i < currentHealthConditions.Count; i++)
+                    row += row_start + col_start + "" + col_end + col_start + (i + 1) + ". " + currentHealthConditions[i].ToString() + col_end + row_end;
+            }
+            //loop through current Treatments:
+            if (currentTreatments.Count > 0)
+            {
+                row += row_start + col_start + "Current Treatments: " + col_end + col_start + "" + col_end + row_end;
+                for (int i = 0; i < currentTreatments.Count; i++)
+                    row += row_start + col_start + "" + col_end + col_start + (i + 1) + ". " + currentTreatments[i].ToString() + col_end + row_end;
+            }
+            lblRow.Text += row;
+            connect.Close();
         }
     }
 }
