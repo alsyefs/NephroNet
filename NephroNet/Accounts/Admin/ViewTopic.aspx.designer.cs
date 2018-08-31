@@ -13,6 +13,15 @@ namespace NephroNet.Accounts.Admin {
     public partial class ViewTopic {
         
         /// <summary>
+        /// ViewTopicDiv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ViewTopicDiv;
+        
+        /// <summary>
         /// lblHeader control.
         /// </summary>
         /// <remarks>
@@ -20,15 +29,6 @@ namespace NephroNet.Accounts.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblHeader;
-        
-        /// <summary>
-        /// upMessages control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upMessages;
         
         /// <summary>
         /// lblContents control.

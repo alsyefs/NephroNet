@@ -9,6 +9,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Services;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -19,7 +21,7 @@ namespace NephroNet.Accounts.Admin
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);
         string username, roleId, loginId, token;
-        string topicId = "";int g_entries = 0;
+        string topicId = ""; int g_entries = 0;
         static string previousPage = "";
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -45,7 +47,7 @@ namespace NephroNet.Accounts.Admin
             showInformation(pageNum);
             checkIfTerminated();
             checkIfDeleted();
-            if(!IsPostBack)
+            if (!IsPostBack)
                 previousPage = Request.UrlReferrer.ToString();
         }
         protected bool isTopicApproved()
@@ -53,7 +55,7 @@ namespace NephroNet.Accounts.Admin
             bool approved = true;
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "select count(*) from topics where topicId = '"+topicId+"' and topic_isApproved = 1 ";
+            cmd.CommandText = "select count(*) from topics where topicId = '" + topicId + "' and topic_isApproved = 1 ";
             int totalTopics = Convert.ToInt32(cmd.ExecuteScalar());
             connect.Close();
             if (totalTopics == 0)
@@ -68,7 +70,7 @@ namespace NephroNet.Accounts.Admin
             lblError.Text = "The topic you are trying to access has not been aproved yet!";
         }
         protected void hideLabels()
-        {            
+        {
             btnSubmit.Visible = false;
             FileUpload1.Visible = false;
             txtEntry.Visible = false;
@@ -129,7 +131,7 @@ namespace NephroNet.Accounts.Admin
                 //else
                 //    authorized = false;
             }
-            else if(type.Equals("Dissemination"))
+            else if (type.Equals("Dissemination"))
             {
                 hideLabels();
                 hideErrorLabels();
@@ -184,23 +186,23 @@ namespace NephroNet.Accounts.Admin
                 //Get "Yes" or "No" for topic_hasImage:
                 cmd.CommandText = "select topic_hasImage from [Topics] where [topicId] = '" + topicId + "' ";
                 int topic_hasImage = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get topic_isDeleted ?:
                 cmd.CommandText = "select topic_isDeleted from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get topic_isApproved ?:
                 cmd.CommandText = "select topic_isApproved from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isApproved = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get topic_isDenied ?:
                 cmd.CommandText = "select topic_isDenied from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isDenied = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get topic_isTerminated ?:
                 cmd.CommandText = "select topic_isTerminated from [Topics] where [topicId] = '" + topicId + "' ";
                 int int_topic_isTerminated = Convert.ToInt32(cmd.ExecuteScalar());
-                
+
                 //Get tags:
                 string tagNames = "";
                 cmd.CommandText = "select count(*) from TagsForTopics where topicId = '" + topicId + "' ";
@@ -273,7 +275,7 @@ namespace NephroNet.Accounts.Admin
                 //Get entry's creator:
                 cmd.CommandText = "select [userId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
                 string entry_creatorId = cmd.ExecuteScalar().ToString();
-                cmd.CommandText = "select user_firstname from users where userId = '"+ entry_creatorId + "' ";
+                cmd.CommandText = "select user_firstname from users where userId = '" + entry_creatorId + "' ";
                 string creator_name = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + entry_creatorId + "' ";
                 creator_name = creator_name + " " + cmd.ExecuteScalar().ToString();
@@ -281,10 +283,10 @@ namespace NephroNet.Accounts.Admin
                 string imagesHtml = "";
                 cmd.CommandText = "select [entry_hasImage] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
                 int hasImage = Convert.ToInt32(cmd.ExecuteScalar());
-                if(hasImage == 1)
+                if (hasImage == 1)
                 {
                     //Count total images for this entry:
-                    cmd.CommandText = "select count(*) from ImagesForEntries where entryId = '"+entryId+"' ";
+                    cmd.CommandText = "select count(*) from ImagesForEntries where entryId = '" + entryId + "' ";
                     int totalImages = Convert.ToInt32(cmd.ExecuteScalar());
                     //Loop through images and store their names:
                     for (int j = 1; j <= totalImages; j++)
@@ -293,13 +295,13 @@ namespace NephroNet.Accounts.Admin
                         cmd.CommandText = "select [imageId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY imagesForEntriesId ASC), * FROM [imagesForEntries] where entryId = '" + entryId + "' ) as t where rowNum = '" + j + "'";
                         string imageId = cmd.ExecuteScalar().ToString();
                         //Get the image name:
-                        cmd.CommandText = "select image_name from images where imageId = '"+imageId+"' ";
+                        cmd.CommandText = "select image_name from images where imageId = '" + imageId + "' ";
                         string image_name = cmd.ExecuteScalar().ToString();
                         imagesHtml = imagesHtml + "<img src='../../images/" + image_name + "'></img> <br /> <br/>";
                     }
                 }
                 //Get userId of current user viewing:
-                cmd.CommandText = "select userId from Users where loginId = '"+loginId+"' ";
+                cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
                 string userId = cmd.ExecuteScalar().ToString();
                 //Get topic creator ID of current user viewing:
                 cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
@@ -310,7 +312,7 @@ namespace NephroNet.Accounts.Admin
             return content;
         }
         protected void showInformation(int pageNum)
-        {            
+        {
             //Show header:
             lblHeader.Text = getHeader();
             //Display info:
@@ -393,7 +395,7 @@ namespace NephroNet.Accounts.Admin
             cmd.CommandText = "select user_lastname from Users where userId like '" + userId + "' ";
             name = name + " " + cmd.ExecuteScalar().ToString();
             //Get topic title:
-            cmd.CommandText = "select topic_title from Topics where topicId = '"+topicId+"' ";
+            cmd.CommandText = "select topic_title from Topics where topicId = '" + topicId + "' ";
             string topic_title = cmd.ExecuteScalar().ToString();
             connect.Close();
             string messageBody = "Hello " + name + ",\nThis email is to notify you that your message for the topic titled (" + topic_title + ") has been successfully submitted and will be reviewed.\n" +
@@ -505,10 +507,10 @@ namespace NephroNet.Accounts.Admin
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string userId = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "insert into Entries (topicId, userId, entry_time, entry_text, entry_isDeleted, entry_isApproved, entry_isDenied, entry_hasImage) values " +
-                "('" + topicId + "', '" + userId + "', '" + entry_time + "', '" + description + "', ' 0 ', '0', '0', '"+ hasImage + "')";
+                "('" + topicId + "', '" + userId + "', '" + entry_time + "', '" + description + "', ' 0 ', '0', '0', '" + hasImage + "')";
             cmd.ExecuteScalar();
             cmd.CommandText = "select [entryId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] " +
-                "where topicId = '" + topicId + "' and userId = '" + userId +"' and entry_isDeleted = '0' and entry_hasImage = '" + hasImage +
+                "where topicId = '" + topicId + "' and userId = '" + userId + "' and entry_isDeleted = '0' and entry_hasImage = '" + hasImage +
                 "' and entry_isApproved = '0' and entry_isDenied = '0' " +
                 " ) as t where rowNum = '1'";
             entryId = cmd.ExecuteScalar().ToString();
@@ -556,17 +558,199 @@ namespace NephroNet.Accounts.Admin
             return correct;
         }
 
-        protected void Timer1_Tick(object sender, EventArgs e)
+        [WebMethod]
+        [ScriptMethod()]
+        public static void terminateTopic_Click(string topicId, string entry_creatorId)
         {
-            lblContents.Dispose();
-            //connect.Open();
-            //SqlCommand cmd = connect.CreateCommand();
-            ////Count entries for this topic that are approved, not denied, and not deleted:
-            //cmd.CommandText = "select count(*) from Entries where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0 ";
-            //int totalEntries = Convert.ToInt32(cmd.ExecuteScalar());
-            //if (totalEntries != g_entries)
-            //    upMessages.Update();
-            //connect.Close();
+
+            Configuration config = new Configuration();
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            bool topicIdExists = isTopicCorrect(topicId, entry_creatorId);
+            
+            if (topicIdExists)
+            {
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //update the DB and set topic_isTerminated = true:
+                cmd.CommandText = "update Topics set topic_isTerminated = 1 where topicId = '" + topicId + "' ";
+                cmd.ExecuteScalar();
+                //Email the topic creator about the topic being deleted:
+                cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
+                string creatorId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select topic_title from Topics where topicId = '" + topicId + "' ";
+                string topic_title = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_firstname from Users where userId = '" + creatorId + "' ";
+                string name = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from Users where userId = '" + creatorId + "' ";
+                name = name + " " + cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_email from Users where userId = '" + creatorId + "' ";
+                string emailTo = cmd.ExecuteScalar().ToString();
+                connect.Close();
+                string emailBody = "Hello " + name + ",\n\n" +
+                    "This email is to inform you that your topic with the title (" + topic_title + ") has been terminated. If you think this happened by mistake, or you did not perform this action, plaese contact the support.\n\n" +
+                    "Best regards,\nNephroNet Support\nNephroNet2018@gmail.com";
+                Email email = new Email();
+                email.sendEmail(emailTo, emailBody);
+            }
+        }
+        [WebMethod]
+        [ScriptMethod()]
+        public static void removeTopic_Click(string topicId, string entry_creatorId)
+        {
+
+            Configuration config = new Configuration();
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            bool topicIdExists = isTopicCorrect(topicId, entry_creatorId);
+            if (topicIdExists)
+            {
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //update the DB and set isDeleted = true:
+                cmd.CommandText = "update Topics set topic_isDeleted = 1 where topicId = '" + topicId + "' ";
+                cmd.ExecuteScalar();
+                //Email the topic creator about the topic being deleted:
+                cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
+                string creatorId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select topic_title from Topics where topicId = '" + topicId + "' ";
+                string topic_title = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_firstname from Users where userId = '" + creatorId + "' ";
+                string name = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from Users where userId = '" + creatorId + "' ";
+                name = name + " " + cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_email from Users where userId = '" + creatorId + "' ";
+                string emailTo = cmd.ExecuteScalar().ToString();
+                connect.Close();
+                string emailBody = "Hello " + name + ",\n\n" +
+                    "This email is to inform you that your topic with the title (" + topic_title + ") has been deleted. If you think this happened by mistake, or you did not perform this action, plaese contact the support.\n\n" +
+                    "Best regards,\nNephroNet Support\nNephroNet2018@gmail.com";
+                Email email = new Email();
+                email.sendEmail(emailTo, emailBody);
+            }
+        }
+        protected static bool isTopicCorrect(string topicId, string creatorId)
+        {
+            bool correct = true;
+            CheckErrors errors = new CheckErrors();
+            //check if id contains a special character:
+            if (!errors.isDigit(topicId))
+                correct = false;
+            //check if id contains an id that does not exist in DB:
+            else if (errors.ContainsSpecialChars(topicId))
+                correct = false;
+            if (correct)
+            {
+                Configuration config = new Configuration();
+                SqlConnection connect = new SqlConnection(config.getConnectionString());
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //Count the existance of the topic:
+                cmd.CommandText = "select count(*) from Topics where topicId = '" + topicId + "' ";
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                if (count > 0)//if count > 0, then the topic ID exists in DB.
+                {
+                    cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
+                    string actual_creatorId = cmd.ExecuteScalar().ToString();
+                    //cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+                    //string userId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + topicId + "' ";
+                    int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    //check if id belongs to a different user:
+                    //if (!userId.Equals(creatorId))
+                    //    correct = false;
+                    //else 
+                    if (isDeleted == 1)
+                        correct = false;
+                }
+                else
+                    correct = false; // means that the topic ID does not exists in DB.
+                connect.Close();
+            }
+            return correct;
+        }
+        [WebMethod]
+        [ScriptMethod()]
+        public static void removeMessage_Click(string entryId, string entry_creatorId)
+        {
+            bool messageIdExists = isMessageCorrect(entryId, entry_creatorId);
+            if (messageIdExists)
+            {
+                Configuration config = new Configuration();
+                SqlConnection connect = new SqlConnection(config.getConnectionString());
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //update the DB and set isDeleted = true:
+                cmd.CommandText = "update Entries set entry_isDeleted = 1 where entryId = '" + entryId + "' ";
+                cmd.ExecuteScalar();
+                //connect.Close();
+                //Email the topic creator about the topic being deleted:
+                cmd.CommandText = "select userId from Entries where entryId = '" + entryId + "' ";
+                string creatorId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select entry_text from Entries where entryId = '" + entryId + "' ";
+                string entry_text = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_firstname from Users where userId = '" + creatorId + "' ";
+                string name = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from Users where userId = '" + creatorId + "' ";
+                name = name + " " + cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_email from Users where userId = '" + creatorId + "' ";
+                string emailTo = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select topicId from Entries where entryId = '" + entryId + "' ";
+                string topicId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select topic_title from Topics where topicId = '" + topicId + "' ";
+                string topic_title = cmd.ExecuteScalar().ToString();
+                connect.Close();
+                string emailBody = "Hello " + name + ",\n\n" +
+                    "This email is to inform you that your message in the topic with the title (" + topic_title + ") has been deleted. The message was:\n" +
+                    "\"" + entry_text + "\" \nIf you think this happened by mistake, or you did not perform this action, plaese contact the support.\n\n" +
+                    "Best regards,\nNephroNet Support\nNephroNet2018@gmail.com";
+                Email email = new Email();
+                email.sendEmail(emailTo, emailBody);
+            }
+        }
+        protected static bool isMessageCorrect(string messageId, string creatorId)
+        {
+            Configuration config = new Configuration();
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            bool correct = true;
+            CheckErrors errors = new CheckErrors();
+            //check if id contains a special character:
+            if (!errors.isDigit(messageId))
+                correct = false;
+            //check if id contains an id that does not exist in DB:
+            else if (errors.ContainsSpecialChars(messageId))
+                correct = false;
+            if (correct)
+            {
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //Count the existance of the message:
+                cmd.CommandText = "select count(*) from Entries where entryId = '" + messageId + "' ";
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                if (count > 0)//if count > 0, then the message ID exists in DB.
+                {
+                    //Get creator ID:
+                    cmd.CommandText = "select userId from Entries where entryId = '" + messageId + "' ";
+                    string actual_creatorId = cmd.ExecuteScalar().ToString();
+                    //Get the current user's ID who is trying to access the message:
+                    //cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+                    //string userId = cmd.ExecuteScalar().ToString();
+                    //Get the deletion's status:
+                    cmd.CommandText = "select entry_isDeleted from Entries where entryId = '" + messageId + "' ";
+                    int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    //check if id belongs to a different user:
+                    //Admins can delete anything!
+                    //if (!userId.Equals(creatorId))
+                    //    correct = false;
+                    //else
+                    if (isDeleted == 1)
+                        correct = false;
+                }
+                else
+                    correct = false; // means that the topic ID does not exists in DB.
+                connect.Close();
+            }
+            return correct;
         }
 
         protected void hideErrorLabels()

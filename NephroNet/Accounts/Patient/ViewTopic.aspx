@@ -65,6 +65,114 @@
                 <br />
                 <asp:Label ID="lblError" runat="server" ForeColor="Red" Text="Label" Visible="False"></asp:Label>
                 <%--Content end--%>
+                <script type="text/javascript">
+                    function terminateTopic(topicId, creatorId) {
+
+                        if (confirm('Are sure you want to terminate the selected topic?'))
+                            terminateTopicConfirmed(topicId, creatorId);
+                    }
+                    function terminateTopicConfirmed(topicId, creatorId) {
+                        console.log('You just confirmed!');
+                        var topicID = parseInt(topicId);
+                        var creatorID = parseInt(creatorId);
+                        var obj = {
+                            topicId: topicID,
+                            entry_creatorId: creatorID
+                        };
+                        var param = JSON.stringify(obj);  // stringify the parameter
+                        $.ajax({
+                            method: "POST",
+                            url: '<%= ResolveUrl("ViewTopic.aspx/terminateTopic_Click") %>',
+                            data: param,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            success: function (msg) {
+                                location.reload(true);
+                                //$('#ViewTopicDiv').load(document.href + '#ViewTopicDiv');
+                                console.log('Successfully terminated the topic!');
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    }
+
+                </script>
+
+                <script type="text/javascript">
+                    function removeTopic(topicId, creatorId) {
+
+                        if (confirm('Are sure you want to remove the selected topic?'))
+                            removeTopicConfirmed(topicId, creatorId);
+                    }
+                    function removeTopicConfirmed(topicId, creatorId) {
+                        console.log('You just confirmed!');
+                        var topicID = parseInt(topicId);
+                        var creatorID = parseInt(creatorId);
+                        var obj = {
+                            topicId: topicID,
+                            entry_creatorId: creatorID
+                        };
+                        var param = JSON.stringify(obj);  // stringify the parameter
+                        $.ajax({
+                            method: "POST",
+                            url: '<%= ResolveUrl("ViewTopic.aspx/removeTopic_Click") %>',
+                            data: param,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            success: function (msg) {
+                                location.reload(true);
+                                //$('#ViewTopicDiv').load(document.href + '#ViewTopicDiv');
+                                //console.log('Successfully updated the page!');
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    }
+
+                </script>
+                <script type="text/javascript">
+                    function removeMessage(messageId, messageNumberInPage, creatorId) {
+
+                        if (confirm('Are sure you want to remove the selected message entry# (' + messageNumberInPage + ')?'))
+                            removeMessageConfirmed(messageId, creatorId);
+                    }
+                    function removeMessageConfirmed(messageId, creatorId) {
+                        console.log('You just confirmed!');
+                        var messageID = parseInt(messageId);
+                        var creatorID = parseInt(creatorId);
+                        var obj = {
+                            entryId: messageID,
+                            entry_creatorId: creatorID
+                        };
+                        var param = JSON.stringify(obj);  // stringify the parameter
+                        $.ajax({
+                            method: "POST",
+                            url: '<%= ResolveUrl("ViewTopic.aspx/removeMessage_Click") %>',
+                            data: param,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            success: function (msg) {
+                                console.log('Successfully deleted message ID: ' + messageId + '!');
+                                location.reload(true);
+                                //$('#ViewTopicDiv').load(document.href + '#ViewTopicDiv');
+                                //console.log('Successfully updated the page!');
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('The call failed! for message ID: ' + messageId);
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    }
+
+                </script>
                 <%--Popup message--%>
                 <script type="text/javascript">
                     function OpenPopup(site) {popup(site);}

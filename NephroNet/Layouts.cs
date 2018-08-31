@@ -17,9 +17,15 @@ namespace NephroNet
             //Check if the user viewing the topic is the creator, or if the current user viewing is an admin:
             int int_roleId = Convert.ToInt32(roleId);
             if (topic_creatorId.Equals(userId) || int_roleId == 1)
+            {
                 deleteCommand = "&nbsp;<button id='remove_button'type='button' onmousedown=\"OpenPopup('RemoveTopic.aspx?id=" + topicId + "')\">Remove Topic</button>";
-            if(int_roleId == 1)
+                deleteCommand = "&nbsp;<button id='remove_button' type='button' onclick=\"removeTopic('" + topicId + "', '" + topic_creatorId + "')\">Remove Topic </button>";
+            }
+            if (int_roleId == 1)
+            {
                 terminateCommand = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id='terminate_button'type='button' onmousedown=\"OpenPopup('TerminateTopic.aspx?id=" + topicId + "')\">Terminate Topic</button>";
+                terminateCommand = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id='terminate_button' type='button' onclick=\"terminateTopic('" + topicId + "', '" + topic_creatorId + "')\">Terminate Topic </button>";
+            }
             bool isTerminated = checkTerminated(topicId);
             if (isTerminated)
                 terminateCommand = "";
@@ -60,8 +66,12 @@ namespace NephroNet
             //Check if the user viewing the message is the creator, or if the current user viewing is an admin:
             int int_roleId = Convert.ToInt32(roleId);
             if (entry_creatorId.Equals(userId) || int_roleId == 1)
-                //deleteCommand = "&nbsp;<asp:Button ID="btnRemove" runat="server" Text="Remove Entry " + i" OnClick="btnRemove_Click" onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "') onchange='__doPostBack('<%=panelAttachments.UniqueID %>',''); return false;\"> + "</button><br/>";
+            //deleteCommand = "&nbsp;<asp:Button ID="btnRemove" runat="server" Text="Remove Entry " + i" OnClick="btnRemove_Click" onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "') onchange='__doPostBack('<%=panelAttachments.UniqueID %>',''); return false;\"> + "</button><br/>";
+            {
                 deleteCommand = "&nbsp;<button id='remove_button' type='button' onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "')\">Remove Entry " + i + "</button><br/>";
+                deleteCommand = "&nbsp;<button id='remove_button' type='button' onclick=\"removeMessage('" + entryId + "', "+i+", '"+ entry_creatorId + "')\">Remove Entry " + i + "</button><br/>";
+            }
+
 			string background_color = "";			
             if(i % 8 == 2)
                 background_color = "style = \"background: rgb(255, 255, 255);background: rgba(203, 203, 152, 0.6);\""; //Custom color
