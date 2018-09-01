@@ -106,7 +106,7 @@ namespace NephroNet.Accounts.Admin
                 cmd.CommandText = "select user_firstname from users where userId = '" + userId + "' ";
                 string creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + userId + "' ";
-                creator = creator = " " + cmd.ExecuteScalar().ToString();
+                creator = creator + " " + cmd.ExecuteScalar().ToString();
                 //Get user's email:
                 cmd.CommandText = "select user_email from users where userId = '" + userId + "' ";
                 string email = cmd.ExecuteScalar().ToString();
@@ -163,15 +163,18 @@ namespace NephroNet.Accounts.Admin
                         imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br />";
                     }
                 }
-                lblMessageInformation.Text = "Creator: " + creator + "<br />" +
-                    "Topic related: " + topic_title + "<br />" +
-                    "Message time: " + Layouts.getTimeFormat(entry_time) + "<br />" +
-                    "Deleted?: " + entry_isDeleted + "<br />" +
-                    "Has image?: " + str_entry_hasImage + "<br />" +
-                    "Approved?: " + entry_isApproved + "<br />" +
-                    "Denied?: " + entry_isDenied + "<br />" +
-                    "Message: " + entry_text + "<br />"+                        
-                    imagesHTML;
+                lblMessageInformation.Text = "<table style=\"width:100%;\">" +
+                    "<tr><td>Creator: </td><td>" + creator + "</td></tr>" +
+                    "<tr><td>Topic related:</td><td>" + topic_title + "</td></tr>" +
+                    "<tr><td>Message time: </td><td>" + Layouts.getTimeFormat(entry_time) + "</td></tr>" +
+                    "<tr><td>Deleted?: </td><td>" + entry_isDeleted + "</td></tr>" +
+                    "<tr><td>Has image?: </td><td>" + str_entry_hasImage + "</td></tr>" +
+                    "<tr><td>Approved?: </td><td>" + entry_isApproved + "</td></tr>" +
+                    "<tr><td>Denied?: </td><td>" + entry_isDenied + "</td></tr>" +
+                    "<tr><td>Message: </td><td> <div style=\"background: #DCCDCA; padding-left:5px; padding-right:5px; \"> " + entry_text +
+                    imagesHTML + "</div></td></tr>" +
+                    "</table>";
+
                 lblMessageInformation.Visible = true;
                 //Copy values to globals:
                 g_topic_isApproved = int_entry_isApproved; g_topic_isDenied = int_entry_isDenied;

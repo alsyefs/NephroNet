@@ -131,18 +131,21 @@ namespace NephroNet.Accounts.Admin
                         imagesHTML = imagesHTML + "<img src='../../images/" + image_name + "'></img> <br /> <br/>";
                     }
                 }
-                lblTopicInformation.Text = "Creator: " + creator + "<br />" +
-                        "Type: " + topic_type + "<br />" +
-                        "Title: " + topic_title + "<br />" +
-                        "Time: " + Layouts.getTimeFormat(topic_time) + "<br />" +
-                        "Has image?: " + str_topic_hasImage + "<br />" +
-                        "Deleted?: " + topic_isDeleted + "<br />" +
-                        "Approved?: " + topic_isApproved + "<br />" +
-                        "Denied?: " + topic_isDenied + "<br />" +
-                        "Terminated?: " + topic_isTerminated + "<br />" +
-                        "Description: \"" + topic_description + "\"<br />" +
-                        "Tags: \"" + tagNames + "\"<br />" +
-                        imagesHTML;
+                lblTopicInformation.Text = 
+                    "<table>"+
+                    "<tr><td>Creator: </td><td>" + creator + "</td></tr>" +
+                    "<tr><td>Type: </td><td>" + topic_type + "</td></tr>" +
+                    "<tr><td>Title: </td><td>" + topic_title + "</td></tr>" +
+                    "<tr><td>Time: </td><td>" + Layouts.getTimeFormat(topic_time) + "</td></tr>" +
+                    "<tr><td>Has image?: </td><td>" + str_topic_hasImage + "</td></tr>" +
+                    "<tr><td>Deleted?: </td><td>" + topic_isDeleted + "</td></tr>" +
+                    "<tr><td>Approved?: </td><td>" + topic_isApproved + "</td></tr>" +
+                    "<tr><td>Denied?: </td><td>" + topic_isDenied + "</td></tr>" +
+                    "<tr><td>Terminated?: </td><td>" + topic_isTerminated + "</td></tr>" +
+                    "<tr><td>Tags: </td><td>" + tagNames + "</td></tr>" +
+                    "<tr><td>Description: </td><td> <div style=\"background: #DCCDCA; padding-left:5px; padding-right:5px; \"> " + topic_description + 
+                    imagesHTML+ "</div></td></tr>" +
+                    "</table>";
                 lblTopicInformation.Visible = true;
                 //Copy values to globals:
                 g_topic_isApproved = int_topic_isApproved; g_topic_isDenied = int_topic_isDenied;

@@ -60,7 +60,7 @@ namespace NephroNet
             return terminated;
         }
 		public static string postMessage(int i, string creator_name, string entry_time, string entry_text, string imagesHtml, 
-			string entry_creatorId, string topic_creatorId, string userId, string entryId, string roleId)
+			string entry_creatorId, string topic_creatorId, string userId, string entryId, string roleId, string topicId)
 		{
 			string deleteCommand = "";
             //Check if the user viewing the message is the creator, or if the current user viewing is an admin:
@@ -69,7 +69,7 @@ namespace NephroNet
             //deleteCommand = "&nbsp;<asp:Button ID="btnRemove" runat="server" Text="Remove Entry " + i" OnClick="btnRemove_Click" onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "') onchange='__doPostBack('<%=panelAttachments.UniqueID %>',''); return false;\"> + "</button><br/>";
             {
                 deleteCommand = "&nbsp;<button id='remove_button' type='button' onmousedown=\"OpenPopup('RemoveEntry.aspx?id=" + entryId + "')\">Remove Entry " + i + "</button><br/>";
-                deleteCommand = "&nbsp;<button id='remove_button' type='button' onclick=\"removeMessage('" + entryId + "', "+i+", '"+ entry_creatorId + "')\">Remove Entry " + i + "</button><br/>";
+                deleteCommand = "&nbsp;<button id='remove_button' type='button' onclick=\"removeMessage('" + entryId + "', "+i+", '"+ entry_creatorId + "', '"+topicId+"')\">Remove Entry " + i + "</button><br/>";
             }
 
 			string background_color = "";			

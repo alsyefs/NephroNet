@@ -78,17 +78,20 @@ namespace NephroNet.Accounts.Admin
                 cmd.CommandText = "select register_patientId from [Registrations] where [registerId] = '" + registerId + "' ";
                 string patientId = cmd.ExecuteScalar().ToString();
                 //Create an informative message containing all information for the selected user:
-                lblUserInformation.Text = "Name: " + firstName + " " + lastName +"<br />"+
-                    "Email: " + email + "<br />"+
-                    "Address: " + address + "<br />" +
-                    "City: " + city + ", State: " + state + "<br />" +
-                    "Zip code: " + zip + "<br />" +
-                    "Phone#: " + Layouts.phoneFormat(phone) + "<br />" +
-                    "Role: " + role + "<br />";
+                lblUserInformation.Text =
+                    "<table>" +
+                    "<tr><td>Name: </td><td>" + firstName + " " + lastName + "</td></tr>" +
+                    "<tr><td>Email: </td><td>" + email + "</td></tr>" +
+                    "<tr><td>Address: </td><td>" + address + "</td></tr>" +
+                    "<tr><td>City: </td><td>" + city + ", State: " + state + "</td></tr>" +
+                    "<tr><td>Zip code: </td><td>" + zip + "</td></tr>" +
+                    "<tr><td>Phone#: </td><td>" + Layouts.phoneFormat(phone) + "</td></tr>" +
+                    "<tr><td>Role: </td><td>" + role + "</td></tr>";
                 if (!string.IsNullOrWhiteSpace(patientId))
                 {
-                    lblUserInformation.Text += "Patient ID: " + patientId + "<br />";
+                    lblUserInformation.Text += "<tr><td>Patient ID: </td><td>" + patientId + "</td></tr>";
                 }
+                lblUserInformation.Text += "</table>";
                 lblUserInformation.Visible = true;
                 //Copy values to globals:
                 g_firstName = firstName; g_lastName = lastName; g_email = email; g_city = city; g_state = state;

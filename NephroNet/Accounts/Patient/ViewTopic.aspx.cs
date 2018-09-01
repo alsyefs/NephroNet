@@ -309,7 +309,7 @@ namespace NephroNet.Accounts.Patient
                 //Get topic creator ID of current user viewing:
                 cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
                 string topic_creatorId = cmd.ExecuteScalar().ToString();
-                content = content + Layouts.postMessage(i, creator_name, entry_time, entry_text, imagesHtml, entry_creatorId, topic_creatorId, userId, entryId, roleId);
+                content = content + Layouts.postMessage(i, creator_name, entry_time, entry_text, imagesHtml, entry_creatorId, topic_creatorId, userId, entryId, roleId, topicId);
             }
             connect.Close();
             return content;

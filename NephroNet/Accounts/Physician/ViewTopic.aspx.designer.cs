@@ -22,22 +22,13 @@ namespace NephroNet.Accounts.Physician {
         protected global::System.Web.UI.WebControls.Label lblHeader;
         
         /// <summary>
-        /// upMessages control.
+        /// divMessages control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upMessages;
-        
-        /// <summary>
-        /// lblContents control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblContents;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divMessages;
         
         /// <summary>
         /// lblEntry control.

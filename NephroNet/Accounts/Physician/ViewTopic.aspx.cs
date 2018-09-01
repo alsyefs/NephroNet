@@ -78,7 +78,8 @@ namespace NephroNet.Accounts.Physician
             btnSubmit.Visible = false;
             FileUpload1.Visible = false;
             txtEntry.Visible = false;
-            lblContents.Visible = false;
+            //lblContents.Visible = false;
+            divMessages.Visible = false;
             lblEntry.Visible = false;
         }
         protected void clearSession()
@@ -309,7 +310,7 @@ namespace NephroNet.Accounts.Physician
                 //Get topic creator ID of current user viewing:
                 cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
                 string topic_creatorId = cmd.ExecuteScalar().ToString();
-                content = content + Layouts.postMessage(i, creator_name, entry_time, entry_text, imagesHtml, entry_creatorId, topic_creatorId, userId, entryId, roleId);
+                content = content + Layouts.postMessage(i, creator_name, entry_time, entry_text, imagesHtml, entry_creatorId, topic_creatorId, userId, entryId, roleId, topicId);
             }
             connect.Close();
             return content;
@@ -319,7 +320,8 @@ namespace NephroNet.Accounts.Physician
             //Show header:
             lblHeader.Text = getHeader();
             //Display info:
-            lblContents.Text = getContents(pageNum);
+            //lblContents.Text = getContents(pageNum);
+            divMessages.InnerHtml = getContents(pageNum);
             //Maybe create new labels and place them for each entry:
             //<div id="div1" runat = "sever" ></div> //<-- Add this in the web page as a placeholder for the label.
             //Label lblNew = new Label();
@@ -555,6 +557,71 @@ namespace NephroNet.Accounts.Physician
 
         [WebMethod]
         [ScriptMethod()]
+        public static string getMessages(string topicId, string userId)
+        {
+            Configuration config = new Configuration();
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            string content = "";
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            //Count entries for this topic that are approved, not denied, and not deleted:
+            cmd.CommandText = "select count(*) from Entries where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0 ";
+            int totalEntries = Convert.ToInt32(cmd.ExecuteScalar());
+            for (int i = 1; i <= totalEntries; i++)
+            {
+                //Get entry ID:
+                cmd.CommandText = "select [entryId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                string entryId = cmd.ExecuteScalar().ToString();
+                //Get entry text:
+                cmd.CommandText = "select [entry_text] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                string entry_text = cmd.ExecuteScalar().ToString();
+                //Get entry time:
+                cmd.CommandText = "select [entry_time] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                string entry_time = cmd.ExecuteScalar().ToString();
+                //Get entry's creator:
+                cmd.CommandText = "select [userId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                string entry_creatorId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_firstname from users where userId = '" + entry_creatorId + "' ";
+                string creator_name = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select user_lastname from users where userId = '" + entry_creatorId + "' ";
+                creator_name = creator_name + " " + cmd.ExecuteScalar().ToString();
+                //Check if entry has images:
+                string imagesHtml = "";
+                cmd.CommandText = "select [entry_hasImage] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where topicId = '" + topicId + "' and entry_isApproved = 1 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
+                int hasImage = Convert.ToInt32(cmd.ExecuteScalar());
+                if (hasImage == 1)
+                {
+                    //Count total images for this entry:
+                    cmd.CommandText = "select count(*) from ImagesForEntries where entryId = '" + entryId + "' ";
+                    int totalImages = Convert.ToInt32(cmd.ExecuteScalar());
+                    //Loop through images and store their names:
+                    for (int j = 1; j <= totalImages; j++)
+                    {
+                        //Get the entry's images:
+                        cmd.CommandText = "select [imageId] from (SELECT rowNum = ROW_NUMBER() OVER(ORDER BY imagesForEntriesId ASC), * FROM [imagesForEntries] where entryId = '" + entryId + "' ) as t where rowNum = '" + j + "'";
+                        string imageId = cmd.ExecuteScalar().ToString();
+                        //Get the image name:
+                        cmd.CommandText = "select image_name from images where imageId = '" + imageId + "' ";
+                        string image_name = cmd.ExecuteScalar().ToString();
+                        imagesHtml = imagesHtml + "<img src='../../images/" + image_name + "'></img> <br /> <br/>";
+                    }
+                }
+                //Get the role ID of the current user:
+                cmd.CommandText = "select loginId from users where userId = '"+userId+"' ";
+                string loginId = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select roleId from Logins where loginId = '"+loginId+"' ";
+                string roleId = cmd.ExecuteScalar().ToString();
+                //Get topic creator ID of current user viewing:
+                cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
+                string topic_creatorId = cmd.ExecuteScalar().ToString();
+                content = content + Layouts.postMessage(i, creator_name, entry_time, entry_text, imagesHtml, entry_creatorId, topic_creatorId, userId, entryId, roleId, topicId);
+            }
+            connect.Close();
+            return content;
+        }
+
+        [WebMethod]
+        [ScriptMethod()]
         public static void terminateTopic_Click(string topicId, string entry_creatorId)
         {
 
@@ -699,7 +766,7 @@ namespace NephroNet.Accounts.Physician
                     "\"" + entry_text + "\" \nIf you think this happened by mistake, or you did not perform this action, plaese contact the support.\n\n" +
                     "Best regards,\nNephroNet Support\nNephroNet2018@gmail.com";
                 Email email = new Email();
-                email.sendEmail(emailTo, emailBody);
+                //email.sendEmail(emailTo, emailBody);
             }
         }
         protected static bool isMessageCorrect(string messageId, string creatorId)

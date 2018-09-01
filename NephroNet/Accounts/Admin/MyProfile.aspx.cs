@@ -743,9 +743,9 @@ namespace NephroNet.Accounts.Admin
                 row += row_start + col_start + "Member ID:" + col_end + col_start + ins.MemberId + col_end + row_end;
                 row += row_start + col_start + "Group ID:" + col_end + col_start + ins.GroupId + col_end + row_end;
                 row += row_start + col_start + "Insurance name: " + col_end + col_start + ins.CompanyName + col_end + row_end;
-                row += row_start + col_start + "Insurance phone1 : " + col_end + col_start + ins.Phone1 + col_end + row_end;
-                row += row_start + col_start + "Insurance phone2 : " + col_end + col_start + ins.Phone2 + col_end + row_end;
-                row += row_start + col_start + "Insurance email: " + col_end + col_start + ins.Phone2 + col_end + row_end;
+                row += row_start + col_start + "Insurance phone1 : " + col_end + col_start + Layouts.phoneFormat(ins.Phone1) + col_end + row_end;
+                row += row_start + col_start + "Insurance phone2 : " + col_end + col_start + Layouts.phoneFormat(ins.Phone2) + col_end + row_end;
+                row += row_start + col_start + "Insurance email: " + col_end + col_start + ins.Email + col_end + row_end;
                 row += row_start + col_start + "Insurance address: " + col_end + col_start +
                     ins.Address + newLine + ins.City + ", " + ins.State + " " + ins.Zip + newLine + ins.Country +
                     col_end + row_end;
@@ -786,7 +786,7 @@ namespace NephroNet.Accounts.Admin
             counter = 0;
             foreach (Phone e in phones)
             {
-                row += row_start + col_start + "" + col_end + col_start + ++counter + ". Phone number: " + e.PhoneNumber;
+                row += row_start + col_start + "" + col_end + col_start + ++counter + ". Phone number: " + Layouts.phoneFormat(e.PhoneNumber);
                 if (e.IsDefault == 1)
                     row += " (default)" + col_end + row_end;
                 else
@@ -800,9 +800,9 @@ namespace NephroNet.Accounts.Admin
             {
                 row += row_start + col_start + "Contact #:" + col_end + col_start + ++counter + col_end + row_end;
                 row += row_start + col_start + "Name: " + col_end + col_start + e.Firstname + " " + e.Lastname + col_end + row_end;
-                row += row_start + col_start + "Phone 1: " + col_end + col_start + e.Phone1 + col_end + row_end;
-                row += row_start + col_start + "Phone 2: " + col_end + col_start + e.Phone2 + col_end + row_end;
-                row += row_start + col_start + "Phone 3: " + col_end + col_start + e.Phone3 + col_end + row_end;
+                row += row_start + col_start + "Phone 1: " + col_end + col_start + Layouts.phoneFormat(e.Phone1) + col_end + row_end;
+                row += row_start + col_start + "Phone 2: " + col_end + col_start + Layouts.phoneFormat(e.Phone2) + col_end + row_end;
+                row += row_start + col_start + "Phone 3: " + col_end + col_start + Layouts.phoneFormat(e.Phone3) + col_end + row_end;
                 row += row_start + col_start + "Email: " + col_end + col_start + e.Email + col_end + row_end;
                 row += row_start + col_start + "Address: " + col_end + col_start +
                     e.Address + newLine + e.City + ", " + e.State + " " + e.Zip + newLine + e.Country +

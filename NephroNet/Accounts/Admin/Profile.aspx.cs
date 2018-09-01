@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Services;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -14,11 +16,13 @@ namespace NephroNet.Accounts.Admin
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);
         string username, roleId, loginId, token;
+        static string g_loginId = "";
         string profileId = "";
         protected void Page_Load(object sender, EventArgs e)
         {
             initialPageAccess();
             profileId = Request.QueryString["id"];
+            g_loginId = loginId;
             bool userIdExists = isUserCorrect();
             if (!userIdExists)
                 goHome();
@@ -60,8 +64,10 @@ namespace NephroNet.Accounts.Admin
                 //Display the information:
                 getShortProfileInformation();
                 getCompleteProfileInformation();
-                string terminateCommand = "<br/><button id='terminate_button'type='button' onmousedown=\"OpenPopup('TerminateAccount.aspx?id=" + profileId + "')\">Terminate Account</button>";
-                string unlockCommand = "<br/><button id='unlock_button'type='button' onmousedown=\"OpenPopup('UnlockAccount.aspx?id=" + profileId + "')\">Unlock Account</button>";
+                //string terminateCommand = "<br/><button id='terminate_button'type='button' onmousedown=\"OpenPopup('TerminateAccount.aspx?id=" + profileId + "')\">Terminate Account</button>";
+                //string unlockCommand = "<br/><button id='unlock_button'type='button' onmousedown=\"OpenPopup('UnlockAccount.aspx?id=" + profileId + "')\">Unlock Account</button>";
+                string terminateCommand = "<br/><button id='terminate_button'type='button' onclick=\"terminateAccount('" + profileId + "')\">Terminate Account</button>";
+                string unlockCommand = "<br/><button id='unlock_button'type='button' onclick=\"unlockAccount('" + profileId + "')\">Unlock Account</button>";
                 if (isActive == 1 && account_loginId != loginId)
                     lblAdminCommands.Text += terminateCommand;
                 else if (isActive == 0 && account_loginId != loginId)
@@ -339,6 +345,106 @@ namespace NephroNet.Accounts.Admin
             roleId = (string)(Session["roleId"]);
             loginId = (string)(Session["loginId"]);
             token = (string)(Session["token"]);
+        }
+        [WebMethod]
+        [ScriptMethod()]
+        public static void terminateOrUnlockAccount(string in_profileId, int terminateOrUnlock)
+        {
+            Configuration config = new Configuration();
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            bool accountIdExists = isAccountCorrect(in_profileId, terminateOrUnlock);
+            if (accountIdExists)
+            {
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                cmd.CommandText = "select loginId from users where userId = '" + in_profileId + "' ";
+                string account_loginId = cmd.ExecuteScalar().ToString();
+                connect.Close();
+                if (terminateOrUnlock == 1)//1=terminate
+                {
+                    connect.Open();
+                    //update the DB and set isActive = false:
+                    cmd.CommandText = "update Logins set login_isActive = 0 where loginId = '" + account_loginId + "' ";
+                    cmd.ExecuteScalar();
+                    //Email the topic creator about the topic being deleted:
+                    cmd.CommandText = "select user_firstname from Users where userId = '" + in_profileId + "' ";
+                    string name = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_lastname from Users where userId = '" + in_profileId + "' ";
+                    name = name + " " + cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_email from Users where userId = '" + in_profileId + "' ";
+                    string emailTo = cmd.ExecuteScalar().ToString();
+                    connect.Close();
+                    string emailBody = "Hello " + name + ",\n\n" +
+                        "This email is to inform you that your account has been terminated. If you think this happened by mistake, or you did not perform this action, plaese contact the support.\n\n" +
+                        "Best regards,\nNephroNet Support\nNephroNet2018@gmail.com";
+                    Email email = new Email();
+                    email.sendEmail(emailTo, emailBody);
+                }
+                else if (terminateOrUnlock == 2)//2 = Unlock
+                {
+                    connect.Open();
+                    //update the DB and set isActive = true:
+                    cmd.CommandText = "update Logins set login_isActive = 1 where loginId = '" + account_loginId + "' ";
+                    cmd.ExecuteScalar();
+                    //Email the topic creator about the topic being deleted:
+                    cmd.CommandText = "select user_firstname from Users where userId = '" + in_profileId + "' ";
+                    string name = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_lastname from Users where userId = '" + in_profileId + "' ";
+                    name = name + " " + cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select user_email from Users where userId = '" + in_profileId + "' ";
+                    string emailTo = cmd.ExecuteScalar().ToString();
+                    connect.Close();
+                    string emailBody = "Hello " + name + ",\n\n" +
+                    "This email is to inform you that your account has been unlocked and can now be used in the system. You can now use your username and password to login. If you have any questions, plaese contact the support.\n\n" +
+                    "Best regards,\nNephroNet Support\nNephroNet2018@gmail.com";
+                    Email email = new Email();
+                    email.sendEmail(emailTo, emailBody);
+                }
+            }
+        }
+        protected static bool isAccountCorrect(string in_profileId, int terminateOrUnlock)
+        {
+            Configuration config = new Configuration();
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            bool correct = true;
+            CheckErrors errors = new CheckErrors();
+            //check if id contains a special character:
+            if (!errors.isDigit(in_profileId))
+                correct = false;
+            //check if id contains an id that does not exist in DB:
+            else if (errors.ContainsSpecialChars(in_profileId))
+                correct = false;
+            if (correct)
+            {
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                //Count the existance of the user:
+                cmd.CommandText = "select count(*) from Users where userId = '" + in_profileId + "' ";
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                if (count > 0)//if count > 0, then the user ID exists in DB.
+                {
+                    //Get the current user's ID who is trying to access the profile:
+                    cmd.CommandText = "select userId from Users where loginId = '" + g_loginId + "' ";
+                    string current_userId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select loginId from users where userId = '" + in_profileId + "' ";
+                    string account_loginId = cmd.ExecuteScalar().ToString();
+                    cmd.CommandText = "select login_isActive from Logins where loginId = '" + account_loginId + "' ";
+                    int isActive = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (terminateOrUnlock == 1)// if the command was to terminate:
+                        if (isActive == 0)
+                            correct = false;
+                        else if (terminateOrUnlock == 2)// if the command was to unlock:
+                            if (isActive == 1)
+                                correct = false;
+                    //Maybe later use the current user's ID to check if the current user has access to view the selected profile.
+                    if (account_loginId == g_loginId)
+                        correct = false;
+                }
+                else
+                    correct = false; // means that the user ID does not exists in DB.
+                connect.Close();
+            }
+            return correct;
         }
     }
 }

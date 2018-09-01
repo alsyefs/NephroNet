@@ -10,18 +10,12 @@
                 <%--Content start--%>
                 <asp:Label ID="lblHeader" runat="server" Text="Header" Font-Bold="True"></asp:Label>
                 <br />
-                <%--Messages start--%>
-                <%--<asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="Timer1_Tick"></asp:Timer> --%>
-                <asp:UpdatePanel ID="upMessages" UpdateMode="Conditional" runat="server">
-                            <ContentTemplate>
-                                <asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>
-                            </ContentTemplate>
-                            <Triggers>
-                                <%--<asp:AsyncPostBackTrigger  ControlID="Timer1" EventName="Tick" />--%>
-                            </Triggers>
-                </asp:UpdatePanel>
-                <%--Messages end--%>
+               
                 <%--<asp:Label ID="lblContents" runat="server" Text="Contents"></asp:Label>--%>
+
+                <div runat="server" id="divMessages"></div>
+
+
                 <br />
                 <asp:Label ID="lblEntry" runat="server" Text="Message"></asp:Label>
                 &nbsp;
@@ -98,7 +92,52 @@
                             }
                         });
                     }
+                    function refreshMessages(topicId, userId) {
+                        console.log('Started refreshMessages. topicId= ' + topicId + ' userId=' + userId);
+                        var topicID = parseInt(topicId);
+                        var userID = parseInt(userId);
+                        var obj = {
+                            topicId: topicID,
+                            userId: userID
+                        };
+                        var param = JSON.stringify(obj);  // stringify the parameter
+                        console.log('topicID= ' + topicID + ' userID=' + userID + ' param:\n'+param);
+                        var marker;
+                        $.ajax({
+                            method: "POST",
+                            url: '<%= ResolveUrl("ViewTopic.aspx/getMessages") %>',
+                            data: param,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: true,
+                            cache: false,
+                            success: function (data) {
+                                console.log('refresh success:\n' + data.responseText);
+                                //location.reload(true);
+                                //$('#ViewTopicDiv').load(document.href + '#ViewTopicDiv');
+                                
+                                //console.log(data.responseText);
+                                //marker = JSON.stringify(data);
+                                //console.log(marker);
 
+                                //var result = $('<div />').append(data).find('#divMessages').html();
+                                //$('#divMessages').html(data);
+                                $('#divMessages').html(data);
+                                $("#divMessages").html(data.responseText);
+                                //$('#divMessages').replaceWith($('#divMessages', data.responseText));
+                                //$('body').html(data);
+                                //$('body').html($('body', data.responseText).html());
+                                //$('#divMessages').html(marker);
+                                //$('#divMessages').load(document.href + '#divMessages');
+                                //response = $(XmlHttpRequest.responseText);//.find('b\\:value').text();
+                                //console.log(data + ' ' + textStatus + ' ' + response);
+                                console.log('Successfully refreshed the div data.responseText:\n' + data.responseText);
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    }
                 </script>
 
                 <script type="text/javascript">
@@ -137,13 +176,13 @@
 
                 </script>
                 <script type="text/javascript">
-                    function removeMessage(messageId, messageNumberInPage, creatorId) {
+                    function removeMessage(messageId, messageNumberInPage, creatorId, topicId) {
 
                         if (confirm('Are sure you want to remove the selected message entry# (' + messageNumberInPage + ')?'))
-                            removeMessageConfirmed(messageId, creatorId);
+                            removeMessageConfirmed(messageId, creatorId, topicId);
                     }
-                    function removeMessageConfirmed(messageId, creatorId) {
-                        console.log('You just confirmed!');
+                    function removeMessageConfirmed(messageId, creatorId, topicId) {
+                        console.log('started removeMessageConfirmed. messageId=' + messageId + ' creatorId=' + creatorId + ' topicId=' + topicId);
                         var messageID = parseInt(messageId);
                         var creatorID = parseInt(creatorId);
                         var obj = {
@@ -160,7 +199,8 @@
                             async: true,
                             cache: false,
                             success: function (msg) {
-                                console.log('Successfully deleted message ID: ' + messageId + '!');
+                                //refreshMessages(topicId, creatorId);
+                                //console.log('Successfully deleted message ID: ' + messageId + '!');
                                 location.reload(true);
                                 //$('#ViewTopicDiv').load(document.href + '#ViewTopicDiv');
                                 //console.log('Successfully updated the page!');
