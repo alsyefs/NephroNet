@@ -16,7 +16,7 @@ namespace NephroNet.Accounts.Admin
         string username, roleId, loginId, token;
         string registerId = "";
         //Globals for "Users" table:
-        string g_firstName, g_lastName, g_email, g_city, g_state, g_zip, g_address, g_phone, g_patientId;
+        string g_firstName, g_lastName, g_email, g_city, g_state, g_zip, g_address, g_phone, g_patientId, g_country;
         //Globals for "Logins" table:
         int g_roleId;
         protected void Page_Load(object sender, EventArgs e)
@@ -74,18 +74,27 @@ namespace NephroNet.Accounts.Admin
                 //Get phone:
                 cmd.CommandText = "select register_phone from [Registrations] where [registerId] = '" + registerId + "' ";
                 string phone = cmd.ExecuteScalar().ToString();
+                //Get Country:
+                cmd.CommandText = "select register_country from [Registrations] where [registerId] = '" + registerId + "' ";
+                string country = cmd.ExecuteScalar().ToString();
                 //Get patient ID:
                 cmd.CommandText = "select register_patientId from [Registrations] where [registerId] = '" + registerId + "' ";
                 string patientId = cmd.ExecuteScalar().ToString();
+                string phoneFormat = "";
+                if (country.Equals("United States"))
+                    phoneFormat = Layouts.phoneFormat(phone);
+                else
+                    phoneFormat = phone;
                 //Create an informative message containing all information for the selected user:
                 lblUserInformation.Text =
                     "<table>" +
                     "<tr><td>Name: </td><td>" + firstName + " " + lastName + "</td></tr>" +
                     "<tr><td>Email: </td><td>" + email + "</td></tr>" +
                     "<tr><td>Address: </td><td>" + address + "</td></tr>" +
-                    "<tr><td>City: </td><td>" + city + ", State: " + state + "</td></tr>" +
+                    "<tr><td>City: </td><td>" + city + "</td></tr>" +
+                    "<tr><td>State: </td><td>" + state + "</td></tr>" +
                     "<tr><td>Zip code: </td><td>" + zip + "</td></tr>" +
-                    "<tr><td>Phone#: </td><td>" + Layouts.phoneFormat(phone) + "</td></tr>" +
+                    "<tr><td>Phone#: </td><td>" + phoneFormat + "</td></tr>" +
                     "<tr><td>Role: </td><td>" + role + "</td></tr>";
                 if (!string.IsNullOrWhiteSpace(patientId))
                 {
@@ -95,7 +104,7 @@ namespace NephroNet.Accounts.Admin
                 lblUserInformation.Visible = true;
                 //Copy values to globals:
                 g_firstName = firstName; g_lastName = lastName; g_email = email; g_city = city; g_state = state;
-                g_zip = zip; g_address = address; g_phone=phone;g_roleId = int_roleId; g_patientId = patientId;
+                g_zip = zip; g_address = address; g_phone=phone;g_roleId = int_roleId; g_patientId = patientId; g_country = country;
             }
             else
             {
@@ -180,6 +189,8 @@ namespace NephroNet.Accounts.Admin
             string hashedPassword = Encryption.hash(newPassword);
             //Set login_attempts = 0, login_securityQuestionsAttempts = 0, login_initial = 1 and login_isActive = 1: (1 in bit = true)
             //Store the previous information into the table "Logins":
+            g_phone = g_phone.Replace(" ", "");
+            g_phone = g_phone.Replace("'", "''");
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
             cmd.CommandText = "insert into Logins (login_username, login_password, roleId, login_attempts, login_securityQuestionsAttempts, login_initial, login_isActive) values " +
@@ -189,8 +200,8 @@ namespace NephroNet.Accounts.Admin
             cmd.CommandText = "select loginId from Logins where login_username like '"+newUsername+"' ";
             string newLoginId = cmd.ExecuteScalar().ToString();
             //Store the user's information into the "Users" table:
-            cmd.CommandText = "insert into Users (user_firstname, user_lastname, user_email, user_city, user_state, user_zip, user_address, user_phone, loginId, user_patientId) values " +
-                "('"+g_firstName+"', '"+g_lastName+"', '"+g_email+"', '"+g_city+"', '"+g_state+"', '"+g_zip+"', '"+g_address+"', '"+g_phone+"', '"+newLoginId+"', '"+g_patientId+"') ";
+            cmd.CommandText = "insert into Users (user_firstname, user_lastname, user_email, user_city, user_state, user_zip, user_address, user_phone, loginId, user_patientId, user_country) values " +
+                "('"+g_firstName+"', '"+g_lastName+"', '"+g_email+"', '"+g_city+"', '"+g_state+"', '"+g_zip+"', '"+g_address+"', '"+g_phone+"', '"+newLoginId+"', '"+g_patientId+"', '"+g_country+"') ";
             cmd.ExecuteScalar();
             //Get the user ID of the user who was just added:
             cmd.CommandText = "select userId from users where loginId = '"+newLoginId+"' ";
@@ -200,8 +211,8 @@ namespace NephroNet.Accounts.Admin
                 "('" + temp_userId + "', '" + g_firstName + "', '" + g_lastName + "', '" + g_roleId + "') ";
             cmd.ExecuteScalar();
             //Store the user's ID into the "CompleteProfiles" table:
-            cmd.CommandText = "insert into CompleteProfiles (userId, completeProfile_city, completeProfile_state, completeProfile_zip, completeProfile_address) values " +
-                "('" + temp_userId + "', '" + g_city + "', '" + g_state + "', '" + g_zip + "', '"+ g_address + "') ";
+            cmd.CommandText = "insert into CompleteProfiles (userId, completeProfile_city, completeProfile_state, completeProfile_zip, completeProfile_address, completeProfile_country) values " +
+                "('" + temp_userId + "', '" + g_city + "', '" + g_state + "', '" + g_zip + "', '"+ g_address + "', '"+g_country+"') ";
             cmd.ExecuteScalar();
             //Get the complete profile ID:
             cmd.CommandText = "select completeProfileId from CompleteProfiles where userId = '"+temp_userId+"' ";

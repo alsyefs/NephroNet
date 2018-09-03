@@ -80,6 +80,7 @@ namespace NephroNet.Accounts.Patient
             calBirthdate.VisibleDate = DateTime.Now.AddYears(Convert.ToInt32(drpYearList.SelectedValue) - DateTime.Now.Year);
         }
         //public override void VerifyRenderingInServerForm(Control control) { }
+        //Methods to show and hide controls
         protected void viewProfiles()
         {
             View.Visible = true;
@@ -89,6 +90,15 @@ namespace NephroNet.Accounts.Patient
             EditCurrentHealthConditions.Visible = false;
             EditCurrentTreatments.Visible = false;
             lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
         }
         protected void showEditShortProfile()
         {
@@ -100,6 +110,15 @@ namespace NephroNet.Accounts.Patient
             EditCurrentTreatments.Visible = false;
             lblSaveShortProfileMessage.Visible = false;
             getEditShortProfileInformation();
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
         }
         protected void showEditCompleteProfile()
         {
@@ -110,6 +129,15 @@ namespace NephroNet.Accounts.Patient
             EditCurrentHealthConditions.Visible = false;
             EditCurrentTreatments.Visible = false;
             lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
         }
         protected void showEditBlockedUsers()
         {
@@ -120,6 +148,15 @@ namespace NephroNet.Accounts.Patient
             EditCurrentHealthConditions.Visible = false;
             EditCurrentTreatments.Visible = false;
             lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
         }
         protected void showEditCurrentHealthConditions()
         {
@@ -130,6 +167,15 @@ namespace NephroNet.Accounts.Patient
             EditCurrentHealthConditions.Visible = true;
             EditCurrentTreatments.Visible = false;
             lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
         }
         protected void showEditCurrentTreatments()
         {
@@ -140,14 +186,177 @@ namespace NephroNet.Accounts.Patient
             EditCurrentHealthConditions.Visible = false;
             EditCurrentTreatments.Visible = true;
             lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
         }
+        protected void showEditMajorDiagnoses()
+        {
+            View.Visible = false;
+            EditShortProfile.Visible = false;
+            EditCompleteProfile.Visible = false;
+            EditBlockedUsers.Visible = false;
+            EditCurrentHealthConditions.Visible = false;
+            EditCurrentTreatments.Visible = false;
+            lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = true;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
+        }
+        protected void showEditPhoneNumbers()
+        {
+            View.Visible = false;
+            EditShortProfile.Visible = false;
+            EditCompleteProfile.Visible = false;
+            EditBlockedUsers.Visible = false;
+            EditCurrentHealthConditions.Visible = false;
+            EditCurrentTreatments.Visible = false;
+            lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = true;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
+        }
+        protected void showEditEmails()
+        {
+            View.Visible = false;
+            EditShortProfile.Visible = false;
+            EditCompleteProfile.Visible = false;
+            EditBlockedUsers.Visible = false;
+            EditCurrentHealthConditions.Visible = false;
+            EditCurrentTreatments.Visible = false;
+            lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = true;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
+        }
+        protected void showEditPastHealthConditions()
+        {
+            View.Visible = false;
+            EditShortProfile.Visible = false;
+            EditCompleteProfile.Visible = false;
+            EditBlockedUsers.Visible = false;
+            EditCurrentHealthConditions.Visible = false;
+            EditCurrentTreatments.Visible = false;
+            lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = true;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
+        }
+        protected void showEditAllergies()
+        {
+            View.Visible = false;
+            EditShortProfile.Visible = false;
+            EditCompleteProfile.Visible = false;
+            EditBlockedUsers.Visible = false;
+            EditCurrentHealthConditions.Visible = false;
+            EditCurrentTreatments.Visible = false;
+            lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = true;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
+        }
+        protected void showEditInsurances()
+        {
+            View.Visible = false;
+            EditShortProfile.Visible = false;
+            EditCompleteProfile.Visible = false;
+            EditBlockedUsers.Visible = false;
+            EditCurrentHealthConditions.Visible = false;
+            EditCurrentTreatments.Visible = false;
+            lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = true;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = false;
+        }
+        protected void showEditPastPatientIDs()
+        {
+            View.Visible = false;
+            EditShortProfile.Visible = false;
+            EditCompleteProfile.Visible = false;
+            EditBlockedUsers.Visible = false;
+            EditCurrentHealthConditions.Visible = false;
+            EditCurrentTreatments.Visible = false;
+            lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = true;
+            EditTreatmentsHistory.Visible = false;
+        }
+        protected void showEditTreatmentsHistory()
+        {
+            View.Visible = false;
+            EditShortProfile.Visible = false;
+            EditCompleteProfile.Visible = false;
+            EditBlockedUsers.Visible = false;
+            EditCurrentHealthConditions.Visible = false;
+            EditCurrentTreatments.Visible = false;
+            lblSaveShortProfileMessage.Visible = false;
+            //Complete Profile Controls:
+            EditMajorDiagnoses.Visible = false;
+            EditPhoneNumbers.Visible = false;
+            EditEmails.Visible = false;
+            EditPastHealthConditions.Visible = false;
+            EditAllergies.Visible = false;
+            EditInsurances.Visible = false;
+            EditPastPatientIDs.Visible = false;
+            EditTreatmentsHistory.Visible = true;
+        }
+        
+
         protected void btnShortProfile_Click(object sender, EventArgs e)
         {
             showEditShortProfile();
         }
         protected void btnCompleteProfile_Click(object sender, EventArgs e)
         {
-
+            showEditCompleteProfile();
         }
         protected bool checkEditShortProfileInformationInput()
         {
@@ -694,6 +903,67 @@ namespace NephroNet.Accounts.Patient
             getEditShortProfileInformation();
             txtTypeTreatment.Text = "";
         }
+
+        protected void drpIssueStarted_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void drpCountry_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnMajorDiagnosesView_Click(object sender, EventArgs e)
+        {
+            showEditMajorDiagnoses();
+        }
+
+        protected void btnPhoneNumbersView_Click(object sender, EventArgs e)
+        {
+            showEditPhoneNumbers();
+        }
+
+        protected void btnEmailsView_Click(object sender, EventArgs e)
+        {
+            showEditEmails();
+        }
+
+        protected void btnPastHealthConditionsView_Click(object sender, EventArgs e)
+        {
+            showEditPastHealthConditions();
+        }
+
+        protected void btnAllergiesView_Click(object sender, EventArgs e)
+        {
+            showEditAllergies();
+        }
+
+        protected void btnInsurancesView_Click(object sender, EventArgs e)
+        {
+            showEditInsurances();
+        }
+
+        protected void btnPastPatientIDsView_Click(object sender, EventArgs e)
+        {
+            showEditPastPatientIDs();
+        }
+
+        protected void btnTreatmentsHistoryView_Click(object sender, EventArgs e)
+        {
+            showEditTreatmentsHistory();
+        }
+
+        protected void btnSaveEditCompleteProfile_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnCancelEditCompleteProfile_Click(object sender, EventArgs e)
+        {
+            viewProfiles();
+        }
+
         protected void btnCancelTreatment_Click(object sender, EventArgs e)
         {
             showEditShortProfile();

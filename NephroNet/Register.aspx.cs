@@ -20,6 +20,8 @@ namespace NephroNet
             {
                 drpCountries.DataSource = getCountries();
                 drpCountries.DataBind();
+                string headline = "Select your country";
+                drpCountries.Items.Insert(0, new ListItem(headline, headline));
             }
 
         }
@@ -145,21 +147,45 @@ namespace NephroNet
             }
             //Check state:
             string stateError = "";
-            if (!error.validState(drpStates.SelectedIndex, out stateError))
+            if (drpCountries.SelectedValue.Equals("United States"))
             {
-                correct = false;
-                lblStateError.Visible = true;
-                lblStateError.Text = stateError;
-                drpStates.Focus();
+                if (!error.validState(drpStates.SelectedIndex, out stateError))
+                {
+                    correct = false;
+                    lblStateError.Visible = true;
+                    lblStateError.Text = stateError;
+                    drpStates.Focus();
+                }
+            }
+            else if (!drpCountries.SelectedValue.Equals("United States"))
+            {
+                if (string.IsNullOrWhiteSpace(txtState.Text))
+                {
+                    correct = false;
+                    lblStateError.Visible = true;
+                    lblStateError.Text = "Invalid input: Please type your state or region.";
+                }
             }
             //Check zip:
             string zipError = "";
-            if (error.ContainsSpecialChars(txtZip.Text, out zipError) || !error.validZip(txtZip.Text, out zipError))
+            if (drpCountries.SelectedValue.Equals("United States"))
             {
-                correct = false;
-                lblZipError.Visible = true;
-                lblZipError.Text = zipError;
-                txtZip.Focus();
+                if (error.ContainsSpecialChars(txtZip.Text, out zipError) || !error.validZip(txtZip.Text, out zipError))
+                {
+                    correct = false;
+                    lblZipError.Visible = true;
+                    lblZipError.Text = zipError;
+                    txtZip.Focus();
+                }
+            }
+            else if (!drpCountries.SelectedValue.Equals("United States"))
+            {
+                if (string.IsNullOrWhiteSpace(txtZip.Text))
+                {
+                    correct = false;
+                    lblZipError.Visible = true;
+                    lblZipError.Text = "Invalid input: Please type your zip code.";
+                }
             }
             //Check address:
             string addressError = "";
@@ -174,14 +200,27 @@ namespace NephroNet
             }
             //Check phone:
             string phoneError = "";
-            if (
+            if (drpCountries.SelectedValue.Equals("United States"))
+            {
+                if (
                 //error.ContainsSpecialChars(txtPhone.Text, out phoneError) || 
                 !error.validPhone(txtPhone.Text, out phoneError))
+                {
+                    correct = false;
+                    lblPhoneError.Visible = true;
+                    lblPhoneError.Text = phoneError;
+                    txtPhone.Focus();
+                }
+            }
+            else if (drpCountries.SelectedValue.Equals("United States"))
             {
-                correct = false;
-                lblPhoneError.Visible = true;
-                lblPhoneError.Text = phoneError;
-                txtPhone.Focus();
+                if(!error.validInternationalPhone(txtPhone.Text, out phoneError))
+                {
+                    correct = false;
+                    lblPhoneError.Visible = true;
+                    lblPhoneError.Text = phoneError;
+                    txtPhone.Focus();
+                }
             }
             //Check selected role:
             string roleError = "";
@@ -228,10 +267,23 @@ namespace NephroNet
             txtEmail.Text = txtEmail.Text.Replace("'", "''");
             txtPhone.Text = txtPhone.Text.Replace("'", "''");
             txtPatientId.Text = txtPatientId.Text.Replace("'", "''");
+            txtZip.Text = txtZip.Text.Replace("'", "''");
+            txtState.Text = txtState.Text.Replace("'", "''");
+            txtPhone.Text = txtPhone.Text.Replace(" ", "");
+            txtPhone.Text = txtPhone.Text.Replace("'", "''");
+            string state = "";
+            if (!drpCountries.SelectedValue.Equals("United States"))
+            {
+                state = txtState.Text.Replace("'", "''");
+            }
+            else
+            {
+                state = drpStates.SelectedItem.ToString();
+            }
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "insert into Registrations(register_firstname, register_lastname, register_email, register_city, register_state, register_zip, register_address, register_roleId, register_phone, register_patientId)" +
-                " values ('" + txtFirstname.Text+"', '"+txtLastname.Text+"', '"+txtEmail.Text+"', '"+txtCity.Text+"', '"+drpStates.SelectedItem.ToString()+"'," +
-                " '"+txtZip.Text+"', '"+txtAddress.Text+"', '"+drpRole.SelectedIndex+"','"+txtPhone.Text+"', '"+txtPatientId.Text+"') ";
+            cmd.CommandText = "insert into Registrations(register_firstname, register_lastname, register_email, register_city, register_state, register_zip, register_address, register_roleId, register_phone, register_patientId, register_country)" +
+                " values ('" + txtFirstname.Text+"', '"+txtLastname.Text+"', '"+txtEmail.Text+"', '"+txtCity.Text+"', '"+ state + "'," +
+                " '"+txtZip.Text+"', '"+txtAddress.Text+"', '"+drpRole.SelectedIndex+"','"+txtPhone.Text+"', '"+txtPatientId.Text+"', '"+drpCountries.SelectedItem.ToString()+"') ";
             cmd.ExecuteScalar();
             connect.Close();
         }
@@ -248,6 +300,20 @@ namespace NephroNet
                 lblPatientId.Visible = false;
                 txtPatientId.Visible = false;
                 lblPatientIdError.Visible = false;
+            }
+        }
+
+        protected void drpCountries_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(!drpCountries.SelectedValue.Equals("United States"))
+            {
+                drpStates.Visible = false;
+                txtState.Visible = true;
+            }
+            else
+            {
+                drpStates.Visible = true;
+                txtState.Visible = false;
             }
         }
     }

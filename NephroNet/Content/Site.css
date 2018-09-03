@@ -167,6 +167,24 @@ iframe {
     padding-left: 1px;
     padding-right: 1px;
 }
+.registerTable table {
+    border:1px;
+    width: 100%;
+    margin: 0 auto;
+}
+/** only for the head of the table. */
+.registerTable table thead th {
+    padding: 0;
+}
+
+/** only for the body of the table. */
+.registerTable table tbody td {
+    padding: 0;
+    white-space:nowrap;
+}
+
+
+
 .dropdown-menu {
     border: 2px solid #dadada;
     border-radius: 5px;

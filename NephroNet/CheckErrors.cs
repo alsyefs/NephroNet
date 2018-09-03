@@ -182,6 +182,33 @@ namespace NephroNet
             }
             return correct;
         }
+        //Validate international phone:
+        public bool validInternationalPhone(string phone, out string result)
+        {
+            bool correct = true;
+            result = "";
+            if (string.IsNullOrEmpty(phone))
+            {
+                correct = false;
+                result = "Invalid input: Please type the phone.";
+            }
+            else if (!phone.All(char.IsDigit))
+            {
+                correct = false;
+                result = "Invalid input: Please type the correct phone numbers using digits only.";
+            }
+            else if (phone.Length < 10)
+            {
+                correct = false;
+                result = "Invalid input: the phone number cannot be less than 10 digits.";
+            }
+            else if (phone.Length > 20)
+            {
+                correct = false;
+                result = "Invalid input: the phone number cannot be more than 20 digits.";
+            }
+            return correct;
+        }
         //Validate role:
         public bool validRole(int role, out string result)
         {
