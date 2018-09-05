@@ -152,13 +152,17 @@ iframe {
     text-align: right;
     padding-left: 1px;
     padding-right: 1px;
+    margin: 0;
+    padding: 0;
 }
 .secondCell {
-    width: 50%;
+    /*width: 50%;*/
     /*column-span: all;*/
     text-align: left;
     padding-right: 1px;
     padding-left: 1px;
+    margin: 0;
+    padding: 0;
 }
 .thirdCell {
     /*width: 20%;*/
@@ -166,6 +170,8 @@ iframe {
     text-align: left;
     padding-left: 1px;
     padding-right: 1px;
+    margin: 0;
+    padding: 0;
 }
 .registerTable table {
     border:1px;

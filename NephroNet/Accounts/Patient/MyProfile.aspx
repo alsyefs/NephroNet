@@ -92,7 +92,7 @@
                                         <td class="firstCell">
                                             <asp:Label ID="lblBirthdateYear" runat="server" Text="Birthdate Year" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:DropDownList ID="drpYearList" runat="server" AutoPostBack="true" OnSelectedIndexChanged="YearList_SelectedIndexChanged"></asp:DropDownList>
+                                            <asp:DropDownList ID="drpYearList" runat="server" AutoPostBack="true" OnSelectedIndexChanged="drpYearList_SelectedIndexChanged"></asp:DropDownList>
                                         </td>
 
                                     </tr>
@@ -319,15 +319,13 @@
                         <%--Table Edit Complete Profile start--%>
                         <div runat="server" id="EditCompleteProfile">
                             <div>
-                                <table style="width: 100%;">
-                                    <tr>
-                                        <td>Edit Complete Profile Information</td>
-                                    </tr>
+                                        <h3>Edit Complete Profile Information</h3>
+                                <table class="tableEdit" style="width: 100%;">
                                     <tr>
                                         <td class="firstCell">
                                             <asp:Label ID="lblOnDialysis" runat="server" Text="On dialysis?" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:DropDownList ID="drpOnDialysis" runat="server" Font-Size="Medium">
+                                            <asp:DropDownList ID="drpOnDialysis" runat="server" Font-Size="Medium" Width="100%">
                                                 <asp:ListItem>Are you on dialysis?</asp:ListItem>
                                                 <asp:ListItem>Yes</asp:ListItem>
                                                 <asp:ListItem>No</asp:ListItem>
@@ -341,7 +339,7 @@
                                         <td class="firstCell">
                                             <asp:Label ID="lblKidneyDisease" runat="server" Text="Kidney disease stage" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:DropDownList ID="drpKidneyDisease" runat="server" Font-Size="Medium">
+                                            <asp:DropDownList ID="drpKidneyDisease" runat="server" Font-Size="Medium" Width="100%">
                                                 <asp:ListItem>Select your stage</asp:ListItem>
                                                 <asp:ListItem>Stage 1</asp:ListItem>
                                                 <asp:ListItem>Stage 2</asp:ListItem>
@@ -358,14 +356,14 @@
                                         <td class="firstCell">
                                             <asp:Label ID="lblIssueStartedYear" runat="server" Text="Issue started year" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:DropDownList ID="drpIssueStarted" runat="server" AutoPostBack="true" OnSelectedIndexChanged="drpIssueStarted_SelectedIndexChanged"></asp:DropDownList>
+                                            <asp:DropDownList ID="drpIssueStarted" runat="server" AutoPostBack="true" Width="100%" OnSelectedIndexChanged="drpIssueStarted_SelectedIndexChanged"></asp:DropDownList>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="firstCell">
                                             <asp:Label ID="lblIssueStarted" runat="server" Text="Issue started" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:Calendar ID="calIssueStarted" runat="server"></asp:Calendar>
+                                            <asp:Calendar ID="calIssueStarted" runat="server" Width="100%"></asp:Calendar>
                                         </td>
                                         <td class="thirdCell">
                                             <asp:Label ID="lblIssueStartedError" runat="server" Text=" " Visible="false" ForeColor="Red" Font-Size="Medium"></asp:Label></td>
@@ -374,7 +372,7 @@
                                         <td class="firstCell">
                                             <asp:Label ID="lblBloodType" runat="server" Text="Blood type" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:DropDownList ID="drpBloodType" runat="server" AutoPostBack="true">
+                                            <asp:DropDownList ID="drpBloodType" runat="server" AutoPostBack="true" Width="100%">
                                                 <asp:ListItem>Select your blood type</asp:ListItem>
                                                 <asp:ListItem>A+</asp:ListItem>
                                                 <asp:ListItem>A-</asp:ListItem>
@@ -394,7 +392,7 @@
                                         <td class="firstCell">
                                             <asp:Label ID="lblCountry" runat="server" Text="Country" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:DropDownList ID="drpCountry" runat="server" AutoPostBack="true" OnSelectedIndexChanged="drpCountry_SelectedIndexChanged"></asp:DropDownList>
+                                            <asp:DropDownList ID="drpCountry" runat="server" AutoPostBack="true" Width="100%" OnSelectedIndexChanged="drpCountry_SelectedIndexChanged"></asp:DropDownList>
                                         </td>
                                         <td class="thirdCell">
                                             <asp:Label ID="lblCountryError" runat="server" Text=" " Visible="false" ForeColor="Red" Font-Size="Medium"></asp:Label></td>
@@ -403,7 +401,7 @@
                                         <td class="firstCell">
                                             <asp:Label ID="lblCity" runat="server" Text="City" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:TextBox ID="txtCity" runat="server" Font-Size="Medium"></asp:TextBox>
+                                            <asp:TextBox ID="txtCity" runat="server" Font-Size="Medium" Width="100%"></asp:TextBox>
                                         </td>
                                         <td class="thirdCell">
                                             <asp:Label ID="lblCityError" runat="server" Text=" " Visible="false" ForeColor="Red" Font-Size="Medium"></asp:Label></td>
@@ -412,8 +410,60 @@
                                         <td class="firstCell">
                                             <asp:Label ID="lblState" runat="server" Text="State" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:TextBox ID="txtState" runat="server" Font-Size="Medium"></asp:TextBox>
-                                            <asp:DropDownList ID="drpState" runat="server" AutoPostBack="true" Visible="false"></asp:DropDownList>
+                                            <asp:DropDownList ID="drpState" runat="server" AutoPostBack="true" Visible="false" Width="100%">
+                                                <asp:ListItem>Select a state</asp:ListItem>
+                                                    <asp:ListItem>Alabama</asp:ListItem>
+                                                    <asp:ListItem>Alaska</asp:ListItem>
+                                                    <asp:ListItem>Arizona</asp:ListItem>
+                                                    <asp:ListItem>Arkansas</asp:ListItem>
+                                                    <asp:ListItem>California</asp:ListItem>
+                                                    <asp:ListItem>Colorado</asp:ListItem>
+                                                    <asp:ListItem>Connecticut</asp:ListItem>
+                                                    <asp:ListItem>Delaware</asp:ListItem>
+                                                    <asp:ListItem>Florida</asp:ListItem>
+                                                    <asp:ListItem>Georgia</asp:ListItem>
+                                                    <asp:ListItem>Hawaii</asp:ListItem>
+                                                    <asp:ListItem>Idaho</asp:ListItem>
+                                                    <asp:ListItem>Illinois</asp:ListItem>
+                                                    <asp:ListItem>Indiana</asp:ListItem>
+                                                    <asp:ListItem>Iowa</asp:ListItem>
+                                                    <asp:ListItem>Kansas</asp:ListItem>
+                                                    <asp:ListItem>Kentucky</asp:ListItem>
+                                                    <asp:ListItem>Louisiana</asp:ListItem>
+                                                    <asp:ListItem>Maine</asp:ListItem>
+                                                    <asp:ListItem>Maryland</asp:ListItem>
+                                                    <asp:ListItem>Massachusetts</asp:ListItem>
+                                                    <asp:ListItem>Michigan</asp:ListItem>
+                                                    <asp:ListItem>Minnesota</asp:ListItem>
+                                                    <asp:ListItem>Mississippi</asp:ListItem>
+                                                    <asp:ListItem>Missouri</asp:ListItem>
+                                                    <asp:ListItem>Montana</asp:ListItem>
+                                                    <asp:ListItem>Nebraska</asp:ListItem>
+                                                    <asp:ListItem>Nevada</asp:ListItem>
+                                                    <asp:ListItem>New Hampshire</asp:ListItem>
+                                                    <asp:ListItem>New Jersey</asp:ListItem>
+                                                    <asp:ListItem>New Mexico</asp:ListItem>
+                                                    <asp:ListItem>New York</asp:ListItem>
+                                                    <asp:ListItem>North Carolina</asp:ListItem>
+                                                    <asp:ListItem>North Dakota</asp:ListItem>
+                                                    <asp:ListItem>Ohio</asp:ListItem>
+                                                    <asp:ListItem>Oklahoma</asp:ListItem>
+                                                    <asp:ListItem>Oregon</asp:ListItem>
+                                                    <asp:ListItem>Pennsylvania</asp:ListItem>
+                                                    <asp:ListItem>Rhode Island</asp:ListItem>
+                                                    <asp:ListItem>South Carolina</asp:ListItem>
+                                                    <asp:ListItem>South Dakota</asp:ListItem>
+                                                    <asp:ListItem>Tennessee</asp:ListItem>
+                                                    <asp:ListItem>Texas</asp:ListItem>
+                                                    <asp:ListItem>Utah</asp:ListItem>
+                                                    <asp:ListItem>Vermont</asp:ListItem>
+                                                    <asp:ListItem>Virginia</asp:ListItem>
+                                                    <asp:ListItem>Washington</asp:ListItem>
+                                                    <asp:ListItem>West Virginia</asp:ListItem>
+                                                    <asp:ListItem>Wisconsin</asp:ListItem>
+                                                    <asp:ListItem>Wyoming</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:TextBox ID="txtState" runat="server" Font-Size="Medium" Width="100%"></asp:TextBox>
                                         </td>
                                         <td class="thirdCell">
                                             <asp:Label ID="lblStateError" runat="server" Text=" " Visible="false" ForeColor="Red" Font-Size="Medium"></asp:Label></td>
@@ -422,73 +472,82 @@
                                         <td class="firstCell">
                                             <asp:Label ID="lblAddress" runat="server" Text="Address" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:TextBox ID="txtAddress" runat="server" Font-Size="Medium"></asp:TextBox>
+                                            <asp:TextBox ID="txtAddress" runat="server" Font-Size="Medium" Width="100%"></asp:TextBox>
                                         </td>
                                         <td class="thirdCell">
                                             <asp:Label ID="lblAddressError" runat="server" Text=" " Visible="false" ForeColor="Red" Font-Size="Medium"></asp:Label></td>
                                     </tr>
                                     <tr>
                                         <td class="firstCell">
-                                            <asp:Label ID="lblMajorDiagnosesView" runat="server" Text="Major diagnoses" Font-Size="Medium"></asp:Label></td>
+                                            <asp:Label ID="lblZip" runat="server" Text="Zip code" Font-Size="Medium"></asp:Label></td>
                                         <td class="secondCell">
-                                            <asp:Label ID="lblMajorDiagnosesViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>
+                                            <asp:TextBox ID="txtZip" runat="server" Font-Size="Medium" Width="100%"></asp:TextBox>
+                                        </td>
                                         <td class="thirdCell">
+                                            <asp:Label ID="lblZipError" runat="server" Text=" " Visible="false" ForeColor="Red" Font-Size="Medium"></asp:Label></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="firstCell">
+                                            <asp:Label ID="lblMajorDiagnosesView" runat="server" Text="Major diagnoses" Font-Size="Medium"></asp:Label></td>
+                                        <%--<td class="secondCell">
+                                            <asp:Label ID="lblMajorDiagnosesViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>--%>
+                                        <td class="secondCell">
                                             <asp:Button ID="btnMajorDiagnosesView" runat="server" Text="Edit Major Diagnoses" Font-Size="Medium" Width="100%" BackColor="orange" Font-Bold="True" OnClick="btnMajorDiagnosesView_Click" /></td>
                                     </tr>
                                     <tr>
                                         <td class="firstCell">
                                             <asp:Label ID="lblPhoneNumbersView" runat="server" Text="Phone numbers" Font-Size="Medium"></asp:Label></td>
+                                        <%--<td class="secondCell">
+                                            <asp:Label ID="lblPhoneNumbersViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>--%>
                                         <td class="secondCell">
-                                            <asp:Label ID="lblPhoneNumbersViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>
-                                        <td class="thirdCell">
                                             <asp:Button ID="btnPhoneNumbersView" runat="server" Text="Edit Phone Numbers" Font-Size="Medium" Width="100%" BackColor="orange" Font-Bold="True" OnClick="btnPhoneNumbersView_Click" /></td>
                                     </tr>
                                     <tr>
                                         <td class="firstCell">
                                             <asp:Label ID="lblEmailsView" runat="server" Text="Emails" Font-Size="Medium"></asp:Label></td>
+                                        <%--<td class="secondCell">
+                                            <asp:Label ID="lblEmailsViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>--%>
                                         <td class="secondCell">
-                                            <asp:Label ID="lblEmailsViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>
-                                        <td class="thirdCell">
                                             <asp:Button ID="btnEmailsView" runat="server" Text="Edit Emails" Font-Size="Medium" Width="100%" BackColor="orange" Font-Bold="True" OnClick="btnEmailsView_Click" /></td>
                                     </tr>
                                     <tr>
                                         <td class="firstCell">
                                             <asp:Label ID="lblPastHealthConditionsView" runat="server" Text="Past health conditions" Font-Size="Medium"></asp:Label></td>
+                                        <%--<td class="secondCell">
+                                            <asp:Label ID="lblPastHealthConditionsViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>--%>
                                         <td class="secondCell">
-                                            <asp:Label ID="lblPastHealthConditionsViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>
-                                        <td class="thirdCell">
                                             <asp:Button ID="btnPastHealthConditionsView" runat="server" Text="Edit Past Health Conditions" Font-Size="Medium" Width="100%" BackColor="orange" Font-Bold="True" OnClick="btnPastHealthConditionsView_Click" /></td>
                                     </tr>
                                     <tr>
                                         <td class="firstCell">
                                             <asp:Label ID="lblAllergiesView" runat="server" Text="Allergies" Font-Size="Medium"></asp:Label></td>
+                                        <%--<td class="secondCell">
+                                            <asp:Label ID="lblAllergiesViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>--%>
                                         <td class="secondCell">
-                                            <asp:Label ID="lblAllergiesViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>
-                                        <td class="thirdCell">
                                             <asp:Button ID="btnAllergiesView" runat="server" Text="Edit Allergies" Font-Size="Medium" Width="100%" BackColor="orange" Font-Bold="True" OnClick="btnAllergiesView_Click" /></td>
                                     </tr>
                                     <tr>
                                         <td class="firstCell">
                                             <asp:Label ID="lblInsurancesView" runat="server" Text="Insurances" Font-Size="Medium"></asp:Label></td>
+                                        <%--<td class="secondCell">
+                                            <asp:Label ID="lblInsurancesViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>--%>
                                         <td class="secondCell">
-                                            <asp:Label ID="lblInsurancesViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>
-                                        <td class="thirdCell">
                                             <asp:Button ID="btnInsurancesView" runat="server" Text="Edit Insurances" Font-Size="Medium" Width="100%" BackColor="orange" Font-Bold="True" OnClick="btnInsurancesView_Click" /></td>
                                     </tr>
                                     <tr>
                                         <td class="firstCell">
                                             <asp:Label ID="lblPastPatientIDsView" runat="server" Text="Past patient IDs" Font-Size="Medium"></asp:Label></td>
+                                        <%--<td class="secondCell">
+                                            <asp:Label ID="lblPastPatientIDsViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>--%>
                                         <td class="secondCell">
-                                            <asp:Label ID="lblPastPatientIDsViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>
-                                        <td class="thirdCell">
                                             <asp:Button ID="btnPastPatientIDsView" runat="server" Text="Edit Past Patient IDs" Font-Size="Medium" Width="100%" BackColor="orange" Font-Bold="True" OnClick="btnPastPatientIDsView_Click" /></td>
                                     </tr>
                                     <tr>
                                         <td class="firstCell">
                                             <asp:Label ID="lblTreatmentsHistoryView" runat="server" Text="Treatments history" Font-Size="Medium"></asp:Label></td>
+                                        <%--<td class="secondCell">
+                                            <asp:Label ID="lblTreatmentsHistoryViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>--%>
                                         <td class="secondCell">
-                                            <asp:Label ID="lblTreatmentsHistoryViewList" runat="server" Text=" " Font-Size="Medium"></asp:Label></td>
-                                        <td class="thirdCell">
                                             <asp:Button ID="btnTreatmentsHistoryView" runat="server" Text="Edit Treatments History" Font-Size="Medium" Width="100%" BackColor="orange" Font-Bold="True" OnClick="btnTreatmentsHistoryView_Click" /></td>
                                     </tr>
                                 </table>
@@ -502,7 +561,7 @@
                                             <asp:Button ID="btnCancelEditCompleteProfile" runat="server" Text="Go Back" BackColor="red" Font-Bold="True" Font-Size="Medium" Width="50%" OnClick="btnCancelEditCompleteProfile_Click" /></td>
                                     </tr>
                                 </table>
-                                <asp:Label ID="Label24" runat="server" Text="You have successfully updated your complete profile!" Font-Size="Medium" ForeColor="green" Visible="false"></asp:Label>
+                                <asp:Label ID="lblSaveCompleteProfileMessage" runat="server" Text="You have successfully updated your complete profile!" Font-Size="Medium" ForeColor="green" Visible="false"></asp:Label>
                             </div>
                         </div>
                         <%--Table Edit Complete Profile end--%>

@@ -57,25 +57,32 @@ namespace NephroNet.Accounts.Patient
         }
         protected void showInformation()
         {
+            string nationalityHeadline = "Select your nationality";
             drpNationality.DataSource = getCountries();
             drpNationality.DataBind();
-            string headline = "Select your nationality";
-            drpNationality.Items.Insert(0, new ListItem(headline, headline));
-            //Drop down to select years for the birthdate:
+            drpNationality.Items.Insert(0, new ListItem(nationalityHeadline, nationalityHeadline));
+            string countryHeadline = "Select your country";
+            drpCountry.DataSource = getCountries();
+            drpCountry.DataBind();
+            drpCountry.Items.Insert(0, new ListItem(countryHeadline, countryHeadline));
+            //Clear the drop downs to avoid duplicate dates:
+            drpIssueStarted.Items.Clear();
             drpYearList.Items.Clear();
             for (int year = DateTime.Now.Year; year > 1880; year--)
             {
                 string targetYear = String.Format("{0}", year);
                 drpYearList.Items.Add(new ListItem(targetYear, year.ToString()));
+                drpIssueStarted.Items.Add(new ListItem(targetYear, year.ToString()));
                 //string targetYear = year.ToString();
                 //drpYearList.Items.Add(new ListItem(targetYear));
             }
-            getEditShortProfileInformation();
             getShortProfileInformation();
+            getEditShortProfileInformation();
             getCompleteProfileInformation();
+            getEditCompleteProfileInformation();
             viewProfiles();
         }
-        protected void YearList_SelectedIndexChanged(object sender, EventArgs e)
+        protected void drpYearList_SelectedIndexChanged(object sender, EventArgs e)
         {
             calBirthdate.VisibleDate = DateTime.Now.AddYears(Convert.ToInt32(drpYearList.SelectedValue) - DateTime.Now.Year);
         }
@@ -99,6 +106,7 @@ namespace NephroNet.Accounts.Patient
             EditInsurances.Visible = false;
             EditPastPatientIDs.Visible = false;
             EditTreatmentsHistory.Visible = false;
+            lblSaveCompleteProfileMessage.Visible = false;
         }
         protected void showEditShortProfile()
         {
@@ -904,14 +912,80 @@ namespace NephroNet.Accounts.Patient
             txtTypeTreatment.Text = "";
         }
 
+        protected void getEditCompleteProfileInformation()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+            string userId = cmd.ExecuteScalar().ToString();
+            CompleteProfile completeProfile = new CompleteProfile(userId, userId);
+            string onDialysis = completeProfile.OnDialysis;
+            string kidneyDisease = completeProfile.KidneyDisease;
+            string issueStarted = completeProfile.IssueStartDate;
+            string bloodType = completeProfile.BloodType;
+            string country = completeProfile.Country;
+            string city = completeProfile.City;
+            string state = completeProfile.State;
+            string address = completeProfile.Address;
+            string zip = completeProfile.Zip;
+            if (!string.IsNullOrWhiteSpace(onDialysis))
+                drpOnDialysis.SelectedValue = onDialysis;
+            if (!string.IsNullOrWhiteSpace(kidneyDisease))
+                drpKidneyDisease.SelectedValue = kidneyDisease;
+            if (!string.IsNullOrWhiteSpace(issueStarted))
+            {
+                calIssueStarted.SelectedDate = DateTime.Parse(issueStarted);
+                drpIssueStarted.SelectedValue = calIssueStarted.SelectedDate.Year.ToString();
+                calIssueStarted.VisibleDate = DateTime.Parse(issueStarted);
+            }
+            if (!string.IsNullOrWhiteSpace(bloodType))
+                drpBloodType.SelectedValue = bloodType;
+            if (!string.IsNullOrWhiteSpace(country))
+                drpCountry.SelectedValue = country;
+            if (!string.IsNullOrWhiteSpace(city))
+                txtCity.Text = city;
+            if (!string.IsNullOrWhiteSpace(state))
+            {
+                if (drpCountry.SelectedValue.Equals("United States"))
+                {
+                    drpState.SelectedValue = state;
+                    txtState.Text = "";
+                    drpState.Visible = true;
+                    txtState.Visible = false;
+                }
+                else
+                {
+                    drpState.SelectedIndex = 0;
+                    txtState.Text = state;
+                    drpState.Visible = false;
+                    txtState.Visible = true;
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(address))
+                txtAddress.Text = address;
+            if (!string.IsNullOrWhiteSpace(zip))
+                txtZip.Text = zip;
+            connect.Close();
+        }
         protected void drpIssueStarted_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            calIssueStarted.VisibleDate = DateTime.Now.AddYears(Convert.ToInt32(drpIssueStarted.SelectedValue) - DateTime.Now.Year);
         }
 
         protected void drpCountry_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (!drpCountry.SelectedValue.Equals("United States"))
+            {
+                drpState.Visible = false;
+                drpState.SelectedIndex = 0;
+                txtState.Visible = true;
+            }
+            else
+            {
+                drpState.Visible = true;
+                txtState.Visible = false;
+                txtState.Text = "";
+            }
         }
 
         protected void btnMajorDiagnosesView_Click(object sender, EventArgs e)
@@ -953,15 +1027,129 @@ namespace NephroNet.Accounts.Patient
         {
             showEditTreatmentsHistory();
         }
-
+        protected bool checkEditCompleteProfileInformationInput()
+        {
+            bool correct = true;
+            //Hide everything first:
+            lblOnDialysisError.Visible = false;
+            lblKidneyDiseaseError.Visible = false;
+            lblIssueStartedError.Visible = false;
+            lblBloodTypeError.Visible = false;
+            lblCountryError.Visible = false;
+            lblCityError.Visible = false;
+            lblStateError.Visible = false;
+            lblAddressError.Visible = false;
+            if(drpOnDialysis.SelectedIndex == 0)
+            {
+                correct = false;
+                lblOnDialysisError.Text = "Invalid input: Please select whether you are on dialysis or not. ";
+                lblOnDialysisError.Visible = true;
+            }
+            if(drpKidneyDisease.SelectedIndex == 0)
+            {
+                correct = false;
+                lblKidneyDiseaseError.Text = "Invalid input: Please select your kidney disease stage.";
+                lblKidneyDiseaseError.Visible = true;
+            }
+            string str_minimum_date = "1880-01-01";
+            DateTime minimum_date = DateTime.ParseExact(str_minimum_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            if (calIssueStarted.SelectedDate == DateTime.MinValue)
+            {
+                correct = false;
+                lblIssueStartedError.Text = "Invalid input: Please select the date when your issue started.";
+                lblIssueStartedError.Visible = true;
+            }
+            else if (calIssueStarted.SelectedDate < minimum_date || calIssueStarted.SelectedDate >= DateTime.Now)
+            {
+                correct = false;
+                lblIssueStartedError.Text = "Invalid input: Please select a reasonable date.";
+                lblIssueStartedError.Visible = true;
+            }
+            if (drpBloodType.SelectedIndex == 0)
+            {
+                correct = false;
+                lblBloodTypeError.Text = "Invalid input: Please select your blood type.";
+                lblBloodTypeError.Visible = true;
+            }
+            if (drpCountry.SelectedIndex == 0)
+            {
+                correct = false;
+                lblCountryError.Text = "Invalid input: Please select a country.";
+                lblCountryError.Visible = true;
+            }
+            if (string.IsNullOrWhiteSpace(txtCity.Text))
+            {
+                correct = false;
+                lblCityError.Text = "Invalid input: Please type a city.";
+                lblCityError.Visible = true;
+            }
+            if (drpCountry.SelectedValue.Equals("United States"))
+            {
+                if(drpState.SelectedIndex == 0)
+                {
+                    correct = false;
+                    lblStateError.Text = "Invalid input: Please select a state.";
+                    lblStateError.Visible = true;
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(txtState.Text))
+                {
+                    correct = false;
+                    lblStateError.Text = "Invalid input: Please type a state or region.";
+                    lblStateError.Visible = true;
+                }
+            }
+            if (string.IsNullOrWhiteSpace(txtAddress.Text))
+            {
+                correct = false;
+                lblAddressError.Text = "Invalid input: Please type your address.";
+                lblAddressError.Visible = true;
+            }
+            return correct;
+        }
         protected void btnSaveEditCompleteProfile_Click(object sender, EventArgs e)
         {
-
+            lblSaveCompleteProfileMessage.Visible = false;
+            //check for input errors:
+            if (checkEditCompleteProfileInformationInput())
+            {
+                //update the new information and store it in the DB:
+                connect.Open();
+                SqlCommand cmd = connect.CreateCommand();
+                cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
+                string userId = cmd.ExecuteScalar().ToString();
+                CompleteProfile completeProfile = new CompleteProfile(userId, userId);
+                string completeProfileId = completeProfile.Id;
+                string state = "";
+                if (drpCountry.SelectedValue.Equals("United States"))
+                    state = drpState.SelectedValue;
+                else
+                    state = txtState.Text.Replace("'", "''");
+                int onDialysis = 0;
+                if (drpOnDialysis.SelectedValue.Equals("No"))
+                    onDialysis = 0;
+                else
+                    onDialysis = 1;
+                cmd.CommandText = "update CompleteProfiles set completeProfile_onDialysis = '" + onDialysis + "', completeProfile_kidneyDisease ='" + drpKidneyDisease.SelectedValue + "'," +
+                    "completeProfile_issueStartDate = '" + calIssueStarted.SelectedDate + "', completeProfile_bloodType = '" + drpBloodType.SelectedValue + "', completeProfile_city = '" + txtCity.Text.Replace("'", "''") + "', completeProfile_state = '" + state + "'," +
+                    "completeProfile_zip = '" + txtZip.Text.Replace("'", "''") + "', completeProfile_address = '"+txtAddress.Text.Replace("'", "''")+"', completeProfile_country = '"+drpCountry.SelectedValue+ "'  where completeProfileId = '" + completeProfileId + "' ";
+                cmd.ExecuteScalar();
+                cmd.CommandText = "update Users set user_city = '"+txtCity.Text.Replace("'", "''") + "', user_state = '"+state+"', user_zip = '"+txtZip.Text.Replace("'", "''") + "'," +
+                    "user_address = '"+txtAddress.Text.Replace("'", "''") + "', user_country = '"+drpCountry.SelectedValue+"' where userId = '"+userId+"'  ";
+                cmd.ExecuteScalar();
+                connect.Close();
+                lblSaveCompleteProfileMessage.Visible = true;
+            }
+            getShortProfileInformation();
+            getCompleteProfileInformation();
         }
 
         protected void btnCancelEditCompleteProfile_Click(object sender, EventArgs e)
         {
             viewProfiles();
+            lblSaveCompleteProfileMessage.Visible = false;
         }
 
         protected void btnCancelTreatment_Click(object sender, EventArgs e)
@@ -989,7 +1177,8 @@ namespace NephroNet.Accounts.Patient
             string kidneyDisease = completeProfile.KidneyDisease;
             string issueDate = completeProfile.IssueStartDate;
             string bloodType = completeProfile.BloodType;
-            string address = completeProfile.Address + newLine + "  " + completeProfile.City + ", " + completeProfile.State + " " + completeProfile.Zip;
+            string address = completeProfile.Address + newLine + "  " + completeProfile.City + ", " + completeProfile.State + " " + completeProfile.Zip +
+                "<br/>" + completeProfile.Country;
             int counter = 0;
             string row = "";
             row += row_start + col_start + col_end + col_start + col_end + row_end;

@@ -719,7 +719,8 @@ namespace NephroNet.Accounts.Physician
             string kidneyDisease = completeProfile.KidneyDisease;
             string issueDate = completeProfile.IssueStartDate;
             string bloodType = completeProfile.BloodType;
-            string address = completeProfile.Address + newLine + "  " + completeProfile.City + ", " + completeProfile.State + " " + completeProfile.Zip;
+            string address = completeProfile.Address + newLine + "  " + completeProfile.City + ", " + completeProfile.State + " " + completeProfile.Zip+
+                "<br/>" + completeProfile.Country;
             int counter = 0;
             string row = "";
             row += row_start + col_start + col_end + col_start + col_end + row_end;

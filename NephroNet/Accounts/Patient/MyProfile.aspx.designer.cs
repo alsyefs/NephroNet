@@ -958,15 +958,6 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Label lblState;
         
         /// <summary>
-        /// txtState control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtState;
-        
-        /// <summary>
         /// drpState control.
         /// </summary>
         /// <remarks>
@@ -974,6 +965,15 @@ namespace NephroNet.Accounts.Patient {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList drpState;
+        
+        /// <summary>
+        /// txtState control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtState;
         
         /// <summary>
         /// lblStateError control.
@@ -1012,6 +1012,33 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Label lblAddressError;
         
         /// <summary>
+        /// lblZip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblZip;
+        
+        /// <summary>
+        /// txtZip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtZip;
+        
+        /// <summary>
+        /// lblZipError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblZipError;
+        
+        /// <summary>
         /// lblMajorDiagnosesView control.
         /// </summary>
         /// <remarks>
@@ -1019,15 +1046,6 @@ namespace NephroNet.Accounts.Patient {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMajorDiagnosesView;
-        
-        /// <summary>
-        /// lblMajorDiagnosesViewList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMajorDiagnosesViewList;
         
         /// <summary>
         /// btnMajorDiagnosesView control.
@@ -1048,15 +1066,6 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Label lblPhoneNumbersView;
         
         /// <summary>
-        /// lblPhoneNumbersViewList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPhoneNumbersViewList;
-        
-        /// <summary>
         /// btnPhoneNumbersView control.
         /// </summary>
         /// <remarks>
@@ -1073,15 +1082,6 @@ namespace NephroNet.Accounts.Patient {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblEmailsView;
-        
-        /// <summary>
-        /// lblEmailsViewList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblEmailsViewList;
         
         /// <summary>
         /// btnEmailsView control.
@@ -1102,15 +1102,6 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Label lblPastHealthConditionsView;
         
         /// <summary>
-        /// lblPastHealthConditionsViewList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPastHealthConditionsViewList;
-        
-        /// <summary>
         /// btnPastHealthConditionsView control.
         /// </summary>
         /// <remarks>
@@ -1127,15 +1118,6 @@ namespace NephroNet.Accounts.Patient {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblAllergiesView;
-        
-        /// <summary>
-        /// lblAllergiesViewList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAllergiesViewList;
         
         /// <summary>
         /// btnAllergiesView control.
@@ -1156,15 +1138,6 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Label lblInsurancesView;
         
         /// <summary>
-        /// lblInsurancesViewList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblInsurancesViewList;
-        
-        /// <summary>
         /// btnInsurancesView control.
         /// </summary>
         /// <remarks>
@@ -1183,15 +1156,6 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Label lblPastPatientIDsView;
         
         /// <summary>
-        /// lblPastPatientIDsViewList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPastPatientIDsViewList;
-        
-        /// <summary>
         /// btnPastPatientIDsView control.
         /// </summary>
         /// <remarks>
@@ -1208,15 +1172,6 @@ namespace NephroNet.Accounts.Patient {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblTreatmentsHistoryView;
-        
-        /// <summary>
-        /// lblTreatmentsHistoryViewList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTreatmentsHistoryViewList;
         
         /// <summary>
         /// btnTreatmentsHistoryView control.
@@ -1246,13 +1201,13 @@ namespace NephroNet.Accounts.Patient {
         protected global::System.Web.UI.WebControls.Button btnCancelEditCompleteProfile;
         
         /// <summary>
-        /// Label24 control.
+        /// lblSaveCompleteProfileMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label24;
+        protected global::System.Web.UI.WebControls.Label lblSaveCompleteProfileMessage;
         
         /// <summary>
         /// EditMajorDiagnoses control.

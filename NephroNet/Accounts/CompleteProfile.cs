@@ -48,9 +48,8 @@ namespace NephroNet.Accounts
             string completeProfile_zip = cmd.ExecuteScalar().ToString();
             cmd.CommandText = "select completeProfile_address from [CompleteProfiles] where userId = '" + in_current_userId + "' ";
             string completeProfile_address = cmd.ExecuteScalar().ToString();
-            //Do we need to have the country?!
-            //cmd.CommandText = "select completeProfile_country from [CompleteProfiles] where userId = '" + in_current_userId + "' ";
-            //string completeProfile_country = cmd.ExecuteScalar().ToString();
+            cmd.CommandText = "select completeProfile_country from [CompleteProfiles] where userId = '" + in_current_userId + "' ";
+            string completeProfile_country = cmd.ExecuteScalar().ToString();
             //Count Emails:
             cmd.CommandText = "select count(*) from [Emails] where completeProfileId = '" + profile_Id + "' ";
             int totalEmails = Convert.ToInt32(cmd.ExecuteScalar());
@@ -270,6 +269,8 @@ namespace NephroNet.Accounts
             Insurances = insurances;
             PastPatientIds = pastPatientIds;
             EmergencyContacts = emergencyContacts;
+            Country = completeProfile_country;
+            
         }
         public string Id { get; set; }
         public string OnDialysis { get; set; }
@@ -280,6 +281,7 @@ namespace NephroNet.Accounts
         public string State { get; set; }
         public string Zip { get; set; }
         public string Address { get; set; }
+        public string Country { get; set; }
         public List<EmailObject> Emails { get; set; }
         public List<Phone> Phones { get; set; }
         public ArrayList Allergies { get; set; }
