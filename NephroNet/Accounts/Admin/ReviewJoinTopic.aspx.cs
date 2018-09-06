@@ -14,18 +14,21 @@ namespace NephroNet.Accounts.Admin
         static string conn = "";
         SqlConnection connect = new SqlConnection(conn);
         string username, roleId, loginId, token;
-        string topicId = "";
-        string requestId = "";
+        static string topicId = "";
+        static string requestId = "";
         //Globals for "Topics" table:
         int g_topic_isApproved, g_topic_isDenied;
         string g_creator, g_topic_title, g_email;        
         protected void Page_Load(object sender, EventArgs e)
         {
             initialPageAccess();
-            requestId = Request.QueryString["id"];
-            topicId = getTopicId();
-            showUserInformation();
-            showTopicInformation();
+            if (!IsPostBack)
+            {
+                requestId = Request.QueryString["id"];
+                topicId = getTopicId();
+                showUserInformation();
+                showTopicInformation();
+            }
         }
         protected string getTopicId()
         {
@@ -229,9 +232,6 @@ namespace NephroNet.Accounts.Admin
             SqlCommand cmd = connect.CreateCommand();
             //Hide the success message:
             lblMessage.Visible = false;
-            //Delete the request record from the database:
-            cmd.CommandText = "delete from UsersForTopics where UsersForTopicsId = '" + requestId + "' ";
-            cmd.ExecuteScalar();
             //Get the topic's creator:
             cmd.CommandText = "select topic_createdBy from Topics where topicId = '" + topicId + "' ";
             string creatorId = cmd.ExecuteScalar().ToString();
@@ -252,6 +252,9 @@ namespace NephroNet.Accounts.Admin
             requester_name = requester_name + " " + cmd.ExecuteScalar().ToString();
             cmd.CommandText = "select user_email from Users where userId = '" + requesterId + "' ";
             string requester_email = cmd.ExecuteScalar().ToString();
+            //Delete the request record from the database:
+            cmd.CommandText = "delete from UsersForTopics where UsersForTopicsId = '" + requestId + "' ";
+            cmd.ExecuteScalar();
             connect.Close();
             Email emailClass = new Email();
             //email the creator:

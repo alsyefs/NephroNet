@@ -54,7 +54,7 @@ namespace NephroNet.Accounts.Admin
             //Set entry_isApproved = 1, entry_isDenied = 0: (1 in bit = true)            
             connect.Open();
             SqlCommand cmd = connect.CreateCommand();
-            cmd.CommandText = "update Entries set entry_isApproved = 0 and entry_isDenied = 1 where entryId = '" + messageId + "' ";
+            cmd.CommandText = "update Entries set entry_isApproved = 0 , entry_isDenied = 1 where entryId = '" + messageId + "' ";
             cmd.ExecuteScalar();
             connect.Close();
             //Create an email message to be sent:
@@ -71,13 +71,11 @@ namespace NephroNet.Accounts.Admin
             //Hide "Approve" and "Deny" buttons:
             hideApproveDeny();
         }
-
         protected void btnCancel_Click(object sender, EventArgs e)
         {
             addSession();
             Response.Redirect("ApproveMessages");
         }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             initialPageAccess();

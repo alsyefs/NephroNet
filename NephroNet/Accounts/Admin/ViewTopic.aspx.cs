@@ -23,6 +23,9 @@ namespace NephroNet.Accounts.Admin
         string username, roleId, loginId, token;
         string topicId = ""; int g_entries = 0;
         static string previousPage = "";
+        static string currentPage = "";
+        static bool requestedRemoveTopic = false;
+        static bool requestedRemoveMessage = false;
         protected void Page_Load(object sender, EventArgs e)
         {
             Configuration config = new Configuration();
@@ -48,7 +51,17 @@ namespace NephroNet.Accounts.Admin
             checkIfTerminated();
             checkIfDeleted();
             if (!IsPostBack)
-                previousPage = Request.UrlReferrer.ToString();
+            {
+                if (!requestedRemoveTopic && !requestedRemoveMessage)
+                {
+                    if (HttpContext.Current.Request.Url.AbsoluteUri != null) currentPage = HttpContext.Current.Request.Url.AbsoluteUri;
+                    else currentPage = "Home.aspx";
+                    if (Request.UrlReferrer != null) previousPage = Request.UrlReferrer.ToString();
+                    else previousPage = "Home.aspx";
+                    if (currentPage.Equals(previousPage))
+                        previousPage = "Home.aspx";
+                }
+            }
         }
         protected bool isTopicApproved()
         {
@@ -349,6 +362,7 @@ namespace NephroNet.Accounts.Admin
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + topicId + "' ";
             int deleted = Convert.ToInt32(cmd.ExecuteScalar());
+            connect.Close();
             if (deleted == 1)
             {
                 if (Convert.ToInt32(roleId) == 1)//if the one trying to access is an admin:
@@ -363,18 +377,23 @@ namespace NephroNet.Accounts.Admin
                 else
                     goBack();
             }
-            connect.Close();
         }
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-            hideErrorLabels();
-            Boolean correct = checkInput();
-            if (correct)
+            if (!requestedRemoveTopic && !requestedRemoveMessage)
             {
-                addNewEntry();
-                clearInputs();
-                sendEmail();
+                hideErrorLabels();
+                Boolean correct = checkInput();
+                if (correct)
+                {
+                    addNewEntry();
+                    clearInputs();
+                    sendEmail();
+                }
             }
+            if (requestedRemoveTopic) requestedRemoveTopic = false;
+            if (requestedRemoveMessage) requestedRemoveMessage = false;
+            clearInputs();
         }
         protected void clearInputs()
         {
@@ -597,7 +616,7 @@ namespace NephroNet.Accounts.Admin
         [ScriptMethod()]
         public static void removeTopic_Click(string topicId, string entry_creatorId)
         {
-
+            requestedRemoveTopic = true;
             Configuration config = new Configuration();
             SqlConnection connect = new SqlConnection(config.getConnectionString());
             bool topicIdExists = isTopicCorrect(topicId, entry_creatorId);
@@ -672,6 +691,7 @@ namespace NephroNet.Accounts.Admin
         [ScriptMethod()]
         public static void removeMessage_Click(string entryId, string entry_creatorId)
         {
+            requestedRemoveMessage = true;
             bool messageIdExists = isMessageCorrect(entryId, entry_creatorId);
             if (messageIdExists)
             {
@@ -765,8 +785,10 @@ namespace NephroNet.Accounts.Admin
         protected void goBack()
         {
             addSession();
-            //Response.Redirect("Home");
-            Response.Redirect(previousPage);
+            if (!string.IsNullOrWhiteSpace(previousPage))
+                Response.Redirect(previousPage);
+            else
+                Response.Redirect("Home.aspx");
         }
     }
 }

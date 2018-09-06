@@ -22,9 +22,24 @@ namespace NephroNet.Accounts.Physician
         SqlConnection connect = new SqlConnection(conn);
         string username, roleId, loginId, token;
         static string previousPage = "";
+        static string currentPage = "";
+        static bool requestedRemoveTopic = false;
+        static bool requestedRemoveMessage = false;
         string topicId = "";
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                if (!requestedRemoveTopic && !requestedRemoveMessage)
+                {
+                    if (HttpContext.Current.Request.Url.AbsoluteUri != null) currentPage = HttpContext.Current.Request.Url.AbsoluteUri;
+                    else currentPage = "Home.aspx";
+                    if (Request.UrlReferrer != null) previousPage = Request.UrlReferrer.ToString();
+                    else previousPage = "Home.aspx";
+                    if (currentPage.Equals(previousPage))
+                        previousPage = "Home.aspx";
+                }
+            }
             Configuration config = new Configuration();
             conn = config.getConnectionString();
             connect = new SqlConnection(conn);
@@ -33,7 +48,6 @@ namespace NephroNet.Accounts.Physician
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            
             topicId = Request.QueryString["id"];
             CheckErrors check = new CheckErrors();
             if (!check.isDigit(topicId))
@@ -47,8 +61,30 @@ namespace NephroNet.Accounts.Physician
                 unauthorized();
             showInformation(pageNum);
             checkIfTerminated();
-            if (!IsPostBack)
-                previousPage = Request.UrlReferrer.ToString();
+            checkIfDeleted();
+        }
+        protected void checkIfDeleted()
+        {
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + topicId + "' ";
+            int deleted = Convert.ToInt32(cmd.ExecuteScalar());
+            connect.Close();
+            if (deleted == 1)
+            {
+                if (Convert.ToInt32(roleId) == 1)//if the one trying to access is an admin:
+                {
+                    lblEntry.Visible = false;
+                    txtEntry.Visible = false;
+                    btnSubmit.Visible = false;
+                    FileUpload1.Visible = false;
+                    lblError.Visible = true;
+                    lblError.Text = "This discussion has been deleted and no more messages can be added.";
+                }
+                else
+                    goBack();
+            }
         }
         protected void Timer1_Tick(object sender, EventArgs e)
         {
@@ -349,14 +385,20 @@ namespace NephroNet.Accounts.Physician
         }
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-            hideErrorLabels();
-            Boolean correct = checkInput();
-            if (correct)
+            if (!requestedRemoveTopic && !requestedRemoveMessage)
             {
-                addNewEntry();
-                clearInputs();
-                sendEmail();
+                hideErrorLabels();
+                Boolean correct = checkInput();
+                if (correct)
+                {
+                    addNewEntry();
+                    clearInputs();
+                    sendEmail();
+                }
             }
+            if (requestedRemoveTopic) requestedRemoveTopic = false;
+            if (requestedRemoveMessage) requestedRemoveMessage = false;
+            clearInputs();
         }
         protected void clearInputs()
         {
@@ -552,7 +594,10 @@ namespace NephroNet.Accounts.Physician
         protected void goBack()
         {
             addSession();
-            Response.Redirect(previousPage);
+            if (!string.IsNullOrWhiteSpace(previousPage))
+                Response.Redirect(previousPage);
+            else
+                Response.Redirect("Home.aspx");
         }
 
         [WebMethod]
@@ -659,7 +704,7 @@ namespace NephroNet.Accounts.Physician
         [ScriptMethod()]
         public static void removeTopic_Click(string topicId, string entry_creatorId)
         {
-
+            requestedRemoveTopic = true;
             Configuration config = new Configuration();
             SqlConnection connect = new SqlConnection(config.getConnectionString());
             bool topicIdExists = isTopicCorrect(topicId, entry_creatorId);
@@ -734,6 +779,7 @@ namespace NephroNet.Accounts.Physician
         [ScriptMethod()]
         public static void removeMessage_Click(string entryId, string entry_creatorId)
         {
+            requestedRemoveMessage = true;
             bool messageIdExists = isMessageCorrect(entryId, entry_creatorId);
             if (messageIdExists)
             {

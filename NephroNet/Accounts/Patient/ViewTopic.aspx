@@ -72,7 +72,7 @@
                             terminateTopicConfirmed(topicId, creatorId);
                     }
                     function terminateTopicConfirmed(topicId, creatorId) {
-                        console.log('You just confirmed!');
+                        console.log('You just confirmed the termination!');
                         var topicID = parseInt(topicId);
                         var creatorID = parseInt(creatorId);
                         var obj = {
@@ -103,12 +103,12 @@
 
                 <script type="text/javascript">
                     function removeTopic(topicId, creatorId) {
-
                         if (confirm('Are sure you want to remove the selected topic?'))
                             removeTopicConfirmed(topicId, creatorId);
                     }
                     function removeTopicConfirmed(topicId, creatorId) {
-                        console.log('You just confirmed!');
+                        console.log('You just confirmed the deletion!');
+                        console.log('Starting the delete process...');
                         var topicID = parseInt(topicId);
                         var creatorID = parseInt(creatorId);
                         var obj = {
@@ -125,14 +125,19 @@
                             async: true,
                             cache: false,
                             success: function (msg) {
-                                location.reload(true);
+                                //window.location.reload();
+                                //window.location = window.location.href;
+                                window.location.href = window.location.href;
+                                //location.reload(false);
+                                //location.reload(true);
                                 //$('#ViewTopicDiv').load(document.href + '#ViewTopicDiv');
-                                //console.log('Successfully updated the page!');
+                                console.log('Successfully deleted the topic and updated the page!');
                             },
                             error: function (xhr, status, error) {
                                 console.log(xhr.responseText);
                             }
                         });
+                        console.log('Just finished the delete process!');
                     }
 
                 </script>

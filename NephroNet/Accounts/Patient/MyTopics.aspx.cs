@@ -95,7 +95,9 @@ namespace NephroNet.Accounts.Patient
                 id = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select topic_isTerminated from topics where topicId = '" + id + "' ";
                 int isTerminated = Convert.ToInt32(cmd.ExecuteScalar());
-                if (isTerminated == 0)// 0 = false. Meaning that the topic is not terminated; therefore, show it in the list of my topics:
+                cmd.CommandText = "select topic_isDeleted from topics where topicId = '" + id + "' ";
+                int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+                if (isTerminated == 0 && isDeleted == 0)// 0 = false. Meaning that the topic is not terminated; therefore, show it in the list of my topics:
                 {
                     //Get type:
                     cmd.CommandText = "select [topic_time] from topics where topicId = '" + id + "' ";

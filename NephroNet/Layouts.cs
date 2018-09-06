@@ -14,21 +14,27 @@ namespace NephroNet
 		{
             string terminateCommand = "";
             string deleteCommand = "";
+            bool isDeleted = checkDeleted(topicId);
+            bool isTerminated = checkTerminated(topicId);
             //Check if the user viewing the topic is the creator, or if the current user viewing is an admin:
             int int_roleId = Convert.ToInt32(roleId);
             if (topic_creatorId.Equals(userId) || int_roleId == 1)
             {
-                deleteCommand = "&nbsp;<button id='remove_button'type='button' onmousedown=\"OpenPopup('RemoveTopic.aspx?id=" + topicId + "')\">Remove Topic</button>";
+                //deleteCommand = "&nbsp;<button id='remove_button'type='button' onmousedown=\"OpenPopup('RemoveTopic.aspx?id=" + topicId + "')\">Remove Topic</button>";
                 deleteCommand = "&nbsp;<button id='remove_button' type='button' onclick=\"removeTopic('" + topicId + "', '" + topic_creatorId + "')\">Remove Topic </button>";
             }
             if (int_roleId == 1)
             {
-                terminateCommand = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id='terminate_button'type='button' onmousedown=\"OpenPopup('TerminateTopic.aspx?id=" + topicId + "')\">Terminate Topic</button>";
+                //terminateCommand = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id='terminate_button'type='button' onmousedown=\"OpenPopup('TerminateTopic.aspx?id=" + topicId + "')\">Terminate Topic</button>";
                 terminateCommand = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id='terminate_button' type='button' onclick=\"terminateTopic('" + topicId + "', '" + topic_creatorId + "')\">Terminate Topic </button>";
             }
-            bool isTerminated = checkTerminated(topicId);
             if (isTerminated)
                 terminateCommand = "";
+            if (isDeleted)
+            {
+                deleteCommand = "";
+                terminateCommand = "";
+            }
             string header = "<div id=\"header\">" +
             "<div id=\"messageHead\">" +
             "&nbsp;\"" + topic_title + "\" " +
@@ -59,7 +65,21 @@ namespace NephroNet
             connect.Close();
             return terminated;
         }
-		public static string postMessage(int i, string creator_name, string entry_time, string entry_text, string imagesHtml, 
+        static protected bool checkDeleted(string topicId)
+        {
+            bool deleted = false;
+            Configuration config = new Configuration();
+            SqlConnection connect = new SqlConnection(config.getConnectionString());
+            connect.Open();
+            SqlCommand cmd = connect.CreateCommand();
+            cmd.CommandText = "select topic_isDeleted from topics where topicId = '" + topicId + "' ";
+            int topic_isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+            if (topic_isDeleted == 1)
+                deleted = true;
+            connect.Close();
+            return deleted;
+        }
+        public static string postMessage(int i, string creator_name, string entry_time, string entry_text, string imagesHtml, 
 			string entry_creatorId, string topic_creatorId, string userId, string entryId, string roleId, string topicId)
 		{
 			string deleteCommand = "";

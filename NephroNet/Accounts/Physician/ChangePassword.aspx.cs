@@ -26,7 +26,12 @@ namespace NephroNet.Accounts.Physician
             if (!correctSession)
                 clearSession();
             if (!IsPostBack)
-                previousPage = Request.UrlReferrer.ToString();
+            {
+                if (Request.UrlReferrer != null)
+                    previousPage = Request.UrlReferrer.ToString();
+                else
+                    previousPage = "Home.aspx";
+            }
         }
         
         protected void btnSubmit_Click(object sender, EventArgs e)
@@ -106,7 +111,10 @@ namespace NephroNet.Accounts.Physician
         protected void goBack()
         {
             addSession();
-            Response.Redirect(previousPage);
+            if (!string.IsNullOrWhiteSpace(previousPage))
+                Response.Redirect(previousPage);
+            else
+                Response.Redirect("Home.aspx");
         }
         protected void clearSession()
         {

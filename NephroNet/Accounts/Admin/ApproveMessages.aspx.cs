@@ -50,6 +50,10 @@ namespace NephroNet.Accounts.Admin
                 //Get topic title:
                 cmd.CommandText = "select [topic_title] from [Topics] where topicId = '"+topic+"' ";
                 title = cmd.ExecuteScalar().ToString();
+                cmd.CommandText = "select [topic_isDeleted] from [Topics] where topicId = '" + topic + "' ";
+                int topic_isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.CommandText = "select [topic_isTerminated] from [Topics] where topicId = '" + topic + "' ";
+                int topic_isTerminated = Convert.ToInt32(cmd.ExecuteScalar());
                 //Get creator's ID:
                 cmd.CommandText = "select [userId] from(SELECT rowNum = ROW_NUMBER() OVER(ORDER BY entryId ASC), * FROM [Entries] where entry_isApproved = 0 and entry_isDenied = 0 and entry_isDeleted = 0) as t where rowNum = '" + i + "'";
                 string creatorId = cmd.ExecuteScalar().ToString();
@@ -58,7 +62,8 @@ namespace NephroNet.Accounts.Admin
                 creator = cmd.ExecuteScalar().ToString();
                 cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
                 creator = creator + " " + cmd.ExecuteScalar().ToString();
-                dt.Rows.Add(id, topic, creator, title);
+                if(topic_isDeleted == 0 && topic_isTerminated == 0)
+                    dt.Rows.Add(id, topic, creator, title);
             }
             connect.Close();
             grdMessages.DataSource = dt;

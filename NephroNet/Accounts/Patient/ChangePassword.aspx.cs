@@ -25,8 +25,13 @@ namespace NephroNet.Accounts.Patient
             bool correctSession = session.sessionIsCorrect(username, roleId, token);
             if (!correctSession)
                 clearSession();
-            if(!IsPostBack)
-                previousPage = Request.UrlReferrer.ToString();
+            if (!IsPostBack)
+            {
+                if (Request.UrlReferrer != null)
+                    previousPage = Request.UrlReferrer.ToString();
+                else
+                    previousPage = "Home.aspx";
+            }
         }
         
         protected void btnSubmit_Click(object sender, EventArgs e)
@@ -107,7 +112,10 @@ namespace NephroNet.Accounts.Patient
         protected void goBack()
         {
             addSession();
-            Response.Redirect(previousPage);
+            if (!string.IsNullOrWhiteSpace(previousPage))
+                Response.Redirect(previousPage);
+            else
+                Response.Redirect("Home.aspx");
         }
         protected void clearSession()
         {

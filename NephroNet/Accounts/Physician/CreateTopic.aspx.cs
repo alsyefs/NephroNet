@@ -147,7 +147,7 @@ namespace NephroNet.Accounts.Physician
             cmd.CommandText = "select userId from Users where loginId = '" + loginId + "' ";
             string userId = cmd.ExecuteScalar().ToString();
             //Add the creator to UsersForTopics:
-            cmd.CommandText = "insert into UsersForTopics (userId, topicId) values ('" + userId + "', '" + topicId + "')";
+            cmd.CommandText = "insert into UsersForTopics (userId, topicId, joined_time) values ('" + userId + "', '" + topicId + "', '"+DateTime.Now+"')";
             cmd.ExecuteScalar();
             //Check if there is a tag entered:
             if (!string.IsNullOrWhiteSpace(txtTags.Text))
