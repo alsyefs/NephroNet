@@ -390,24 +390,30 @@ namespace NephroNet.Accounts.Patient
                 if (!new_id.Equals(id))
                 {
                     id = new_id;
-                    //Get type:
-                    cmd.CommandText = "select [topic_time] from Topics where topicId = '" + id + "' ";
-                    time = cmd.ExecuteScalar().ToString();
-                    //Get title:
-                    cmd.CommandText = "select [topic_title] from Topics where topicId = '" + id + "' ";
-                    title = cmd.ExecuteScalar().ToString();
-                    //Get type:
-                    cmd.CommandText = "select [topic_type] from Topics where topicId = '" + id + "' ";
-                    type = cmd.ExecuteScalar().ToString();
-                    //Get creator's ID:
-                    cmd.CommandText = "select [topic_createdBy] from Topics where topicId = '" + id + "' ";
-                    string creatorId = cmd.ExecuteScalar().ToString();
-                    //Get creator's name:
-                    cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                    creator = cmd.ExecuteScalar().ToString();
-                    cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                    creator = creator + " " + cmd.ExecuteScalar().ToString();
-                    dt.Rows.Add(title, "Message text", Layouts.getTimeFormat(time), type, creator);
+                    //Check if the topic of the selected message is deleted or not:
+                    cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + id + "' ";
+                    int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (isDeleted == 0)//0: False, meaning that the topic is not deleted
+                    {
+                        //Get type:
+                        cmd.CommandText = "select [topic_time] from Topics where topicId = '" + id + "' ";
+                        time = cmd.ExecuteScalar().ToString();
+                        //Get title:
+                        cmd.CommandText = "select [topic_title] from Topics where topicId = '" + id + "' ";
+                        title = cmd.ExecuteScalar().ToString();
+                        //Get type:
+                        cmd.CommandText = "select [topic_type] from Topics where topicId = '" + id + "' ";
+                        type = cmd.ExecuteScalar().ToString();
+                        //Get creator's ID:
+                        cmd.CommandText = "select [topic_createdBy] from Topics where topicId = '" + id + "' ";
+                        string creatorId = cmd.ExecuteScalar().ToString();
+                        //Get creator's name:
+                        cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
+                        creator = cmd.ExecuteScalar().ToString();
+                        cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
+                        creator = creator + " " + cmd.ExecuteScalar().ToString();
+                        dt.Rows.Add(title, "Message text", Layouts.getTimeFormat(time), type, creator);
+                    }
                 }
             }
             connect.Close();
@@ -549,24 +555,30 @@ namespace NephroNet.Accounts.Patient
                 if (!new_id.Equals(id))
                 {
                     id = new_id;
-                    //Get type:
-                    cmd.CommandText = "select [topic_time] from Topics where topicId = '" + id + "' ";
-                    time = cmd.ExecuteScalar().ToString();
-                    //Get title:
-                    cmd.CommandText = "select [topic_title] from Topics where topicId = '" + id + "' ";
-                    title = cmd.ExecuteScalar().ToString();
-                    //Get type:
-                    cmd.CommandText = "select [topic_type] from Topics where topicId = '" + id + "' ";
-                    type = cmd.ExecuteScalar().ToString();
-                    //Get creator's ID:
-                    cmd.CommandText = "select [topic_createdBy] from Topics where topicId = '" + id + "' ";
-                    string creatorId = cmd.ExecuteScalar().ToString();
-                    //Get creator's name:
-                    cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
-                    creator = cmd.ExecuteScalar().ToString();
-                    cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
-                    creator = creator + " " + cmd.ExecuteScalar().ToString();
-                    dt.Rows.Add(title, "Message text", Layouts.getTimeFormat(time), type, creator);
+                    //Check if the topic of the selected message is deleted or not:
+                    cmd.CommandText = "select topic_isDeleted from Topics where topicId = '" + id + "' ";
+                    int isDeleted = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (isDeleted == 0)//0: False, meaning that the topic is not deleted
+                    {
+                        //Get type:
+                        cmd.CommandText = "select [topic_time] from Topics where topicId = '" + id + "' ";
+                        time = cmd.ExecuteScalar().ToString();
+                        //Get title:
+                        cmd.CommandText = "select [topic_title] from Topics where topicId = '" + id + "' ";
+                        title = cmd.ExecuteScalar().ToString();
+                        //Get type:
+                        cmd.CommandText = "select [topic_type] from Topics where topicId = '" + id + "' ";
+                        type = cmd.ExecuteScalar().ToString();
+                        //Get creator's ID:
+                        cmd.CommandText = "select [topic_createdBy] from Topics where topicId = '" + id + "' ";
+                        string creatorId = cmd.ExecuteScalar().ToString();
+                        //Get creator's name:
+                        cmd.CommandText = "select user_firstname from users where userId = '" + creatorId + "' ";
+                        creator = cmd.ExecuteScalar().ToString();
+                        cmd.CommandText = "select user_lastname from users where userId = '" + creatorId + "' ";
+                        creator = creator + " " + cmd.ExecuteScalar().ToString();
+                        dt.Rows.Add(title, "Message text", Layouts.getTimeFormat(time), type, creator);
+                    }
                 }
             }
             connect.Close();

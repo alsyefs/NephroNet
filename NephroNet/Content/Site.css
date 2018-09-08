@@ -29,10 +29,6 @@ img {
     height: auto;
     background: rgb(255, 255, 255); /*This is a fallback color in case  the browser doesn't render the below.*/
     background: rgba(255, 255, 255, 0.60);
-    /*padding-left: 5px;
-    padding-right: 5px;
-    padding-top:5px;
-    padding-bottom:5px;*/
 }
 .panel-body {
     padding: 5px;
@@ -194,7 +190,7 @@ iframe {
 .dropdown-menu {
     border: 2px solid #dadada;
     border-radius: 5px;
-    padding:0px;
+    padding:0;
 }
 
 .dropdown-item {

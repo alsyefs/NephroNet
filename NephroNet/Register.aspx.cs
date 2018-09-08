@@ -96,6 +96,7 @@ namespace NephroNet
             lblAddressError.Visible = false;
             lblPhoneError.Visible = false;
             lblRoleError.Visible = false;
+            lblCountryError.Visible = false;
         }
         protected bool checkInput()
         {
@@ -221,6 +222,14 @@ namespace NephroNet
                     lblPhoneError.Text = phoneError;
                     txtPhone.Focus();
                 }
+            }
+            //Check if no country is selected:
+            if(drpCountries.SelectedIndex == 0)
+            {
+                correct = false;
+                lblCountryError.Visible = true;
+                lblCountryError.Text = "Invalid input: Please select a country.";
+                drpCountries.Focus();
             }
             //Check selected role:
             string roleError = "";
