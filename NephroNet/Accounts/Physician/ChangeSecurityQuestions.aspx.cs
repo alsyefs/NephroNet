@@ -160,7 +160,7 @@ namespace NephroNet.Accounts.Physician
             Session.Add("username", username);
             Session.Add("roleId", roleId);
             Session.Add("loginId", loginId);
-            Session.Add("loginId", token);
+            Session.Add("token", token);
         }
         protected void getSession()
         {

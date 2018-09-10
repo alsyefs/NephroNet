@@ -28,7 +28,6 @@ namespace NephroNet.Accounts.Admin
                     previousPage = "Home.aspx";
             }            
         }
-        
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             bool correctInput = checkInputs();
@@ -125,7 +124,7 @@ namespace NephroNet.Accounts.Admin
             Session.Add("username", username);
             Session.Add("roleId", roleId);
             Session.Add("loginId", loginId);
-            Session.Add("loginId", token);
+            Session.Add("token", token);
         }
         protected void getSession()
         {

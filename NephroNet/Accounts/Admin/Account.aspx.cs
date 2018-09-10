@@ -37,32 +37,26 @@ namespace NephroNet.Accounts.Admin
             if (!correctSession)
                 clearSession();
         }
-
         protected void btnChangePassword_Click(object sender, EventArgs e)
         {
             Response.Redirect("ChangePassword");
         }
-
         protected void btnChangeSecurityQuestions_Click(object sender, EventArgs e)
         {
             Response.Redirect("ChangeSecurityQuestions");
         }
-
         protected void btnSetViewShortProfilePermissions_Click(object sender, EventArgs e)
         {
             Response.Redirect("SetViewShortProfilePermissions");
         }
-
         protected void btnChangeShortProfileInfo_Click(object sender, EventArgs e)
         {
             Response.Redirect("ChangeShortProfileInformation");
         }
-
         protected void btnChangeCompleteProfileInfo_Click(object sender, EventArgs e)
         {
             Response.Redirect("ChangeCompleteProfileInformation");
         }
-
         protected void clearSession()
         {
 

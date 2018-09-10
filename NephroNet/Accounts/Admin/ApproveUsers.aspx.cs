@@ -38,7 +38,6 @@ namespace NephroNet.Accounts.Admin
             connect.Close();
             return count;
         }
-        
         protected void createTable(int count)
         {
             DataTable dt = new DataTable();
@@ -138,7 +137,5 @@ namespace NephroNet.Accounts.Admin
                 }                
             }
         }
-
-
     }
 }
